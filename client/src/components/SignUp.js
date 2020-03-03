@@ -47,6 +47,11 @@ const useStyles = makeStyles(theme => ({
     submit: {
         margin: theme.spacing(3, 0, 2),
     },
+    image: {
+        height: '200px',
+        width: '900px',
+    },
+
 }));
 
 export default function SignUp() {
@@ -56,7 +61,7 @@ export default function SignUp() {
         <Container component="main" maxWidth= "md">
             <CssBaseline />
             <div className={classes.paper}>
-                <img src = {defaultPicture}></img>
+                <img className = {classes.image} src = {defaultPicture} border = "5"></img>
                 {/*<Avatar className={classes.avatar}>*/}
                 {/*    <LockOutlinedIcon />*/}
                 {/*</Avatar>*/}
