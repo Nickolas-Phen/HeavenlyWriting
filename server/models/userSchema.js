@@ -5,7 +5,9 @@ import mongoose from 'mongoose';
 const Schema = new mongoose.Schema;
 
 const userSchema = new Schema ({
-    name: {type: String, required: true},
+    firstName: {type: String, required: true},
+    middleName: {type: String},
+    lastName: {type: String, required: true},
     birthtime: {type: Number},
     birthday: {type: Date, required: true},
     email: {type: String, required:true},

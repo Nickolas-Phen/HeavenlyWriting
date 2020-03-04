@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import User from '../modles/userSchema.js';
+import User from '../models/userSchema.js';
 
 
 //function to create a new object
@@ -7,24 +7,13 @@ export const create = async (req, res) => {
     let temp = new User();
 
     //initializes the required variables
-    temp.name = req.body.name;
+    temp.firstName = req.body.firstName;
+    temp.lastName = req.body.lastName;
     temp.birthday = req.body.brithday;
     temp.email = req.body.email;
     temp.username = req.body.username;
     temp.password = req.body.password;
 
-    //schema that is being used
-    /*
-    name: {type: String, required: true},
-    birthtime: {type: Number},
-    birthday: {type: Date, required: true},
-    email: {type: String, required:true},
-    house: {type: String},
-    zodiac: {type: String},
-        
-    username: {type: String, required: true, unique:true},
-    password: {type: String}
-    */
 
     //saves when done
     //if theres an error it print to the console
