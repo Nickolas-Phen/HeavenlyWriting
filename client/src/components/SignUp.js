@@ -1,6 +1,6 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
 
-import React from 'react';
+import React, {useState} from 'react';
 //import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -54,8 +54,29 @@ const useStyles = makeStyles(theme => ({
 
 }));
 
-export default function SignUp() {
+
+
+const SignUp = () => {
+    const [userInfo, setUserInfo] = useState({
+        //all inputs of signup form
+        fname: '',
+        lname: '',
+        POB: '',
+        TOB: 0,
+        email: '',
+        pass: '',
+        DOB: ''});
     const classes = useStyles();
+
+    const onChangeText = (newInfo) =>
+    {
+        const newState = userInfo;
+        newState[newInfo.target.name] = newInfo.target.value;
+        setUserInfo(newState);
+    }
+    const submitUserInfo = (info) => {
+        const {}
+    }
 
     return (
         <Container component="main" maxWidth= "md">
@@ -196,3 +217,5 @@ export default function SignUp() {
         </Container>
     );
 }
+
+export default SignUp
