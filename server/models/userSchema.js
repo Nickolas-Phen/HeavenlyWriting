@@ -6,16 +6,19 @@ const Schema = new mongoose.Schema;
 
 const userSchema = new Schema ({
     firstName: {type: String, required: true},
-    middleName: {type: String},
     lastName: {type: String, required: true},
-    birthtime: {type: Number},
     birthday: {type: Date, required: true},
     email: {type: String, required:true},
+    
+    middleName: {type: String},
+    birthHour: {type: Number},  //in military time unless we want to add an am/pm attribute
+    birthMinute: {type:Number},
     house: {type: String},
     zodiac: {type: String},
-        
+    
+    //find a way to protect this?
     username: {type: String, required: true, unique:true},
-    password: {type: String}
+    password: {type: String, required: true}
 
 });
 

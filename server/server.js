@@ -1,6 +1,10 @@
 import express from 'express'
 import router from './routes/examples.server.routes.js'
- 
+import mongoose from 'mongoose'; 
+
+import User from "./models/userSchema";
+
+
 // Use env port or default
 const port = process.env.PORT || 5000;
 

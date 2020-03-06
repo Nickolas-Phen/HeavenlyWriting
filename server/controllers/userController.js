@@ -3,6 +3,7 @@ import User from '../models/userSchema.js';
 
 
 //function to create a new object
+//req is the object to be created
 export const create = async (req, res) => {
     let temp = new User();
 
@@ -26,9 +27,21 @@ export const create = async (req, res) => {
 };
 
 //finds a user by the username
+//input is the username requested
 export const findByUsername = (reqUsername, res) => 
 {
     Schema.find({username:reqUsername}, (err, data) =>
+    {
+        if (err) {console.log(err);}
+        //else { res.send(data);}
+        res(null, data);
+    })
+};
+
+//finds a user by the id
+export const read = (req, res) => 
+{
+    Schema.findById(req.params.userId, (err, data) =>
     {
         if (err) {console.log(err);}
         //else { res.send(data);}
@@ -49,7 +62,8 @@ export const update = (req, res) => {
         else{
 
             /* Replace the user's properties with the new required properties found in req.body */
-            data.name = req.body.name;
+            data.firstName = req.body.firstName;
+            data.lastName = req.body.lastName;
             data.birthday = req.body.brithday;
             data.email = req.body.email;
             data.username = req.body.username;
@@ -71,7 +85,7 @@ export const update = (req, res) => {
 
 
 /* Delete a user */
-/*
+
 export const remove = (req, res) => {
     User.findByIdAndDelete(req.params.userId, (err, data) => 
     {
@@ -79,13 +93,13 @@ export const remove = (req, res) => {
         {
             res.status(404).send("Error: User could not be deleted");
         }
-        else {
+        else 
+        {
             res.send(data);
         }
-     
     });
 };
-*/
+
 
 /* Retreive all the directory users */
 export const list = (req, res) => {
@@ -101,3 +115,5 @@ export const list = (req, res) => {
         }
     })
 };
+
+//only function not included from BC 3 is middleware
