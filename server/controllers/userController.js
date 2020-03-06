@@ -1,18 +1,20 @@
 import mongoose from 'mongoose';
-import User from '../modles/userSchema.js';
+import User from '../models/userSchema.js';
 
 
 //function to create a new object
 export const create = async (req, res) => {
+
     let temp = new User();
 
     //initializes the required variables
-    temp.name = req.body.name;
-    temp.birthday = req.body.brithday;
+    temp.firstName = req.body.firstName;
+    temp.lastName = req.body.lastName;
+    temp.birthday = req.body.birthday;
     temp.email = req.body.email;
     temp.username = req.body.username;
     temp.password = req.body.password;
-
+    console.log(temp.firstName);
     //schema that is being used
     /*
     name: {type: String, required: true},
@@ -29,10 +31,12 @@ export const create = async (req, res) => {
     //saves when done
     //if theres an error it print to the console
     //otherwise it sends the new object out
-    temp.save( (err) => 
+    temp.save( (err) =>
     {
+        console.log("Saving");
         if (err) {console.log(err);}
-        else {res.send(temp);}
+        else {res.send(temp);
+            console.log("Sent")}
     });
 };
 
