@@ -8,12 +8,12 @@ const router = express.Router();
 
 //heavily based on bootcamp 3  
 
-userRouter.get('/', user.list);
-userRouter.post('/', /*getMoonLoc ,*/ user.create);
+router.get('/', user.list);
+router.post('/', /*getMoonLoc ,*/ user.create);
 
 // ':' = url parameter
-userRouter.get('/:userId', user.read);
-userRouter.put('/:userId', /*getMoonLoc ,*/ user.update);
-userRouter.delete('/:userId', user.remove);
+router.get('/:userId', user.read);
+router.put('/:userId', /*getMoonLoc ,*/ user.update);
+router.delete('/:userId', user.remove);
 
-export default userRouter;
+export default router;
