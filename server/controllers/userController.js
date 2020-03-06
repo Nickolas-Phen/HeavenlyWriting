@@ -14,7 +14,7 @@ export const create = async (req, res) => {
     temp.email = req.body.email;
     temp.username = req.body.username;
     temp.password = req.body.password;
-    console.log(temp.firstName);
+    console.log("first name: " + req.body.firstName);
     //schema that is being used
     /*
     name: {type: String, required: true},

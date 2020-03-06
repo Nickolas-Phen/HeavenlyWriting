@@ -1,6 +1,7 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
 
 import React, {useState} from 'react';
+import axios from 'axios';
 //import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -52,13 +53,13 @@ const useStyles = makeStyles(theme => ({
 export default function SignUp() {
     const [userInfo, setUserInfo] = useState(
         {
-            fname: '',
-            lname: '',
-            dateBirth: '',
+            firstName: '',
+            lastName: '',
+            birthday: '',
             email: '',
             password: '',
-            placeBirth: '',
-            timeBirth: 0,
+            birthtime: 0,
+            username: 'defaul name',
         }
     );
     const onChangeText = (e) => {
@@ -66,20 +67,23 @@ export default function SignUp() {
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
-    const submitComment = (e) => {
-        console.log("Submitting");
-        e.preventDefault();
-        const { fname, lname, email, dateBirth, password } = userInfo;
+    const submitUserInfo = (e) => {
         console.log(userInfo);
-        if (!fname || !lname || !email ||!dateBirth ||!password) return;
-        console.log("Fetching...");
-        fetch('/api/signup', {
-            method: 'POST',
-            body: JSON.stringify({ fname, lname, email, dateBirth, password }),
-        }).then(res => res.json()).then((res) => {
-            if (!res.success) this.setState({ error: res.error.message || res.error });
-            else this.setState({fname: '', lname: '', dateBirth: '', email: '', password: '', placeBirth: '', timeBirth: 0, });
-        });
+        e.preventDefault();
+        axios.post('/api/signup', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
+            console.log(res);
+            console.log(res.data);
+            setUserInfo({
+                firstName: '',
+                lastName: '',
+                birthday: '',
+                email: '',
+                password: '',
+                birthtime: 0,
+                username: 'default name',
+                }
+            )
+        })
     };
     const classes = useStyles();
 
@@ -100,8 +104,8 @@ export default function SignUp() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={3}>
                             <TextField
-                                autoComplete="fname"
-                                name="fname"
+                                autoComplete="firstName"
+                                name="firstName"
                                 variant="outlined"
                                 required
                                 fullWidth
@@ -118,7 +122,7 @@ export default function SignUp() {
                                 fullWidth
                                 id="lastName"
                                 label="Last Name"
-                                name="lname"
+                                name="lastName"
                                 autoComplete="lname"
                                 onChange={onChangeText}
                             />
@@ -142,7 +146,7 @@ export default function SignUp() {
                                 fullWidth
                                 id="timeBirth"
                                 label="Time of Birth"
-                                name="timeBirth"
+                                name="birthtime"
                                 autoComplete="tbirth"
                                 onChange={onChangeText}
                             />
@@ -181,9 +185,9 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                name="dateBirth"
+                                name="birthday"
                                 label="Date of Birth"
-                                id="dateBirth"
+                                id="birthday"
                                 autoComplete="dob"
                                 onChange={onChangeText}
                             />
@@ -213,7 +217,7 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={submitComment}
+                        onClick={submitUserInfo}
                     >
                         Sign Up
                     </Button>
