@@ -12,9 +12,11 @@ const userSchema = new Schema ({
     
     middleName: {type: String},
     birthHour: {type: Number},  //in military time unless we want to add an am/pm attribute
-    birthMinute: {type:Number},
+    birthMinute: {type:Number}, //will have default times if none submitted
     house: {type: String},
     zodiac: {type: String},
+
+    //add moon location?
     
     //find a way to protect this?
     username: {type: String, required: true, unique:true},

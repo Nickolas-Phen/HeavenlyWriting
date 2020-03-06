@@ -34,7 +34,7 @@ export const findByUsername = (reqUsername, res) =>
     {
         if (err) {console.log(err);}
         //else { res.send(data);}
-        res(null, data);
+        res.send(data);
     })
 };
 
@@ -45,7 +45,7 @@ export const read = (req, res) =>
     {
         if (err) {console.log(err);}
         //else { res.send(data);}
-        res(null, data);
+        res.send(data);
     })
 };
 
