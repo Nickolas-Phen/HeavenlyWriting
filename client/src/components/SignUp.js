@@ -50,7 +50,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
     const [userInfo, setUserInfo] = useState(
         {
             firstName: '',
@@ -62,6 +62,11 @@ export default function SignUp() {
             username: '',
         }
     );
+
+    const goToSignIn = () =>
+    {
+        props.updateParent("signin");
+    };
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
@@ -235,7 +240,7 @@ export default function SignUp() {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link href="/api/signin" variant="body2" onClick = {goToSignIn}>
                                 Already have an account? Sign in
                             </Link>
                         </Grid>
