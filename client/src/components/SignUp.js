@@ -240,7 +240,7 @@ export default function SignUp(props) {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link href="/api/signin" variant="body2" onClick = {goToSignIn}>
+                            <Link variant="body2" onClick = {goToSignIn}>
                                 Already have an account? Sign in
                             </Link>
                         </Grid>

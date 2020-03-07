@@ -112,7 +112,7 @@ export default function SignIn(props) {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link href="/api/signup" variant="body2" onClick = {goToSignUp}>
+                            <Link variant="body2" onClick = {goToSignUp}>
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
