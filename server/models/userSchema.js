@@ -2,9 +2,9 @@ import mongoose from 'mongoose';
 
 //making a schema for the database
 
-const Schema = new mongoose.Schema;
+//const Schema = new mongoose.Schema;
 
-const userSchema = new Schema ({
+const userSchema = new mongoose.Schema ({
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     birthday: {type: Date, required: true},
