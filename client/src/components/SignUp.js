@@ -59,20 +59,20 @@ export default function SignUp() {
             email: '',
             password: '',
             birthtime: 0,
-            username: 'defaul name',
+            username: '',
         }
     );
     const onChangeText = (e) => {
+        //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
     const submitUserInfo = (e) => {
-        console.log(userInfo);
+        //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
         axios.post('/api/signup', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
-            console.log(res);
-            console.log(res.data);
+            //after sending data, reset state back to defaults
             setUserInfo({
                 firstName: '',
                 lastName: '',
@@ -80,7 +80,7 @@ export default function SignUp() {
                 email: '',
                 password: '',
                 birthtime: 0,
-                username: 'default name',
+                username: '',
                 }
             )
         })
