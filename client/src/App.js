@@ -1,31 +1,20 @@
 import React, {useState} from 'react';
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
+import User from "./components/User/User";
+import { Switch, Route, useHistory } from "react-router-dom";
 
-const App = (props) => {
-  //change what page is returned based on pageState
-  const [pageState, setPageState] = useState("signup");
-  const changePage = (pageName) =>
-  {
-    setPageState(pageName);
-  };
-  if (pageState === "signup") {
-    return (
-        <SignUp updateParent = {changePage}/>
-    );
-  }
-  else if (pageState === "signin")
-  {
-    return (
-        <SignIn updateParent = {changePage}/>
-    );
-  }
-  else if (pageState === "userpage")
-  {
-    return (
-        <user/>
-    );
-  }
+const App = () => {
+  return (
+    <Switch>
+      <Route path="/signup">
+        <SignUp />
+      </Route>
+      <Route path="/">
+        <User />
+      </Route>
+    </Switch>
+  );
 };
 
 export default App;
