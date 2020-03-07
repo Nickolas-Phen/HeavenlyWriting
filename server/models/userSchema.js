@@ -2,20 +2,25 @@ import mongoose from 'mongoose';
 
 //making a schema for the database
 
-const Schema = new mongoose.Schema;
+//const Schema = new mongoose.Schema;
 
 const userSchema = new mongoose.Schema ({
     firstName: {type: String, required: true},
-    middleName: {type: String},
     lastName: {type: String, required: true},
-    birthtime: {type: Number},
     birthday: {type: Date, required: true},
     email: {type: String, required:true},
+    
+    middleName: {type: String},
+    birthHour: {type: Number},  //in military time unless we want to add an am/pm attribute
+    birthMinute: {type:Number}, //will have default times if none submitted
     house: {type: String},
     zodiac: {type: String},
-        
+
+    //add moon location?
+    
+    //find a way to protect this?
     username: {type: String, required: true, unique:true},
-    password: {type: String}
+    password: {type: String, required: true}
 
 });
 

@@ -3,6 +3,7 @@ import User from '../models/userSchema.js';
 
 
 //function to create a new object
+//req is the object to be created
 export const create = async (req, res) => {
 
     let temp = new User();
@@ -14,40 +15,38 @@ export const create = async (req, res) => {
     temp.email = req.body.email;
     temp.username = req.body.username;
     temp.password = req.body.password;
-    console.log("first name: " + req.body.firstName);
-    //schema that is being used
-    /*
-    name: {type: String, required: true},
-    birthtime: {type: Number},
-    birthday: {type: Date, required: true},
-    email: {type: String, required:true},
-    house: {type: String},
-    zodiac: {type: String},
-        
-    username: {type: String, required: true, unique:true},
-    password: {type: String}
-    */
+
 
     //saves when done
     //if theres an error it print to the console
     //otherwise it sends the new object out
-    temp.save( (err) =>
+    temp.save( (err) => 
     {
-        console.log("Saving");
         if (err) {console.log(err);}
-        else {res.send(temp);
-            console.log("Sent")}
+        else {res.send(temp);}
     });
 };
 
 //finds a user by the username
-export const findByUsername = (reqUsername, res) => 
+//input is the username requested
+export const findByUsername = (reqUsername, res) =>
 {
     Schema.find({username:reqUsername}, (err, data) =>
     {
         if (err) {console.log(err);}
         //else { res.send(data);}
-        res(null, data);
+        res.send(data);
+    })
+};
+
+//finds a user by the id
+export const read = (req, res) =>
+{
+    Schema.findById(req.params.userId, (err, data) =>
+    {
+        if (err) {console.log(err);}
+        //else { res.send(data);}
+        res.send(data);
     })
 };
 
@@ -64,7 +63,8 @@ export const update = (req, res) => {
         else{
 
             /* Replace the user's properties with the new required properties found in req.body */
-            data.name = req.body.name;
+            data.firstName = req.body.firstName;
+            data.lastName = req.body.lastName;
             data.birthday = req.body.brithday;
             data.email = req.body.email;
             data.username = req.body.username;
@@ -86,7 +86,7 @@ export const update = (req, res) => {
 
 
 /* Delete a user */
-/*
+
 export const remove = (req, res) => {
     User.findByIdAndDelete(req.params.userId, (err, data) => 
     {
@@ -94,13 +94,13 @@ export const remove = (req, res) => {
         {
             res.status(404).send("Error: User could not be deleted");
         }
-        else {
+        else
+        {
             res.send(data);
         }
-     
     });
 };
-*/
+
 
 /* Retreive all the directory users */
 export const list = (req, res) => {
@@ -116,3 +116,5 @@ export const list = (req, res) => {
         }
     })
 };
+
+//only function not included from BC 3 is middleware
