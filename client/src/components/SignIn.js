@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 //import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,6 +13,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "../assets/defaultSignInPic.jpeg";
+import {Redirect} from 'react-router-dom'
+
 
 function Copyright() {
     return (
@@ -53,6 +55,17 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignIn(props) {
     const classes = useStyles();
+    const [toUserPage, setToUserPage] = useState(false);
+
+    const loginPressed = () =>
+    {
+        setToUserPage(true);
+    };
+
+    if (toUserPage)
+    {
+        return <Redirect to = 'user'></Redirect>
+    }
 
     return (
         <Container component="main" maxWidth="md">
@@ -93,11 +106,13 @@ export default function SignIn(props) {
                         label="Remember me"
                     />
                     <Button
+                        component = {Link} href = "user"
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={loginPressed}
                     >
                         Sign In
                     </Button>

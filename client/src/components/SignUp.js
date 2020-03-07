@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
+import {Redirect} from 'react-router-dom'
 
 function Copyright() {
     return (
@@ -62,6 +63,7 @@ export default function SignUp(props) {
             username: '',
         }
     );
+    const [toUserPage, setToUserPage] = useState(false);
 
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
@@ -72,7 +74,7 @@ export default function SignUp(props) {
     const submitUserInfo = (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        axios.post('/api/signup', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
+        axios.post('/api/user', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
             //after sending data, reset state back to defaults
             setUserInfo({
                 firstName: '',
@@ -85,10 +87,14 @@ export default function SignUp(props) {
                 }
             )
         })
+        setToUserPage(true);
     };
     const classes = useStyles();
 
-
+    if (toUserPage)
+    {
+        return <Redirect to = 'user'></Redirect>
+    }
     return (
         <Container component="main" maxWidth= "md">
             <CssBaseline />
@@ -225,6 +231,7 @@ export default function SignUp(props) {
                         {/*</Grid>*/}
                     </Grid>
                     <Button
+                        component = {Link} href = "user"
                         type="submit"
                         fullWidth
                         variant="contained"
