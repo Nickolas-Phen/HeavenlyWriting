@@ -11,6 +11,9 @@ const router = express.Router();
 router.get('/', user.list);
 router.post('/', /*getMoonLoc ,*/ user.create);
 
+//route for sending signup info
+router.post('/signup', user.create);
+
 // ':' = url parameter
 router.get('/:userId', user.read);
 router.put('/:userId', /*getMoonLoc ,*/ user.update);
