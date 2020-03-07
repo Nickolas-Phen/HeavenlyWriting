@@ -54,10 +54,6 @@ const useStyles = makeStyles(theme => ({
 export default function SignIn(props) {
     const classes = useStyles();
 
-    const goToSignUp = () =>
-    {
-        props.updateParent("signup");
-    };
     return (
         <Container component="main" maxWidth="md">
             <CssBaseline />
@@ -112,7 +108,7 @@ export default function SignIn(props) {
                             </Link>
                         </Grid>
                         <Grid item>
-                            <Link variant="body2" onClick = {goToSignUp}>
+                            <Link href="/signup" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>

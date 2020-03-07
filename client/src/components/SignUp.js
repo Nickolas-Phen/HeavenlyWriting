@@ -63,10 +63,6 @@ export default function SignUp(props) {
         }
     );
 
-    const goToSignIn = () =>
-    {
-        props.updateParent("signin");
-    };
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
@@ -240,7 +236,7 @@ export default function SignUp(props) {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link variant="body2" onClick = {goToSignIn}>
+                            <Link href="signin" variant="body2">
                                 Already have an account? Sign in
                             </Link>
                         </Grid>
