@@ -204,6 +204,18 @@ export default function SignUp() {
                                 autoComplete="current-password"
                             />
                         </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="username"
+                                label="Username"
+                                id="username"
+                                autoComplete="username"
+                                onChange={onChangeText}
+                            />
+                        </Grid>
                         {/*<Grid item xs={12}>*/}
                         {/*    <FormControlLabel*/}
                         {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
