@@ -5,12 +5,13 @@ import User from '../models/userSchema.js';
 //function to create a new object
 //req is the object to be created
 export const create = async (req, res) => {
+
     let temp = new User();
 
     //initializes the required variables
     temp.firstName = req.body.firstName;
     temp.lastName = req.body.lastName;
-    temp.birthday = req.body.brithday;
+    temp.birthday = req.body.birthday;
     temp.email = req.body.email;
     temp.username = req.body.username;
     temp.password = req.body.password;
@@ -28,7 +29,7 @@ export const create = async (req, res) => {
 
 //finds a user by the username
 //input is the username requested
-export const findByUsername = (reqUsername, res) => 
+export const findByUsername = (reqUsername, res) =>
 {
     Schema.find({username:reqUsername}, (err, data) =>
     {
@@ -39,7 +40,7 @@ export const findByUsername = (reqUsername, res) =>
 };
 
 //finds a user by the id
-export const read = (req, res) => 
+export const read = (req, res) =>
 {
     Schema.findById(req.params.userId, (err, data) =>
     {
@@ -93,7 +94,7 @@ export const remove = (req, res) => {
         {
             res.status(404).send("Error: User could not be deleted");
         }
-        else 
+        else
         {
             res.send(data);
         }

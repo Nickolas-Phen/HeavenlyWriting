@@ -1,6 +1,7 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
 
-import React from 'react';
+import React, {useState} from 'react';
+import axios from 'axios';
 //import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -50,7 +51,42 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function SignUp() {
+    const [userInfo, setUserInfo] = useState(
+        {
+            firstName: '',
+            lastName: '',
+            birthday: '',
+            email: '',
+            password: '',
+            birthtime: 0,
+            username: 'defaul name',
+        }
+    );
+    const onChangeText = (e) => {
+        const newState = {...userInfo};
+        newState[e.target.name] = e.target.value;
+        setUserInfo(newState);
+    };
+    const submitUserInfo = (e) => {
+        console.log(userInfo);
+        e.preventDefault();
+        axios.post('/api/signup', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
+            console.log(res);
+            console.log(res.data);
+            setUserInfo({
+                firstName: '',
+                lastName: '',
+                birthday: '',
+                email: '',
+                password: '',
+                birthtime: 0,
+                username: 'default name',
+                }
+            )
+        })
+    };
     const classes = useStyles();
+
 
     return (
         <Container component="main" maxWidth= "md">
@@ -59,6 +95,7 @@ export default function SignUp() {
                 <img src = {defaultPicture}></img>
                 {/*<Avatar className={classes.avatar}>*/}
                 {/*    <LockOutlinedIcon />*/}
+
                 {/*</Avatar>*/}
                 <Typography component="h1" variant="h5">
                     Sign up
@@ -67,7 +104,7 @@ export default function SignUp() {
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={3}>
                             <TextField
-                                autoComplete="fname"
+                                autoComplete="firstName"
                                 name="firstName"
                                 variant="outlined"
                                 required
@@ -75,6 +112,7 @@ export default function SignUp() {
                                 id="firstName"
                                 label="First Name"
                                 autoFocus
+                                onChange={onChangeText}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -86,6 +124,7 @@ export default function SignUp() {
                                 label="Last Name"
                                 name="lastName"
                                 autoComplete="lname"
+                                onChange={onChangeText}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -97,6 +136,7 @@ export default function SignUp() {
                                 label="Place of Birth"
                                 name="placeBirth"
                                 autoComplete="pbirth"
+                                onChange={onChangeText}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -106,8 +146,9 @@ export default function SignUp() {
                                 fullWidth
                                 id="timeBirth"
                                 label="Time of Birth"
-                                name="timeBirth"
+                                name="birthtime"
                                 autoComplete="tbirth"
+                                onChange={onChangeText}
                             />
                         </Grid>
                     </Grid>
@@ -121,6 +162,7 @@ export default function SignUp() {
                                 label="Email Address"
                                 name="email"
                                 autoComplete="email"
+                                onChange={onChangeText}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -133,6 +175,7 @@ export default function SignUp() {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={onChangeText}
                             />
                         </Grid>
                     </Grid>
@@ -142,10 +185,11 @@ export default function SignUp() {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                name="dateBirth"
+                                name="birthday"
                                 label="Date of Birth"
-                                id="dateBirth"
+                                id="birthday"
                                 autoComplete="dob"
+                                onChange={onChangeText}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -158,6 +202,18 @@ export default function SignUp() {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                variant="outlined"
+                                required
+                                fullWidth
+                                name="username"
+                                label="Username"
+                                id="username"
+                                autoComplete="username"
+                                onChange={onChangeText}
                             />
                         </Grid>
                         {/*<Grid item xs={12}>*/}
@@ -173,6 +229,7 @@ export default function SignUp() {
                         variant="contained"
                         color="primary"
                         className={classes.submit}
+                        onClick={submitUserInfo}
                     >
                         Sign Up
                     </Button>
