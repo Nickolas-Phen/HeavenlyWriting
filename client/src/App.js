@@ -4,7 +4,7 @@ import SignIn from "./components/SignIn";
 
 const App = (props) => {
   return (
-    <SignUp/>
+    <SignIn/>
   );
 };
 
