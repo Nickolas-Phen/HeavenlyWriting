@@ -17,6 +17,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
+import { request } from 'express';
 
 function Copyright() {
     return (
@@ -64,13 +65,14 @@ export default function SignUp(props) {
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
-
+    
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
+
     const submitUserInfo = (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
@@ -89,6 +91,7 @@ export default function SignUp(props) {
         })
         setToUserPage(true);
     };
+
     const classes = useStyles();
 
     if (toUserPage)
