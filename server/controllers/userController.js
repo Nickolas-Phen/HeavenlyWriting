@@ -13,9 +13,11 @@ export const create = async (req, res) => {
     temp.lastName = req.body.lastName;
     temp.birthday = req.body.birthday;
     temp.email = req.body.email;
+
     temp.username = req.body.username;
     temp.password = req.body.password;
 
+    addNonRequired(req,temp);
 
     //saves when done
     //if theres an error it print to the console
@@ -67,8 +69,11 @@ export const update = (req, res) => {
             data.lastName = req.body.lastName;
             data.birthday = req.body.brithday;
             data.email = req.body.email;
+
             data.username = req.body.username;
             data.password = req.body.password;
+
+            addNonRequired(req,temp);
 
              /* Save the user */
             data.save( (err) => {
@@ -118,3 +123,29 @@ export const list = (req, res) => {
 };
 
 //only function not included from BC 3 is middleware
+
+const addNonRequired = (req, res) =>
+{
+    if (req.phoneNumber)
+        {res.phoneNumber = req.body.phoneNumber;}
+    if(req.middleName)
+        {res.phoneNumber = req.body.phoneNumber;}
+    if(req.brithHour)
+        {res.birthHour = req.body.birthHour;}
+    if(req.birbirthMinute)
+        {res.birbirthMinute = req.body.brithMinute;}
+    if(req.house)
+        {res.house = req.body.house;}
+    if(req.zodiac)
+        {res.zodiac = req.body.zodiac;}
+
+    
+    /*
+    phoneNumber: {type:String},
+    middleName: {type: String},
+    birthHour: {type: Number},  //in military time unless we want to add an am/pm attribute
+    birthMinute: {type:Number}, //will have default times if none submitted
+    house: {type: String},
+    zodiac: {type: String},
+     */
+}
