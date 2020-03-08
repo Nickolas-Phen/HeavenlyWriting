@@ -83,7 +83,7 @@ export default function Today() {
       })
       .catch(() => {
         increaseCounter();
-        setArticle("You will die in 7 days...");
+        setArticle("Nothing to do today");
       });
   }, []);
 
