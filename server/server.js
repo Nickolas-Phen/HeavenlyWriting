@@ -24,7 +24,7 @@ app.use(bodyParser.urlencoded({ //very important
 }));
 app.use(bodyParser.json());
 
-app.use('/api/signup', router, (req, res) => {
+app.use('/api/user', router, (req, res) => {
 
 });
 

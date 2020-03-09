@@ -8,7 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 //import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
+import {Link}    from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 //import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
@@ -16,6 +16,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
+import {Redirect} from 'react-router-dom'
 
 function Copyright() {
     return (
@@ -50,7 +51,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
     const [userInfo, setUserInfo] = useState(
         {
             firstName: '',
@@ -59,20 +60,22 @@ export default function SignUp() {
             email: '',
             password: '',
             birthtime: 0,
-            username: 'defaul name',
+            username: '',
         }
     );
+    const [toUserPage, setToUserPage] = useState(false);
+
     const onChangeText = (e) => {
+        //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
     const submitUserInfo = (e) => {
-        console.log(userInfo);
+        //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        axios.post('/api/signup', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
-            console.log(res);
-            console.log(res.data);
+        axios.post('/api/user', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
+            //after sending data, reset state back to defaults
             setUserInfo({
                 firstName: '',
                 lastName: '',
@@ -80,14 +83,18 @@ export default function SignUp() {
                 email: '',
                 password: '',
                 birthtime: 0,
-                username: 'default name',
+                username: '',
                 }
             )
         })
+        setToUserPage(true);
     };
     const classes = useStyles();
 
-
+    if (toUserPage)
+    {
+        return <Redirect to = 'user'></Redirect>
+    }
     return (
         <Container component="main" maxWidth= "md">
             <CssBaseline />
@@ -224,6 +231,7 @@ export default function SignUp() {
                         {/*</Grid>*/}
                     </Grid>
                     <Button
+                        component = {Link} to ="/user"
                         type="submit"
                         fullWidth
                         variant="contained"
@@ -235,7 +243,7 @@ export default function SignUp() {
                     </Button>
                     <Grid container justify="flex-end">
                         <Grid item>
-                            <Link href="#" variant="body2">
+                            <Link to = "/signin" variant="body2">
                                 Already have an account? Sign in
                             </Link>
                         </Grid>
