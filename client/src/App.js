@@ -1,22 +1,23 @@
-import React from 'react';
-import { Route, Switch, Redirect  } from 'react-router-dom';
-import Home from "./views/Home/Home";
-import NotFound from "./views/NotFound";
-import NavBar from "./components/Header/NavBar";
+import React, {useState} from 'react';
+import SignUp from "./components/SignUp";
+import SignIn from "./components/SignIn";
+import User from "./components/User/User";
+import { Switch, Route, useHistory } from "react-router-dom";
 
 const App = () => {
   return (
-    <div>
-      <NavBar />
-      <Switch>
-        <Route exact path="/Home" component={Home} />
-        <Route exact path="/">
-          <Redirect to="/Home" />
-        </Route>
-        <Route component={NotFound}/>
-      </Switch>
-    </div>
+    <Switch>
+      <Route path="/signup">
+        <SignUp />
+      </Route>
+    <Route path="/signin">
+        <SignIn />
+    </Route>
+      <Route path="/">
+        <User />
+      </Route>
+    </Switch>
   );
-}
+};
 
 export default App;
