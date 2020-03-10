@@ -145,7 +145,7 @@ export default function Today() {
             alt="Rick"
           />
           <br></br>
-          <h2>Today is a {moonPhase}</h2>
+          <h2>Today's moon:  {moonPhase}</h2>
           
           
           {/* <span className={classes.quoteText}>{quote}</span> */}
