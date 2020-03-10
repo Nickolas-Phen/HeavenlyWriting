@@ -1,7 +1,7 @@
 import * as user from '../controllers/userController.js'
 import express from 'express'
 const router = express.Router();
-import getMoonLoc from '../controllers/moonLocationController.js';
+import getMoonLoc from '../../client/src/api/getMoonData.js';
 //need to import the js file to obtain moon location (not written)
 
 //used for routing requests to correct req handler

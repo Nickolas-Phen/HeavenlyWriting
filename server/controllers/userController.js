@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
+import findMoon from '../../client/src/api/getMoonData.js'
 
 
 //function to create a new object
 //req is the object to be created
 export const create = async (req, res) => {
-
+    // console.log("find moon called");
+    // findMoon();
     let temp = new User();
 
     //initializes the required variables
@@ -20,7 +22,7 @@ export const create = async (req, res) => {
     //saves when done
     //if theres an error it print to the console
     //otherwise it sends the new object out
-    temp.save( (err) => 
+    temp.save( (err) =>
     {
         if (err) {console.log(err);}
         else {res.send(temp);}
