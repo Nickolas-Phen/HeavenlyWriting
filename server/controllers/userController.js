@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
 import axios from 'axios'
+import findMoon from '../../client/src/api/getMoonData.js'
+
 
 //function to create a new object
 //req is the object to be created
 export const create = async (req, res) => {
-
+    // console.log("find moon called");
+    // findMoon();
     let temp = new User();
 
     //initializes the required variables
@@ -69,6 +72,11 @@ export const create = async (req, res) => {
             //   }
             // }
         //   });
+    temp.save( (err) =>
+    {
+        if (err) {console.log(err);}
+        else {res.send(temp);}
+    });
 };
 
 //finds a user by the username
