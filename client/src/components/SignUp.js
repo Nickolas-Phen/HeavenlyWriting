@@ -1,5 +1,4 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-
 import React, {useState} from 'react';
 import axios from 'axios';
 //import Avatar from '@material-ui/core/Avatar';
@@ -87,14 +86,9 @@ export default function SignUp(props) {
                 }
             )
         })
-        setToUserPage(true);
     };
     const classes = useStyles();
 
-    if (toUserPage)
-    {
-        return <Redirect to = 'user'></Redirect>
-    }
     return (
         <Container component="main" maxWidth= "md">
             <CssBaseline />
