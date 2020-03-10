@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
-import findMoon from '../../client/src/api/moonLocationController.js'
+import findMoon from '../../client/src/api/getMoonData.js'
 
 
 //function to create a new object

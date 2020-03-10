@@ -3,7 +3,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect } from "react";
 import Song from "./MocArticle";
-import getMoonPhase from '../../api/moonLocationController.js'
+//import getMoonPhase from '../../api/getMoonData.js'
 import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
@@ -73,9 +73,9 @@ export default function Today() {
     };
 
     //don't know what this does
-    configMoon.LDZ=new Date(configMoon.year,configMoon.month-1,1)/1000
+    configMoon.LDZ=new Date(configMoon.year,configMoon.month-1,1)/1000;
     var obj = configMoon;
-    var gets=[]
+    var gets=[];
     //add url info to complete url accessed by api
     for (var i in obj){
       gets.push(i+"="+encodeURIComponent(obj[i]))
@@ -83,17 +83,17 @@ export default function Today() {
     //final api url
     var url = "https://www.icalendar37.net/lunar/api/?"+gets.join("&");
     //get moon data from moon api
-    var phase = "dog"
+    var phase = "dog";
     axios.get(url).then(res =>
     {
       var day = new Date().getDate();
       var moon = res.data;//moon dat
       phase = moon.phase[day].phaseName;
-      console.log("Phase: " + phase)
+      console.log("Phase: " + phase);
       setMoonPhase(phase);
     })
-  }
-  if (moonPhase == "")
+  };
+  if (moonPhase === "")
   {
     getMoonPhase();
   }
