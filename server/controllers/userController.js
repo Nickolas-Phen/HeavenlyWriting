@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
 import axios from 'axios'
-import findMoon from '../../client/src/api/getMoonData.js'
+//import findMoon from '../../client/src/api/getMoonData.js'
 
 
 //function to create a new object
