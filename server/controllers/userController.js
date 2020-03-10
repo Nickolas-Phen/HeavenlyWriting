@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
-import findMoon from '../../client/src/api/getMoonData.js'
+import axios from 'axios'
+//import findMoon from '../../client/src/api/getMoonData.js'
 
 
 //function to create a new object
@@ -11,17 +12,66 @@ export const create = async (req, res) => {
     let temp = new User();
 
     //initializes the required variables
-    temp.firstName = req.body.firstName;
-    temp.lastName = req.body.lastName;
-    temp.birthday = req.body.birthday;
+    // temp.firstName = req.body.firstName;
+    // temp.lastName = req.body.lastName;
+    // temp.birthday = req.body.birthday;
     temp.email = req.body.email;
-    temp.username = req.body.username;
-    temp.password = req.body.password;
-
-
+    // temp.username = req.body.username;
+    // temp.password = req.body.password;
+    console.log(temp.email);
     //saves when done
     //if theres an error it print to the console
     //otherwise it sends the new object out
+    // temp.save( (err) => 
+    // {
+    //     if (err) {console.log(err);}
+    //     else {res.send(temp);}
+    // });
+
+
+    //mailchimp
+
+    // const {email}
+    //constructs data for mailchimp subscriber
+        const data={
+            members:[
+                {
+                    email_address: temp.email,
+                    status: 'subscribed',
+                    // merge_fields:{
+                    //     FNAME: temp.firstName,
+                    //     LNAME: temp.lastName,
+                    // }
+                }
+            ]
+        }
+        const postData=JSON.stringify(data);
+        //console.log(temp.email);
+        // creates mailchimp subscriber 
+        const options ={
+            url: 'https://us19.api.mailchimp.com/3.0/lists/363ae36a99',
+            method: 'POST',
+            headers:{
+                Authorization: 'auth e6ed8d7427300d00fe7bb3d0eee6fed3-us19'
+            },
+            body: postData
+        }
+
+        axios.post(options.url, options.body.postData, {headers: options.headers}).then(
+            res => {
+                console.log("SENT");
+            }
+        )
+            // if (err) {
+            //   console.log("nah bih");
+            // } else {
+            //   if (response.statusCode === 200) {
+            //     console.log("ayyee lit");
+            //   } else {
+            //     console.log("nah bih2.0");
+            //   }
+            // }
+        //   });
     temp.save( (err) =>
     {
         if (err) {console.log(err);}
