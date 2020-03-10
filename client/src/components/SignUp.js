@@ -86,9 +86,14 @@ export default function SignUp(props) {
                 }
             )
         })
+        setToUserPage(true);
     };
     const classes = useStyles();
 
+    if (toUserPage)
+    {
+        return <Redirect to = 'user'></Redirect>
+    }
     return (
         <Container component="main" maxWidth= "md">
             <CssBaseline />

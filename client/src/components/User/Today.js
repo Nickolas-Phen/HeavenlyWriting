@@ -137,7 +137,7 @@ export default function Today() {
   } else {
     return (
       <div className={classes.paper}>
-        <Typography>Today is a {moonPhase}</Typography>
+        <h1>Today is a {moonPhase}</h1>
         <div className={classes.quote}>
           <img 
             className={classes.image}
