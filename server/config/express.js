@@ -30,9 +30,9 @@ module.exports.init = () => {
     // body parsing middleware
     app.use(bodyParser.json());
 
-    app.use(bodyParser.urlencoded({ //very important
-        extended: true
-    }));
+    // app.use(bodyParser.urlencoded({ //very important
+    //     extended: true
+    // }));
 
     // add a router
     app.use('/api/example', exampleRouter);
