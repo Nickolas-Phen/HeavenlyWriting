@@ -1,14 +1,14 @@
 import * as user from '../controllers/userController.js'
 import express from 'express'
 const router = express.Router();
-import getMoonLoc from '../../client/src/api/getMoonData.js';
+//import getMoonLoc from '../../client/src/api/getMoonData.js';
 //need to import the js file to obtain moon location (not written)
 
 //used for routing requests to correct req handler
 
 //heavily based on bootcamp 3  
 
-router.get('/', getMoonLoc, user.list);
+//router.get('/', getMoonLoc, user.list);
 router.post('/', /*getMoonLoc ,*/ user.create);
 
 //route for sending signup info

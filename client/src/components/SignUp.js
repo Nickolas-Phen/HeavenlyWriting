@@ -16,6 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
+//import { request } from 'express';
 
 function Copyright() {
     return (
@@ -106,7 +107,8 @@ export default function SignUp(props) {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                {/* adding get post inside of form */}
+                <form className={classes.form} noValidate method="POST">
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={3}>
                             <TextField
