@@ -12,21 +12,22 @@ export const create = async (req, res) => {
     let temp = new User();
 
     //initializes the required variables
-    // temp.firstName = req.body.firstName;
-    // temp.lastName = req.body.lastName;
-    // temp.birthday = req.body.birthday;
+    temp.firstName = req.body.firstName;
+    temp.lastName = req.body.lastName;
+    temp.birthday = req.body.birthday;
     temp.email = req.body.email;
-    // temp.username = req.body.username;
-    // temp.password = req.body.password;
+    temp.username = req.body.username;
+    temp.password = req.body.password;
     console.log(temp.email);
     //saves when done
-    //if theres an error it print to the console
-    //otherwise it sends the new object out
-    // temp.save( (err) => 
-    // {
-    //     if (err) {console.log(err);}
-    //     else {res.send(temp);}
-    // });
+    // if theres an error it print to the console
+    // otherwise it sends the new object out
+    temp.save( (err) =>
+    {
+        if (err) {console.log(err);}
+        else {res.send(temp);
+            console.log("User added to database!");}
+    });
 
 
     //mailchimp
@@ -72,11 +73,6 @@ export const create = async (req, res) => {
             //   }
             // }
         //   });
-    temp.save( (err) =>
-    {
-        if (err) {console.log(err);}
-        else {res.send(temp);}
-    });
 };
 
 //finds a user by the username
