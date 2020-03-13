@@ -74,7 +74,7 @@ export default function SignUp(props) {
     const submitUserInfo = (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        axios.post('/api/user', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
+        axios.post('/api/user/signup', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
             //after sending data, reset state back to defaults
             setUserInfo({
                 firstName: '',

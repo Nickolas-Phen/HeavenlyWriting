@@ -14,6 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "../assets/defaultSignInPic.jpeg";
 import {Redirect} from 'react-router-dom'
+import axios from 'axios';
 
 
 function Copyright() {
@@ -57,10 +58,12 @@ export default function SignIn(props) {
     const classes = useStyles();
     const [toUserPage, setToUserPage] = useState(false);
 
-    const loginPressed = () =>
+    const loginPressed = (e) =>
     {
+        axios.get()
         setToUserPage(true);
     };
+
 
     if (toUserPage)
     {
