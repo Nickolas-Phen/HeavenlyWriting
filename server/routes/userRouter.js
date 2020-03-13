@@ -1,6 +1,6 @@
 import * as user from '../controllers/userController.js'
 import express from 'express'
-const router = express.Router();
+const userRouter = express.Router();
 //import getMoonLoc from '../../client/src/api/getMoonData.js';
 //need to import the js file to obtain moon location (not written)
 
@@ -8,15 +8,15 @@ const router = express.Router();
 
 //heavily based on bootcamp 3  
 
-//router.get('/', getMoonLoc, user.list);
-router.post('/', /*getMoonLoc ,*/ user.create);
+//userRouter.get('/', getMoonLoc, user.list);
+userRouter.post('/', /*getMoonLoc ,*/ user.create);
 
 //route for sending signup info
-router.post('/signup', user.create);
+userRouter.post('/signup', user.create);
 
 // ':' = url parameter
-router.get('/:userId', user.read);
-router.put('/:userId', /*getMoonLoc ,*/ user.update);
-router.delete('/:userId', user.remove);
+userRouter.get('/:userId', user.read);
+userRouter.put('/:userId', /*getMoonLoc ,*/ user.update);
+userRouter.delete('/:userId', user.remove);
 
-export default router;
+export default userRouter;
