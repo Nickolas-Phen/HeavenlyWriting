@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import SignUp from "./components/SignUp";
+import SignIn from "./components/SignIn";
 import User from "./components/User/User";
 import { Switch, Route, useHistory } from "react-router-dom";
 
@@ -9,6 +10,9 @@ const App = () => {
       <Route path="/signup">
         <SignUp />
       </Route>
+    <Route path="/signin">
+        <SignIn />
+    </Route>
       <Route path="/">
         <User />
       </Route>

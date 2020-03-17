@@ -53,7 +53,7 @@ export default function Feedback() {
 
   return (
     <div className={classes.paper}>
-      <Typography paragraph>Tell us your feedback. Rate how you feel:</Typography>
+            <Typography paragraph>Tell us your feedback. Rate how you feel:</Typography>
       <div className={classes.row}>
         <div className={classes.root}>
           <Typography id="moodSlider" gutterBottom>Mood</Typography>
@@ -114,7 +114,6 @@ export default function Feedback() {
           />
         </div>
       </div>
-      
       <Button 
       variant="contained"
       color="primary" 
