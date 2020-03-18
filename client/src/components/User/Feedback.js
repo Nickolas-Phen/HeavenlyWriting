@@ -4,6 +4,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useState } from "react";
 import Slider from  "@material-ui/core/Slider";
 import Button from  "@material-ui/core/Button";
+import axios from "./AxiosConfig";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -50,6 +52,18 @@ export default function Feedback() {
   const [stress, setStress] = useState(5);
   const [energy, setEnergy] = useState(5);
   const [sociability, setSociability] = useState(5);
+  const history = useHistory();
+
+  const sendFeedback = () => 
+  axios.post('/userFeedback', {
+    mood,
+    stress,
+    energy,
+    sociability})
+    .catch(err => console.log(err))
+    .then(response => {
+      history.push('/today');
+    });
 
   return (
     <div className={classes.paper}>
@@ -117,7 +131,8 @@ export default function Feedback() {
       <Button 
       variant="contained"
       color="primary" 
-      onClick={() => console.log([mood, stress, energy, sociability])}
+      //...onClick={() => console.log([mood, stress, energy, sociability])}
+      onClick={() => sendFeedback()}
       >Submit Feedback</Button>
     </div>
   );

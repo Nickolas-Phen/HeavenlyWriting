@@ -122,7 +122,10 @@ function DrawerTest(props) {
 
           </IconButton>
           <Typography variant="h6" noWrap>
-            {tab} {/*display name of card*/}
+            {
+              history.location.pathname[1].toUpperCase() + 
+              history.location.pathname.slice(2)
+            } {/*display name of card*/}
           </Typography>
         </Toolbar>
       </AppBar>
