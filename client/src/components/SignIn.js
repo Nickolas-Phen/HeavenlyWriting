@@ -74,7 +74,7 @@ export default function SignIn(props) {
     const loginPressed = async (e) =>
     {
         e.preventDefault();
-        const user = await httpUser.logIn({fields}); //returns user token if user is in db
+        const user = await httpUser.logIn(fields); //returns user token if user is in db
         if (user) {
             //travel to user page
             setToUserPage(true);

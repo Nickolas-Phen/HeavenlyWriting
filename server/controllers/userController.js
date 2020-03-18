@@ -124,12 +124,11 @@ export const index = async (req, res) => {
 
 export const authenticate = async (req, res) => {
     const user = await User.findOne({username: req.body.username});
-
     if(!user || !user.validPassword(req.body.password)) {
         return res.json({success: false, message: "Invalid Login"});
     }
 
-    const token = await signToken(user);
+    const token = await authHelper.signToken(user);
     res.json({success: true, message: "Token attached", token});
 };
 
