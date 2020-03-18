@@ -39,9 +39,14 @@ return (
     <a href="#contact">Contact</a>
   </div>
  <div class="pic"> 
+
 <h1 >Heavenly Writing Astrology</h1>
-{/* About information */}
 <hr class="line"></hr>
+{/* The moon code */}
+<div>
+ <iframe allowtransparency="no" scrolling="no" src="https://in-the-sky.org/widgets/moonphase.php?skin=1"></iframe>
+ </div>
+ {/* About information */}
 <h2>About</h2>
 <div class="box">
 <p>
@@ -58,11 +63,12 @@ Connects people to a more nature-based, embodied sense of time.
 {/* These are the 2 buttons */}
 <h3> If you are interested create an account</h3>
 <Button class="button" component = {Link} to ="/signup">Sign up</Button>
-<hr></hr>
-<h3> If you already have an account you can <a href="./signin">Sign in</a></h3>
+
+<h3> If you already have an account you can <a href="./signin" class="link">Sign in</a></h3>
 {/* <button class="button" ><a href="./signin">Sign in</a></button> */}
 {/* this ^ works or you can also do this */}
 <Button class="button" component = {Link} to ="/signin">Sign in</Button>
+<hr></hr>
 
 <Box mt={8} class="cr">
             <Copyright />
