@@ -22,10 +22,18 @@ export const create = async (req, res) => {
     //saves when done
     // if theres an error it print to the console
     // otherwise it sends the new object out
-    temp.save( (err) =>
+    temp.save(async (err) =>
     {
-        if (err) {console.log(err);}
-        else {res.send(temp);
+        if (err) {
+            console.log(err);
+            res.json({success: false, code: err.code});
+        }
+
+        else {
+            res.send(temp);
+            //create sign token, showing success
+            const token = await signToken({username: temp.username, password: temp.password});
+            res.json({success: true, message: "User created with token", token});
             console.log("User added to database!");}
     });
 
@@ -163,6 +171,25 @@ export const list = (req, res) => {
             res.json(data);
         }
     })
+};
+export const index = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.json(users);
+    } catch(err) {
+        alert(err);
+    }
+};
+
+export const authenticate = async (req, res) => {
+    const user = await User.findOne({email: req.body.email});
+
+    if(!user || !user.validPassword(req.body.password)) {
+        return res.json({success: false, message: "Invalid Login"});
+    }
+
+    const token = await signToken(user);
+    res.json({success: true, message: "Token attached", token});
 };
 
 //only function not included from BC 3 is middleware

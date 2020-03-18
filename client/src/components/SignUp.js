@@ -17,6 +17,7 @@ import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 //import { request } from 'express';
+import httpUser from '../httpUser'
 
 function Copyright() {
     return (
@@ -71,12 +72,13 @@ export default function SignUp(props) {
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
-    const submitUserInfo = (e) => {
+    const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        axios.post('/api/user/signup', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
-            //after sending data, reset state back to defaults
-            setUserInfo({
+        //create account for user and get their token
+        const user = await httpUser.signUp(...userInfo);
+        //reset fields back to defaults
+        setUserInfo({
                 firstName: '',
                 lastName: '',
                 birthday: '',
@@ -84,10 +86,15 @@ export default function SignUp(props) {
                 password: '',
                 birthtime: 0,
                 username: '',
-                }
-            )
-        })
-        setToUserPage(true);
+            }
+        );
+        if(user)
+        {
+            //sign user in
+            props.onSignUpSuccess(user);
+            //go to user page
+            setToUserPage(true);
+        }
     };
     const classes = useStyles();
 
