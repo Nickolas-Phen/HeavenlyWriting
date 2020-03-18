@@ -48,7 +48,7 @@ return (
  </div>
  {/* About information */}
 <h2>About</h2>
-<div class="box">
+<div allowtransparency="yes"class="box">
 <p>
 The application leverages the current popularity of astrology and empowers others to shift their relationship to time and move through their world in ways that are more sane, present, and sustainable.
 
