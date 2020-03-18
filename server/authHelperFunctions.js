@@ -1,17 +1,19 @@
 //Thank you Dakota and Jon
-const jwt = require('jsonwebtoken'),
-    User = require('./models/userSchema.js'),
-    jwt_secret = process.env.secret || require('./config/config.js').secret;
+import jwt from 'jsonwebtoken'
+import User from './models/userSchema.js'
+//process.env.secret
+import config from './config/config.js';
+const jwt_secret = process.env.secret || config.secret;
 
 // function to create tokens
-function signToken(user) {
+export const signToken = (user) => {
     const userData = user.toObject();
     delete userData.password;
     return jwt.sign(userData, jwt_secret)
-}
+};
 
 // function to verify tokens
-function verifyToken(req, res, next) {
+export const verifyToken = (req, res, next) => {
     const token = req.get('token') || req.body.token || req.query.token;
 
     // reject user if no token
@@ -31,9 +33,4 @@ function verifyToken(req, res, next) {
             next();
         })
     })
-}
-
-module.exports = {
-    signToken,
-    verifyToken
 };

@@ -1,86 +1,25 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
 import axios from 'axios'
+import * as authHelper from '../authHelperFunctions.js'
 //import findMoon from '../../client/src/api/getMoonData.js'
 
 
 //function to create a new object
 //req is the object to be created
 export const create = async (req, res) => {
-    // console.log("find moon called");
-    // findMoon();
-    let temp = new User();
-
-    //initializes the required variables
-    temp.firstName = req.body.firstName;
-    temp.lastName = req.body.lastName;
-    temp.birthday = req.body.birthday;
-    temp.email = req.body.email;
-    temp.username = req.body.username;
-    temp.password = req.body.password;
-    console.log(temp.email);
-    //saves when done
-    // if theres an error it print to the console
-    // otherwise it sends the new object out
-    temp.save(async (err) =>
+    //creates user and saves it at the same time
+    try {
+        //create sign token, showing success
+        const user = await User.create(req.body);
+        const token = await authHelper.signToken(user);
+        res.json({success: true, message: "User created with token", token});
+        console.log("User added to database!");
+    }
+    catch
     {
-        if (err) {
-            console.log(err);
-            res.json({success: false, code: err.code});
-        }
-
-        else {
-            res.send(temp);
-            //create sign token, showing success
-            const token = await signToken({username: temp.username, password: temp.password});
-            res.json({success: true, message: "User created with token", token});
-            console.log("User added to database!");}
-    });
-
-
-    //mailchimp
-
-    // const {email}
-    //constructs data for mailchimp subscriber
-        const data={
-            members:[
-                {
-                    email_address: temp.email,
-                    status: 'subscribed',
-                    // merge_fields:{
-                    //     FNAME: temp.firstName,
-                    //     LNAME: temp.lastName,
-                    // }
-                }
-            ]
-        }
-        const postData=JSON.stringify(data);
-        //console.log(temp.email);
-        // creates mailchimp subscriber 
-        const options ={
-            url: 'https://us19.api.mailchimp.com/3.0/lists/363ae36a99',
-            method: 'POST',
-            headers:{
-                Authorization: 'auth e6ed8d7427300d00fe7bb3d0eee6fed3-us19'
-            },
-            body: postData
-        }
-
-        axios.post(options.url, options.body.postData, {headers: options.headers}).then(
-            res => {
-                console.log("SENT");
-            }
-        )
-            // if (err) {
-            //   console.log("nah bih");
-            // } else {
-            //   if (response.statusCode === 200) {
-            //     console.log("ayyee lit");
-            //   } else {
-            //     console.log("nah bih2.0");
-            //   }
-            // }
-        //   });
+        res.json({success: false, code: err.code});
+    }
 };
 
 //finds a user by the username
@@ -149,10 +88,12 @@ export const remove = (req, res) => {
         if (err) 
         {
             res.status(404).send("Error: User could not be deleted");
+            res.json({success: false, code: err.code});
         }
         else
         {
             res.send(data);
+            res.json({success: true, message: "User deleted", user});
         }
     });
 };
@@ -182,7 +123,7 @@ export const index = async (req, res) => {
 };
 
 export const authenticate = async (req, res) => {
-    const user = await User.findOne({email: req.body.email});
+    const user = await User.findOne({username: req.body.username});
 
     if(!user || !user.validPassword(req.body.password)) {
         return res.json({success: false, message: "Invalid Login"});
@@ -190,6 +131,18 @@ export const authenticate = async (req, res) => {
 
     const token = await signToken(user);
     res.json({success: true, message: "Token attached", token});
+};
+
+export const show = async (req, res) => {
+    console.log("Current User:");
+    console.log(req.user);
+
+    try {
+        const user = await User.findById(req.params.id);
+        res.json(user);
+    } catch(err) {
+        alert(err);
+    }
 };
 
 //only function not included from BC 3 is middleware

@@ -1,7 +1,7 @@
 import * as user from '../controllers/userController.js'
 import express from 'express'
 const userRouter = express.Router();
-import verifyToken from '../authHelperFunctions'
+import * as authHelper from '../authHelperFunctions.js'
 //import getMoonLoc from '../../client/src/api/getMoonData.js';
 //need to import the js file to obtain moon location (not written)
 
@@ -17,8 +17,8 @@ import verifyToken from '../authHelperFunctions'
 //copy and pasted from authentication tutorial
 userRouter.route('/').get(user.index).post(user.create);
 userRouter.post('/authenticate', user.authenticate);
-userRouter.use(verifyToken);
-userRouter.route('/:id').get(user.show).patch(user.update).delete(user.destroy);
+userRouter.use(authHelper.verifyToken);
+userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
 
 // ':' = url parameter
 userRouter.get('/:userId', user.read);

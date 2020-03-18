@@ -76,7 +76,7 @@ export default function SignUp(props) {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
         //create account for user and get their token
-        const user = await httpUser.signUp(...userInfo);
+        const user = await httpUser.signUp(userInfo);
         //reset fields back to defaults
         setUserInfo({
                 firstName: '',
