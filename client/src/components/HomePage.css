@@ -43,11 +43,14 @@ h2{
 .cr{
     bottom: 10px;
 }
-button{
-    background-color: teal;
+.button{
+    /* background-color: teal; */
+    background-color: whitesmoke;
+    color: blue;
+    font-weight: bolder;
     align-items: center;
-    margin-left: 50px;
-    right:  10px;
+    margin-left: 48%;
+    align-content: center;
 }
 p{
     color: black;
@@ -104,4 +107,8 @@ p{
     padding: 0px;
     margin: 8%;
     margin-top: 20px;
+    margin-bottom: 20px;
+    }
+    h3{
+      text-align: center;
     }

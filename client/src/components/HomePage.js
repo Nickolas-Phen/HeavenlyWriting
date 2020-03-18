@@ -34,8 +34,8 @@ return (
 <div>
      {/* If I end up having a problem with background image just switch it to div and remove from body in css */}
     <div class="navbar">
-    <a href="#home">Sign Up</a>
-    <a href="#news">Sign In</a>
+    <a href="./signup">Sign Up</a>
+    <a href="./signin">Sign In</a>
     <a href="#contact">Contact</a>
   </div>
  <div class="pic"> 
@@ -56,26 +56,18 @@ Connects people to a more nature-based, embodied sense of time.
 </p>
 </div>
 {/* These are the 2 buttons */}
-<button >SignIn</button>
-{/* <Button variant="success">SignUp</Button> */}
+<h3> If you are interested create an account</h3>
+<Button class="button" component = {Link} to ="/signup">Sign up</Button>
 <hr></hr>
-<Button                   type="submit"
-                        variant="contained"
-                        color="primary"
-                        
-                        
-                    >
-                        SignUp
-                    </Button>
+<h3> If you already have an account you can <a href="./signin">Sign in</a></h3>
+{/* <button class="button" ><a href="./signin">Sign in</a></button> */}
+{/* this ^ works or you can also do this */}
+<Button class="button" component = {Link} to ="/signin">Sign in</Button>
+
 <Box mt={8} class="cr">
             <Copyright />
         </Box>
-{/* 
-      <h1 >Heavenly Writing</h1>
-        <Box mt={8} class="cr">
-            <Copyright />
-        </Box> */}
-  
+
   </div>
   </div>
 );

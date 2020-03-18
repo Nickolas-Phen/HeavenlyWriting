@@ -8,7 +8,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 const App = () => {
   return (
     <Switch>
-      <Route path="/">
+      <Route path="/home">
         <Home />
       </Route>
       <Route path="/signup">
@@ -17,7 +17,7 @@ const App = () => {
     <Route path="/signin">
         <SignIn />
     </Route>
-      <Route path="/user">
+      <Route path="/">
         <User />
       </Route>
     </Switch>
