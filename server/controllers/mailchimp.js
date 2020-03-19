@@ -15,11 +15,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.post('/signup', (req, res) => {
   const { firstName, lastName, email } = req.body;
 
+}); //THE APP.POST IS NOT CLOSED SO I ADDED THIS - FEEL FREE TO MOVE
+
+
   // Make sure fields are filled
-  if (!firstName || !lastName || !email) {
-    res.redirect('/fail.html');
+/*  if (!firstName || !lastName || !email) {
+    res.redirect('/fail.html');     //doesn't exist
     return;
-  }
+  } */
 
   // Construct req data
   const data = {
