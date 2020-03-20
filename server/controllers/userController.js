@@ -1,11 +1,13 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
 import axios from 'axios'
+import config from '../config/config.js'
 //import findMoon from '../../client/src/api/getMoonData.js'
 
-
+mongoose.connect(config.db.uri, {useNewUrlParser: true}); //user db connection
 //function to create a new object
 //req is the object to be created
+
 export const create = async (req, res) => {
     // console.log("find moon called");
     // findMoon();
