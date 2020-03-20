@@ -4,6 +4,7 @@ const path = require('path'),
     morgan = require('morgan'),
     request=require('request'),
     bodyParser = require('body-parser'),
+    config = require('./config'),
     exampleRouter = require('../routes/examples.server.routes');
 
 module.exports.init = () => {
