@@ -31,16 +31,16 @@ module.exports.init = () => {
     // body parsing middleware
     app.use(bodyParser.json());
 
-    app.use(bodyParser.urlencoded({ //very important
-        extended: true
-    }));
+    // app.use(bodyParser.urlencoded({ //very important
+    //     extended: true
+    // }));
 
     // add a router
     app.use('/api/example', exampleRouter);
 
     if (process.env.NODE_ENV === 'production') {
         // Serve any static files
-        app.use(express.static(path.join(__dirname, '../../client/build')));
+        app.use(express.static(path.join(__dirname, 'client/build')));
 
         // Handle React routing, return all requests to React app
         app.get('*', function(req, res) {

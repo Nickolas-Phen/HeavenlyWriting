@@ -14,21 +14,25 @@ export const create = async (req, res) => {
     let temp = new User();
 
     //initializes the required variables
-    // temp.firstName = req.body.firstName;
-    // temp.lastName = req.body.lastName;
-    // temp.birthday = req.body.birthday;
+    temp.firstName = req.body.firstName;
+    temp.lastName = req.body.lastName;
+    temp.birthday = req.body.birthday;
     temp.email = req.body.email;
-    // temp.username = req.body.username;
-    // temp.password = req.body.password;
+    temp.username = req.body.username;
+    temp.password = req.body.password;
     console.log(temp.email);
     //saves when done
-    //if theres an error it print to the console
-    //otherwise it sends the new object out
-    // temp.save( (err) => 
-    // {
-    //     if (err) {console.log(err);}
-    //     else {res.send(temp);}
-    // });
+    // if theres an error it print to the console
+    // otherwise it sends the new object out
+    addNonRequired(req,temp);
+    findZodiac(req, temp);
+
+    temp.save( (err) =>
+    {
+        if (err) {console.log(err);}
+        else {res.send(temp);
+            console.log("User added to database!");}
+    });
 
 
     //mailchimp
@@ -74,11 +78,6 @@ export const create = async (req, res) => {
             //   }
             // }
         //   });
-    temp.save( (err) =>
-    {
-        if (err) {console.log(err);}
-        else {res.send(temp);}
-    });
 };
 
 //finds a user by the username
@@ -124,6 +123,8 @@ export const update = (req, res) => {
             data.username = req.body.username;
             data.password = req.body.password;
 
+            addNonRequired(req,temp);
+            
              /* Save the user */
             data.save( (err) => {
                 if (err) { 
@@ -171,4 +172,124 @@ export const list = (req, res) => {
     })
 };
 
-//only function not included from BC 3 is middleware
+//adds all the values that may not exist
+const addNonRequired = (req, res) =>
+{
+    if (req.phoneNumber)
+        {res.phoneNumber = req.body.phoneNumber;}
+    if(req.middleName)
+        {res.phoneNumber = req.body.phoneNumber;}
+    if(req.brithHour)
+        {res.birthHour = req.body.birthHour;}
+    if(req.birbirthMinute)
+        {res.birbirthMinute = req.body.brithMinute;}
+    if(req.house)
+        {res.house = req.body.house;}
+    if(req.zodiac)
+        {res.zodiac = req.body.zodiac;}
+}
+
+
+//sets the zodiac sign for the user
+export const findZodiac = (req, res) => {
+    if(req.brithday.getMonth()  ==  0)
+    {
+        if(req.birthday.getDay() <=  19)
+        {req.zodiac   = "Capricorn";}
+
+        else
+        {
+            req.zodiac   = "Aquarius";
+        }
+    }
+
+    else if (req.brithday.getMonth()   == 1)
+    {
+        if(req.brithday.getDay()<= 18)
+            {req.zodiac  =   "Aquarius";}
+        else  
+            {req.zodiac  =  "Pisces";}
+    }
+    
+    else if (req.brithday.getMonth()   == 2)
+    {
+        if(req.brithday.getDay()<= 20)
+            {req.zodiac  =   "Pisces";}
+        else  
+            {req.zodiac  =  "Aries";}
+    }
+    
+    else if (req.brithday.getMonth()   == 3)
+    {
+        if(req.brithday.getDay()<= 19)
+            {req.zodiac  =   "Aries";}
+        else  
+            {req.zodiac  =  "Taurus";}
+    }
+    
+    else if (req.brithday.getMonth()   == 4)
+    {
+        if(req.brithday.getDay()<= 20)
+            {req.zodiac  =   "Taurus";}
+        else  
+            {req.zodiac  =  "Gemini";}
+    }
+    
+    else if (req.brithday.getMonth()   == 5)
+    {
+        if(req.brithday.getDay()<= 20)
+            {req.zodiac  =   "Gemini";}
+        else  
+            {req.zodiac  =  "Cancer";}
+    }
+    
+    else if (req.brithday.getMonth()   == 6)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Cancer";}
+        else  
+            {req.zodiac  =  "Leo";}
+    }
+    
+    else if (req.brithday.getMonth()   == 7)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Leo";}
+        else  
+            {req.zodiac  =  "Virgo";}
+    }
+    
+    else if (req.brithday.getMonth()   == 8)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Virgo";}
+        else  
+            {req.zodiac  =  "Libra";}
+    }
+    
+    else if (req.brithday.getMonth()   == 9)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Libra";}
+        else  
+            {req.zodiac  =  "Scorpio";}
+    }
+    
+    else if (req.brithday.getMonth()   == 10)
+    {
+        if(req.brithday.getDay()<= 21)
+            {req.zodiac  =   "Scorpio";}
+        else  
+            {req.zodiac  =  "Sagittarius";}
+    }
+    
+    else if (req.brithday.getMonth()   == 11)
+    {
+        if(req.brithday.getDay()<= 21)
+            {req.zodiac  =   "Sagittarius";}
+        else  
+            {req.zodiac  =  "Capricorn";}
+    }
+        
+
+};
