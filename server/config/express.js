@@ -49,8 +49,9 @@ module.exports.init = () => {
 
     //app.use(express.static(path.join(__dirname, '../../client/src/components/Signup.js')));
     //added 
-    app.post('/signUp',(req,res)=>{
-    console.log(req.body.email);
+    app.post('/signup',(req,res)=>{
+        res.send('Signed Up!');
+        console.log('worked!');
         //res.send('hello');
         //Possible to get from other places?
         
