@@ -1,3 +1,4 @@
+/*
 const express = require('express');
 const request = require('request');
 const bodyParser = require('body-parser');
@@ -17,13 +18,14 @@ app.post('/signup', (req, res) => {
 
 }); //THE APP.POST IS NOT CLOSED SO I ADDED THIS - FEEL FREE TO MOVE
 
-
+*/
   // Make sure fields are filled
 /*  if (!firstName || !lastName || !email) {
     res.redirect('/fail.html');     //doesn't exist
     return;
   } */
 
+  /*
   // Construct req data
   const data = {
     members: [
@@ -48,3 +50,4 @@ app.post('/signup', (req, res) => {
     },
     body: postData
   };
+*/
