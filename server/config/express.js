@@ -7,6 +7,8 @@ const path = require('path'),
     config = require('./config'),
     exampleRouter = require('../routes/examples.server.routes');
 
+
+
 module.exports.init = () => {
     /* 
         connect to database
@@ -52,7 +54,7 @@ module.exports.init = () => {
     //added 
     app.post('/signUp',(req,res)=>{
     console.log(req.body.email);
-        //res.send('hello');
+        res.send('hello');
         //Possible to get from other places?
         
         // const {email,firstName,lastName,address,phoneNumber,birthday}=req.body;

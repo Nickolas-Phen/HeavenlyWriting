@@ -39,8 +39,10 @@
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
     "react-scripts": "3.4.0",
+    "require": "^2.4.20",
     "requirejs": "^2.3.6",
     "should": "^13.2.3",
+    "superagent": "^5.2.2",
     "supertest": "^4.0.2",
     "xmlhttprequest": "^1.8.0"
   },
