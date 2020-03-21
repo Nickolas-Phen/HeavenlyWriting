@@ -1,7 +1,18 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
 import axios from 'axios'
-//import findMoon from '../../client/src/api/getMoonData.js'
+import request from 'superagent';
+import express from 'express'
+import bodyParser from 'body-parser';
+
+var app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: true}));
+
+
+var mailchimpInstance   = 'us19',
+    listUniqueId        = 'de644ad1de',
+    mailchimpApiKey     = '31d36951a5db54c9db20da653fb109b3-us19';
 
 
 //function to create a new object
@@ -18,7 +29,12 @@ export const create = async (req, res) => {
     temp.email = req.body.email;
     temp.username = req.body.username;
     temp.password = req.body.password;
-    console.log(temp.email);
+   
+    //FOR SOME REASON THESE 2 DON'T WORK, ILL CHECK IT LATER - MELINDA
+    //calls functions to add more info to the user
+    //addNonRequired(req,temp);
+    //findZodiac(, temp);
+    
     //saves when done
     // if theres an error it print to the console
     // otherwise it sends the new object out
@@ -29,51 +45,10 @@ export const create = async (req, res) => {
             console.log("User added to database!");}
     });
 
-
-    //mailchimp
-
-    // const {email}
-    //constructs data for mailchimp subscriber
-        const data={
-            members:[
-                {
-                    email_address: temp.email,
-                    status: 'subscribed',
-                    // merge_fields:{
-                    //     FNAME: temp.firstName,
-                    //     LNAME: temp.lastName,
-                    // }
-                }
-            ]
-        }
-        const postData=JSON.stringify(data);
-        //console.log(temp.email);
-        // creates mailchimp subscriber 
-        const options ={
-            url: 'https://us19.api.mailchimp.com/3.0/lists/363ae36a99',
-            method: 'POST',
-            headers:{
-                Authorization: 'auth e6ed8d7427300d00fe7bb3d0eee6fed3-us19'
-            },
-            body: postData
-        }
-
-        axios.post(options.url, options.body.postData, {headers: options.headers}).then(
-            res => {
-                console.log("SENT");
-            }
-        )
-            // if (err) {
-            //   console.log("nah bih");
-            // } else {
-            //   if (response.statusCode === 200) {
-            //     console.log("ayyee lit");
-            //   } else {
-            //     console.log("nah bih2.0");
-            //   }
-            // }
-        //   });
+    //calls the function that adds the user to mailchimp
+     mail(req, res);
 };
+
 
 //finds a user by the username
 //input is the username requested
@@ -117,6 +92,11 @@ export const update = (req, res) => {
             data.email = req.body.email;
             data.username = req.body.username;
             data.password = req.body.password;
+
+            //calls functions to add more info to the user
+            //addNonRequired(req,temp);
+            //findZodiac(req, temp);
+    
 
              /* Save the user */
             data.save( (err) => {
@@ -166,3 +146,155 @@ export const list = (req, res) => {
 };
 
 //only function not included from BC 3 is middleware
+
+export const mail = (input, res) =>
+{
+    request
+    .post('https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listUniqueId + '/members/')
+    .set('Content-Type', 'application/json;charset=utf-8')
+    .set('Authorization', 'Basic ' + new Buffer('any:' + mailchimpApiKey ).toString('base64'))
+    .send({
+      'email_address': input.body.email,
+      'status': 'subscribed',
+      'merge_fields': {
+        'FNAME': input.body.firstName,
+        'LNAME': input.body.lastName
+      }
+    })
+        .end(function(err, response) {
+          if (response.status < 300 || (response.status === 400 && response.body.title === "Member Exists")) {
+            console.log('Signed Up for Mailchimp!');
+          } else {
+            console.log('Mailchimp Sign Up Failed');
+          }
+      });
+      
+      
+
+};
+
+
+
+
+//adds all the values that may not exist
+const addNonRequired = (req, res) =>
+{
+    if (req.phoneNumber)
+        {res.phoneNumber = req.body.phoneNumber;}
+    if(req.middleName)
+        {res.phoneNumber = req.body.phoneNumber;}
+    if(req.brithHour)
+        {res.birthHour = req.body.birthHour;}
+    if(req.birbirthMinute)
+        {res.birbirthMinute = req.body.brithMinute;}
+    if(req.house)
+        {res.house = req.body.house;}
+    if(req.zodiac)
+        {res.zodiac = req.body.zodiac;}
+}
+
+
+//sets the zodiac sign for the user
+export const findZodiac = (req, res) => {
+    if(req.brithday.getMonth()  ==  0)
+    {
+        if(req.birthday.getDay() <=  19)
+        {req.zodiac   = "Capricorn";}
+
+        else
+        {
+            req.zodiac   = "Aquarius";
+        }
+    }
+
+    else if (req.brithday.getMonth()   == 1)
+    {
+        if(req.brithday.getDay()<= 18)
+            {req.zodiac  =   "Aquarius";}
+        else  
+            {req.zodiac  =  "Pisces";}
+    }
+    
+    else if (req.brithday.getMonth()   == 2)
+    {
+        if(req.brithday.getDay()<= 20)
+            {req.zodiac  =   "Pisces";}
+        else  
+            {req.zodiac  =  "Aries";}
+    }
+    
+    else if (req.brithday.getMonth()   == 3)
+    {
+        if(req.brithday.getDay()<= 19)
+            {req.zodiac  =   "Aries";}
+        else  
+            {req.zodiac  =  "Taurus";}
+    }
+    
+    else if (req.brithday.getMonth()   == 4)
+    {
+        if(req.brithday.getDay()<= 20)
+            {req.zodiac  =   "Taurus";}
+        else  
+            {req.zodiac  =  "Gemini";}
+    }
+    
+    else if (req.brithday.getMonth()   == 5)
+    {
+        if(req.brithday.getDay()<= 20)
+            {req.zodiac  =   "Gemini";}
+        else  
+            {req.zodiac  =  "Cancer";}
+    }
+    
+    else if (req.brithday.getMonth()   == 6)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Cancer";}
+        else  
+            {req.zodiac  =  "Leo";}
+    }
+    
+    else if (req.brithday.getMonth()   == 7)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Leo";}
+        else  
+            {req.zodiac  =  "Virgo";}
+    }
+    
+    else if (req.brithday.getMonth()   == 8)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Virgo";}
+        else  
+            {req.zodiac  =  "Libra";}
+    }
+    
+    else if (req.brithday.getMonth()   == 9)
+    {
+        if(req.brithday.getDay()<= 22)
+            {req.zodiac  =   "Libra";}
+        else  
+            {req.zodiac  =  "Scorpio";}
+    }
+    
+    else if (req.brithday.getMonth()   == 10)
+    {
+        if(req.brithday.getDay()<= 21)
+            {req.zodiac  =   "Scorpio";}
+        else  
+            {req.zodiac  =  "Sagittarius";}
+    }
+    
+    else if (req.brithday.getMonth()   == 11)
+    {
+        if(req.brithday.getDay()<= 21)
+            {req.zodiac  =   "Sagittarius";}
+        else  
+            {req.zodiac  =  "Capricorn";}
+    }
+        
+
+};
+
