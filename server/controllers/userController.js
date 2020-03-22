@@ -164,6 +164,7 @@ export const mail = (input, res) =>
         .end(function(err, response) {
           if (response.status < 300 || (response.status === 400 && response.body.title === "Member Exists")) {
             console.log('Signed Up for Mailchimp!');
+            response.send("Submitted!");
           } else {
             console.log('Mailchimp Sign Up Failed');
           }
