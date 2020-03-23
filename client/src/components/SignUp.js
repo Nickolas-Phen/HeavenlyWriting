@@ -17,6 +17,7 @@ import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 //import { request } from 'express';
+import httpUser from '../httpUser'
 
 function Copyright() {
     return (
@@ -64,39 +65,27 @@ export default function SignUp(props) {
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
-    const [mPW, setMPW] = useState('');
-    const [cPW, setCPW] = useState('');
-    const pw ='';
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const passwordsMatch = () =>
+    {
+        //if both password fields have input and are equal, return true
+        return ((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword))
+    };
+
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
-
-    const checkPW = () =>{
-        if(mPW !== cPW){
-            setToUserPage(true);
-             alert("Password doesn't match!");
-           window.location.reload();
-            // return(<div                         component = {Link} to ="/user"> 
-
-            // </div>);
-        }else{
-            setToUserPage(true);
-            submitUserInfo();
-            // return(<div component = {Link} to ="/user"> 
-            // </div>);
-        }
-    };
-
-    const submitUserInfo = () => {
-        console.log("axios");
+    const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
-        // e.preventDefault();
-        axios.post('/api/user', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
-            //after sending data, reset state back to defaults
-            setUserInfo({
+        e.preventDefault();
+        //create account for user and get their token
+        const user = await httpUser.signUp(userInfo);
+        //reset fields back to defaults
+        setUserInfo({
                 firstName: '',
                 lastName: '',
                 birthday: '',
@@ -104,10 +93,15 @@ export default function SignUp(props) {
                 password: '',
                 birthtime: 0,
                 username: '',
-                }
-            )
-        })
-        // setToUserPage(true);
+            }
+        );
+        if(user)
+        {
+            //sign user in
+            props.onSignUpSuccess(user);
+            //go to user page
+            setToUserPage(true);
+        }
     };
     const classes = useStyles();
 
@@ -204,8 +198,6 @@ export default function SignUp(props) {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={onChangeText}
-                                onChange={e=> setMPW(e.target.value)}
-                                                              
                             />
                         </Grid>
                     </Grid>
@@ -232,9 +224,7 @@ export default function SignUp(props) {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
-                                onChange={e=> setCPW(e.target.value)}
-                                
-
+                                onChange={e=> setConfirmPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -249,22 +239,17 @@ export default function SignUp(props) {
                                 onChange={onChangeText}
                             />
                         </Grid>
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <FormControlLabel*/}
-                        {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
-                        {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
                     </Grid>
                     <Button
-                        //  component = {Link} to ="/user"
+                        component = {Link} to ="/user"
+                        //enable button if passwords match
+                        disabled = {!passwordsMatch()}
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={checkPW}
-                        
+                        onClick={submitUserInfo}
                     >
                         Sign Up
                     </Button>

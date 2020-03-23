@@ -6,6 +6,7 @@ import Song from "./MocArticle";
 //import getMoonPhase from '../../api/getMoonData.js'
 import axios from "axios";
 import './today.css'
+import httpUser from "../../httpUser";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -127,8 +128,6 @@ export default function Today() {
       });
   }, []);
 
-
-
   if (isLoading) {
     return (
       <div className={classes.paper}>
@@ -146,6 +145,7 @@ export default function Today() {
           />
           <br></br>
           <h2>Today's moon:  {moonPhase}</h2>
+          <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
           
           
           {/* <span className={classes.quoteText}>{quote}</span> */}

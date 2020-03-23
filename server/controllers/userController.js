@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import User from '../models/userSchema.js';
 import axios from 'axios'
+import * as authHelper from '../authHelperFunctions.js'
+//import findMoon from '../../client/src/api/getMoonData.js'
 import request from 'superagent';
 import express from 'express'
 import bodyParser from 'body-parser';
@@ -18,33 +20,18 @@ var mailchimpInstance   = 'us19',
 //function to create a new object
 //req is the object to be created
 export const create = async (req, res) => {
-    // console.log("find moon called");
-    // findMoon();
-    let temp = new User();
-
-    //initializes the required variables
-    temp.firstName = req.body.firstName;
-    temp.lastName = req.body.lastName;
-    temp.birthday = req.body.birthday;
-    temp.email = req.body.email;
-    temp.username = req.body.username;
-    temp.password = req.body.password;
-   
-    //FOR SOME REASON THESE 2 DON'T WORK, ILL CHECK IT LATER - MELINDA
-    //calls functions to add more info to the user
-    //addNonRequired(req,temp);
-    //findZodiac(, temp);
-    
-    //saves when done
-    // if theres an error it print to the console
-    // otherwise it sends the new object out
-    temp.save( (err) =>
+    //creates user and saves it at the same time
+    try {
+        //create sign token, showing success
+        const user = await User.create(req.body);
+        const token = await authHelper.signToken(user);
+        res.json({success: true, message: "User created with token", token});
+        console.log("User added to database!");
+    }
+    catch
     {
-        if (err) {console.log(err);}
-        else {res.send(temp);
-            console.log("User added to database!");}
-    });
-
+        res.json({success: false, code: err.code});
+    }
     //calls the function that adds the user to mailchimp
      mail(req, res);
 };
@@ -96,7 +83,7 @@ export const update = (req, res) => {
             //calls functions to add more info to the user
             //addNonRequired(req,temp);
             //findZodiac(req, temp);
-    
+
 
              /* Save the user */
             data.save( (err) => {
@@ -121,10 +108,12 @@ export const remove = (req, res) => {
         if (err) 
         {
             res.status(404).send("Error: User could not be deleted");
+            res.json({success: false, code: err.code});
         }
         else
         {
             res.send(data);
+            res.json({success: true, message: "User deleted", user});
         }
     });
 };
@@ -143,6 +132,36 @@ export const list = (req, res) => {
             res.json(data);
         }
     })
+};
+export const index = async (req, res) => {
+    try {
+        const users = await User.find({});
+        res.json(users);
+    } catch(err) {
+        alert(err);
+    }
+};
+
+export const authenticate = async (req, res) => {
+    const user = await User.findOne({username: req.body.username});
+    if(!user || !user.validPassword(req.body.password)) {
+        return res.json({success: false, message: "Invalid Login"});
+    }
+
+    const token = await authHelper.signToken(user);
+    res.json({success: true, message: "Token attached", token});
+};
+
+export const show = async (req, res) => {
+    console.log("Current User:");
+    console.log(req.user);
+
+    try {
+        const user = await User.findById(req.params.id);
+        res.json(user);
+    } catch(err) {
+        alert(err);
+    }
 };
 
 //only function not included from BC 3 is middleware
@@ -169,8 +188,8 @@ export const mail = (input, res) =>
             console.log('Mailchimp Sign Up Failed');
           }
       });
-      
-      
+
+
 
 };
 
@@ -212,90 +231,90 @@ export const findZodiac = (req, res) => {
     {
         if(req.brithday.getDay()<= 18)
             {req.zodiac  =   "Aquarius";}
-        else  
+        else
             {req.zodiac  =  "Pisces";}
     }
-    
+
     else if (req.brithday.getMonth()   == 2)
     {
         if(req.brithday.getDay()<= 20)
             {req.zodiac  =   "Pisces";}
-        else  
+        else
             {req.zodiac  =  "Aries";}
     }
-    
+
     else if (req.brithday.getMonth()   == 3)
     {
         if(req.brithday.getDay()<= 19)
             {req.zodiac  =   "Aries";}
-        else  
+        else
             {req.zodiac  =  "Taurus";}
     }
-    
+
     else if (req.brithday.getMonth()   == 4)
     {
         if(req.brithday.getDay()<= 20)
             {req.zodiac  =   "Taurus";}
-        else  
+        else
             {req.zodiac  =  "Gemini";}
     }
-    
+
     else if (req.brithday.getMonth()   == 5)
     {
         if(req.brithday.getDay()<= 20)
             {req.zodiac  =   "Gemini";}
-        else  
+        else
             {req.zodiac  =  "Cancer";}
     }
-    
+
     else if (req.brithday.getMonth()   == 6)
     {
         if(req.brithday.getDay()<= 22)
             {req.zodiac  =   "Cancer";}
-        else  
+        else
             {req.zodiac  =  "Leo";}
     }
-    
+
     else if (req.brithday.getMonth()   == 7)
     {
         if(req.brithday.getDay()<= 22)
             {req.zodiac  =   "Leo";}
-        else  
+        else
             {req.zodiac  =  "Virgo";}
     }
-    
+
     else if (req.brithday.getMonth()   == 8)
     {
         if(req.brithday.getDay()<= 22)
             {req.zodiac  =   "Virgo";}
-        else  
+        else
             {req.zodiac  =  "Libra";}
     }
-    
+
     else if (req.brithday.getMonth()   == 9)
     {
         if(req.brithday.getDay()<= 22)
             {req.zodiac  =   "Libra";}
-        else  
+        else
             {req.zodiac  =  "Scorpio";}
     }
-    
+
     else if (req.brithday.getMonth()   == 10)
     {
         if(req.brithday.getDay()<= 21)
             {req.zodiac  =   "Scorpio";}
-        else  
+        else
             {req.zodiac  =  "Sagittarius";}
     }
-    
+
     else if (req.brithday.getMonth()   == 11)
     {
         if(req.brithday.getDay()<= 21)
             {req.zodiac  =   "Sagittarius";}
-        else  
+        else
             {req.zodiac  =  "Capricorn";}
     }
-        
+
 
 };
 
