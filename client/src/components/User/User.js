@@ -22,7 +22,7 @@ import Today from "./Today";
 import Previous from "./Previous";
 import Feedback from "./Feedback";
 import Admin from "./Admin";
-
+import Home from "../HomePage";
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -146,7 +146,7 @@ function DrawerTest(props) {
         </div>
         <Divider />
         <List>
-          {["Today", "Previous", "Feedback", "Admin"].map(text => (
+          {["Today", "Previous", "Feedback", "Admin","Log out"].map(text => (
             <ListItem button key={text} onClick={() => changeTab(text)}>
               <ListItemText primary={text} />
             </ListItem>
@@ -160,6 +160,9 @@ function DrawerTest(props) {
       >
         <div className={classes.drawerHeader} />
         <Switch>
+          <Route path="/Log out">
+            <Home/>
+          </Route>
           <Route path="/previous">
             <Previous />
           </Route>
@@ -172,6 +175,7 @@ function DrawerTest(props) {
           <Route path="/">
             <Today />
           </Route>
+          
         </Switch>
       </main>
     </div>
