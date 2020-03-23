@@ -65,6 +65,13 @@ export default function SignUp(props) {
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const passwordsMatch = () =>
+    {
+        //if both password fields have input and are equal, return true
+        return ((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword))
+    };
 
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
@@ -217,6 +224,7 @@ export default function SignUp(props) {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={e=> setConfirmPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -231,15 +239,11 @@ export default function SignUp(props) {
                                 onChange={onChangeText}
                             />
                         </Grid>
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <FormControlLabel*/}
-                        {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
-                        {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
                     </Grid>
                     <Button
                         component = {Link} to ="/user"
+                        //enable button if passwords match
+                        disabled = {!passwordsMatch()}
                         type="submit"
                         fullWidth
                         variant="contained"
