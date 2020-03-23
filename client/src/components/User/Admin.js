@@ -5,6 +5,7 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import DropDown from "../widgets/DropDown.js"
 import {Signs, Houses, MoonPhases} from "../astronomyInfo";
+import TextEditor from "../widgets/TextEditor";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -31,6 +32,7 @@ export default function Admin() {
             <DropDown options = {MoonPhases}></DropDown>
           </Grid>
         </Grid>
+        <TextEditor/>
       </Container>
     </div>
   );
