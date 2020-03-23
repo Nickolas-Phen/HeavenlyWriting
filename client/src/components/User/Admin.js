@@ -5,16 +5,13 @@ import dropdown from "../widgets/dropdown.js"
 import Select from 'react-select'
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
+import DropDown from "../DropDown.js"
 
 const options = [
   {value: 'chocolate', label: 'Chocolate'},
   {value: 'strawberry', label: 'Strawberry'},
   {value: 'vanilla', label: 'Vanilla'}
 ];
-
-const DropDown = () => {
-  return <Select options={options}/>
-}
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -32,13 +29,13 @@ export default function Admin() {
       <Container component="main" maxWidth= "md">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={3}>
-            <DropDown></DropDown>
+            <DropDown options = {options}></DropDown>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <DropDown></DropDown>
+            <DropDown options = {options}></DropDown>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <DropDown></DropDown>
+            <DropDown options = {options}></DropDown>
           </Grid>
         </Grid>
       </Container>
