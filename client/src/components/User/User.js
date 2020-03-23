@@ -182,10 +182,10 @@ function DrawerTest(props) {
   );
 }
 
-export default function User(props) {
+export default function User() {
   return (
     <div>
-      <DrawerTest onLogOut = {props.onLogOut}/>
+      <DrawerTest/>
     </div>
   );
 }

@@ -22,7 +22,7 @@ const App = () => {
   return (
     <Switch>
       <Route path="/home">
-        <Home />
+        <Home onLogOut = {logOut}/>
       </Route>
       <Route path="/signup">
         <SignUp onSignUpSuccess={onLoginSuccess}/>
@@ -31,7 +31,7 @@ const App = () => {
         <SignIn onLoginSuccess={onLoginSuccess}/>
     </Route>
       <Route path="/">
-        <User onLogOut = {logOut}/>
+        <User/>
       </Route>
     </Switch>
   );
