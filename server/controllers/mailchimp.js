@@ -1,3 +1,5 @@
+/*
+
 const express = require('express');
 const request = require('request');
 const bodyParser = require('body-parser');
@@ -24,12 +26,7 @@ var mailchimpInstance   = 'us19',
 cont [selectedUser,setUser] =useState('');
 const SignUp = (props) => {
     const addUser = (e) => {
-    /*
-      console.log("data has reached the server");
-      console.log(e.lastName);
-      console.log(e.firstName);
-      console.log(e.email);
-      */
+    
 
       request
       .post('https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listUniqueId + '/members/')
