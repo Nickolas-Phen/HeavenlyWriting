@@ -161,6 +161,7 @@ function DrawerTest(props) {
         <div className={classes.drawerHeader} />
         <Switch>
           <Route path="/Log out">
+            <button onClick = {props.onLogOut}>logout</button>
             <Home/>
           </Route>
           <Route path="/previous">
@@ -182,10 +183,10 @@ function DrawerTest(props) {
   );
 }
 
-export default function User() {
+export default function User(props) {
   return (
     <div>
-      <DrawerTest />
+      <DrawerTest onLogOut = {props.onLogOut}/>
     </div>
   );
 }

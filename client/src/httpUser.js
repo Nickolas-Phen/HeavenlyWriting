@@ -15,8 +15,17 @@ httpUser.setToken = function(token) {
 };
 
 httpUser.getCurrentUser = function() {
+    const defaultUser = {
+        firstName: 'Joe',
+        lastName: 'Schmoe',
+        birthday: '11/11/11',
+        email: 'joe.schmoe@gmail.com',
+        password: '1234',
+        birthtime: 0,
+        username: 'No one logged in',
+    };
     const token = this.getToken();
-    return (token ? jwtDecode(token) : null)
+    return (token ? jwtDecode(token) : defaultUser)
 };
 
 httpUser.logIn = async function(credentials) {

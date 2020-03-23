@@ -17,6 +17,7 @@ const App = () => {
     const logOut = () => {
         httpUser.logOut();
         setCurrentUser(null);
+        console.log("logging out");
     };
   return (
     <Switch>
@@ -30,7 +31,7 @@ const App = () => {
         <SignIn onLoginSuccess={onLoginSuccess}/>
     </Route>
       <Route path="/">
-        <User />
+        <User onLogOut = {logOut}/>
       </Route>
     </Switch>
   );
