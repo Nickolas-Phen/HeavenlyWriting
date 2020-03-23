@@ -16,7 +16,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-import { Switch, Route, useHistory } from "react-router-dom";
+import {Switch, Route, useHistory, Redirect} from "react-router-dom";
 
 import Today from "./Today";
 import Previous from "./Previous";
@@ -161,7 +161,7 @@ function DrawerTest(props) {
         <div className={classes.drawerHeader} />
         <Switch>
           <Route path="/Log out">
-            <Home/>
+            <Redirect to = 'Home'></Redirect>
           </Route>
           <Route path="/previous">
             <Previous />
@@ -185,7 +185,7 @@ function DrawerTest(props) {
 export default function User() {
   return (
     <div>
-      <DrawerTest />
+      <DrawerTest/>
     </div>
   );
 }

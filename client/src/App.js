@@ -17,11 +17,12 @@ const App = () => {
     const logOut = () => {
         httpUser.logOut();
         setCurrentUser(null);
+        console.log("logging out");
     };
   return (
     <Switch>
       <Route path="/home">
-        <Home />
+        <Home onLogOut = {logOut}/>
       </Route>
       <Route path="/signup">
         <SignUp onSignUpSuccess={onLoginSuccess}/>
@@ -30,7 +31,7 @@ const App = () => {
         <SignIn onLoginSuccess={onLoginSuccess}/>
     </Route>
       <Route path="/">
-        <User />
+        <User/>
       </Route>
     </Switch>
   );

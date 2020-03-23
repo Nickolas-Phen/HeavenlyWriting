@@ -1,20 +1,11 @@
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
-import dropdown from "../widgets/dropdown.js"
-import Select from 'react-select'
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-
-const options = [
-  {value: 'chocolate', label: 'Chocolate'},
-  {value: 'strawberry', label: 'Strawberry'},
-  {value: 'vanilla', label: 'Vanilla'}
-];
-
-const DropDown = () => {
-  return <Select options={options}/>
-}
+import DropDown from "../widgets/DropDown.js"
+import {Signs, Houses, MoonPhases} from "../astronomyInfo";
+import TextEditor from "../widgets/TextEditor";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -28,19 +19,20 @@ export default function Admin() {
   const classes = useStyles();
   return (
     <div className={classes.paper}>
-      <Typography paragraph>UNLIMITED POWER.</Typography>
+      <Typography paragraph>Select the information corresponding to the interpretation you wish to edit</Typography>
       <Container component="main" maxWidth= "md">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={3}>
-            <DropDown></DropDown>
+            <DropDown options = {Signs}></DropDown>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <DropDown></DropDown>
+            <DropDown options = {Houses}></DropDown>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <DropDown></DropDown>
+            <DropDown options = {MoonPhases}></DropDown>
           </Grid>
         </Grid>
+        <TextEditor/>
       </Container>
     </div>
   );
