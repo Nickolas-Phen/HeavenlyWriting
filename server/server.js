@@ -33,6 +33,6 @@ app.use('api/reading', (req, res) =>
 //api for readings made and updated by admin
 });
 
-app.all('/', (req, res) => {
+app.all('*/', (req, res) => {
     res.send("Default response");
 });

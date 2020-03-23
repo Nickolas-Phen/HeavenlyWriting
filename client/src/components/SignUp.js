@@ -64,16 +64,36 @@ export default function SignUp(props) {
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
-
+    const [mPW, setMPW] = useState('');
+    const [cPW, setCPW] = useState('');
+    const pw ='';
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
-    const submitUserInfo = (e) => {
+
+    const checkPW = () =>{
+        if(mPW !== cPW){
+            setToUserPage(true);
+             alert("Password doesn't match!");
+           window.location.reload();
+            // return(<div                         component = {Link} to ="/user"> 
+
+            // </div>);
+        }else{
+            setToUserPage(true);
+            submitUserInfo();
+            // return(<div component = {Link} to ="/user"> 
+            // </div>);
+        }
+    };
+
+    const submitUserInfo = () => {
+        console.log("axios");
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
-        e.preventDefault();
+        // e.preventDefault();
         axios.post('/api/user', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
             //after sending data, reset state back to defaults
             setUserInfo({
@@ -87,7 +107,7 @@ export default function SignUp(props) {
                 }
             )
         })
-        setToUserPage(true);
+        // setToUserPage(true);
     };
     const classes = useStyles();
 
@@ -184,6 +204,8 @@ export default function SignUp(props) {
                                 id="password"
                                 autoComplete="current-password"
                                 onChange={onChangeText}
+                                onChange={e=> setMPW(e.target.value)}
+                                                              
                             />
                         </Grid>
                     </Grid>
@@ -210,6 +232,9 @@ export default function SignUp(props) {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={e=> setCPW(e.target.value)}
+                                
+
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -232,13 +257,14 @@ export default function SignUp(props) {
                         {/*</Grid>*/}
                     </Grid>
                     <Button
-                        component = {Link} to ="/user"
+                        //  component = {Link} to ="/user"
                         type="submit"
                         fullWidth
                         variant="contained"
                         color="primary"
                         className={classes.submit}
-                        onClick={submitUserInfo}
+                        onClick={checkPW}
+                        
                     >
                         Sign Up
                     </Button>
