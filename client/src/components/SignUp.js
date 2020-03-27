@@ -1,23 +1,18 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-
 import React, {useState} from 'react';
 import axios from 'axios';
-//import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-//import FormControlLabel from '@material-ui/core/FormControlLabel';
-//import Checkbox from '@material-ui/core/Checkbox';
 import {Link}    from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
-//import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
-import { request } from 'express';
+import httpUser from '../httpUser'
 
 function Copyright() {
     return (
@@ -65,20 +60,27 @@ export default function SignUp(props) {
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
-    
+    const [confirmPassword, setConfirmPassword] = useState('');
+
+    const passwordsMatch = () =>
+    {
+        //if both password fields have input and are equal, return true
+        return ((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword))
+    };
+
     const onChangeText = (e) => {
         //when a user types in info to any box, update userInfo state to match
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
-
-    const submitUserInfo = (e) => {
+    const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        axios.post('/api/user', {...userInfo}, {headers: {'Content-Type': 'application/json'}}).then(res => {
-            //after sending data, reset state back to defaults
-            setUserInfo({
+        //create account for user and get their token
+        const user = await httpUser.signUp(userInfo);
+        //reset fields back to defaults
+        setUserInfo({
                 firstName: '',
                 lastName: '',
                 birthday: '',
@@ -86,10 +88,15 @@ export default function SignUp(props) {
                 password: '',
                 birthtime: 0,
                 username: '',
-                }
-            )
-        })
-        setToUserPage(true);
+            }
+        );
+        if(user)
+        {
+            //sign user in
+            props.onSignUpSuccess(user);
+            //go to user page
+            setToUserPage(true);
+        }
     };
 
     const classes = useStyles();
@@ -110,7 +117,8 @@ export default function SignUp(props) {
                 <Typography component="h1" variant="h5">
                     Sign up
                 </Typography>
-                <form className={classes.form} noValidate>
+                {/* adding get post inside of form */}
+                <form className={classes.form} noValidate method="POST">
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={3}>
                             <TextField
@@ -212,6 +220,7 @@ export default function SignUp(props) {
                                 type="password"
                                 id="password"
                                 autoComplete="current-password"
+                                onChange={e=> setConfirmPassword(e.target.value)}
                             />
                         </Grid>
                         <Grid item xs={12} sm={3}>
@@ -226,15 +235,11 @@ export default function SignUp(props) {
                                 onChange={onChangeText}
                             />
                         </Grid>
-                        {/*<Grid item xs={12}>*/}
-                        {/*    <FormControlLabel*/}
-                        {/*        control={<Checkbox value="allowExtraEmails" color="primary" />}*/}
-                        {/*        label="I want to receive inspiration, marketing promotions and updates via email."*/}
-                        {/*    />*/}
-                        {/*</Grid>*/}
                     </Grid>
                     <Button
                         component = {Link} to ="/user"
+                        //enable button if passwords match
+                        disabled = {!passwordsMatch()}
                         type="submit"
                         fullWidth
                         variant="contained"

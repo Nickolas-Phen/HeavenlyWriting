@@ -1,22 +1,28 @@
 import * as user from '../controllers/userController.js'
 import express from 'express'
-const router = express.Router();
-import getMoonLoc from '../controllers/moonLocationController.js';
+const userRouter = express.Router();
+import * as authHelper from '../authHelperFunctions.js'
+//import getMoonLoc from '../../client/src/api/getMoonData.js';
 //need to import the js file to obtain moon location (not written)
 
 //used for routing requests to correct req handler
 
 //heavily based on bootcamp 3  
 
-router.get('/', getMoonLoc, user.list);
-router.post('/', /*getMoonLoc ,*/ user.create);
+//userRouter.get('/', getMoonLoc, user.list);
 
 //route for sending signup info
-router.post('/signup', user.create);
+//userRouter.post('/signup', user.create);
+
+//copy and pasted from authentication tutorial
+userRouter.route('/').get(user.index).post(user.create);
+userRouter.post('/authenticate', user.authenticate);
+userRouter.use(authHelper.verifyToken);
+userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
 
 // ':' = url parameter
-router.get('/:userId', user.read);
-router.put('/:userId', /*getMoonLoc ,*/ user.update);
-router.delete('/:userId', user.remove);
+userRouter.get('/:userId', user.read);
+userRouter.put('/:userId', /*getMoonLoc ,*/ user.update);
+userRouter.delete('/:userId', user.remove);
 
-export default router;
+export default userRouter;
