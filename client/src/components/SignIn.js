@@ -93,10 +93,6 @@ export default function SignIn(props) {
         <Container component="main" maxWidth="md">
             <CssBaseline />
             <div className={classes.paper}>
-                <img className = {classes.image} src = {defaultPicture} border = "5"></img>
-                {/*<Avatar className={classes.avatar}>*/}
-                {/*    <LockOutlinedIcon />*/}
-                {/*</Avatar>*/}
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>

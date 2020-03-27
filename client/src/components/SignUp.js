@@ -13,9 +13,10 @@ import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+//import Calendaimport FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-
+import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
+import 'react-calendar/dist/Calendar.css';
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -63,11 +64,54 @@ export default function SignUp(props) {
     );
     const [toUserPage, setToUserPage] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [birthday, setBirthday] = useState('');
+    const [AM_PM, setAM_PM] = useState("AM");
 
     const passwordsMatch = () =>
     {
         //if both password fields have input and are equal, return true
         return ((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword))
+    };
+
+    const checkValidTime = () =>
+    {
+        //make sure the time field is a time
+        const time = userInfo.birthtime;
+        if (time.length !== 5)
+            return false;
+
+        const hours = time[0] + time[1]; //grab hour part of string
+        const hours_int = parseInt(hours); //make sure it is an int
+        if (isNaN(hours_int) || (hours_int > 12))//make sure hours are a number less than 13
+        {
+            return false;
+        }
+        if (time[2] !== ':')//make sure time has colon
+            return false;
+
+        const minutes = time[3] + time[4];
+        const minutes_int = parseInt(minutes);
+        if (isNaN(minutes_int) || (minutes_int > 59)) //make sure minutes are numbers under 60
+            return false;
+        return true;
+    };
+
+    const checkValidEmail = async () =>
+    {
+        const email = userInfo.email;
+        if (!email.includes("@") || !email.includes(".com"))//make sure email has @ and .com in it
+            return false;
+        const response = await axios.get('/api/user/email/' + email);
+        console.log(response);
+    };
+
+    const onChangeBirthday = (date) =>
+    {
+      setBirthday({date});
+      const newState = {...userInfo};
+      newState.birthday = date;
+      console.log(newState.birthday);
+      setUserInfo(newState);
     };
 
     const onChangeText = (e) => {
@@ -76,9 +120,33 @@ export default function SignUp(props) {
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
     };
+
+    const onAM_PMChange = (e) => {
+        //allows AM and PM radio buttons to operate
+        const target = e.target;
+        if (target.name === "AM")
+        {
+            setAM_PM("AM");
+        }
+        else
+        {
+            setAM_PM("PM");
+        }
+    };
+
     const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
+        //add AM or PM to birth time based on selected radio button
+
+        if (AM_PM === "AM")
+        {
+            userInfo.birthtime += " AM";
+        }
+        else
+        {
+            userInfo.birthtime += " PM";
+        }
         //create account for user and get their token
         const user = await httpUser.signUp(userInfo);
         //reset fields back to defaults
@@ -110,17 +178,12 @@ export default function SignUp(props) {
         <Container component="main" maxWidth= "md">
             <CssBaseline />
             <div className={classes.paper}>
-                <img src = {defaultPicture}></img>
-                {/*<Avatar className={classes.avatar}>*/}
-                {/*    <LockOutlinedIcon />*/}
-
-                {/*</Avatar>*/}
-                <Typography component="h1" variant="h5">
+                <h1 component="h1" variant="h5">
                     Sign up
-                </Typography>
+                </h1>
                 {/* adding get post inside of form */}
                 <form className={classes.form} noValidate method="POST">
-                    <Grid container spacing={2}>
+                    <Grid container spacing={2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
                                 autoComplete="firstName"
@@ -146,32 +209,8 @@ export default function SignUp(props) {
                                 onChange={onChangeText}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <TextField
-                                variant="outlined"
-                                required
-                                fullWidth
-                                id="placeBirth"
-                                label="Place of Birth"
-                                name="placeBirth"
-                                autoComplete="pbirth"
-                                onChange={onChangeText}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <TextField
-                                variant="outlined"
-                                // required
-                                fullWidth
-                                id="timeBirth"
-                                label="Time of Birth"
-                                name="birthtime"
-                                autoComplete="tbirth"
-                                onChange={onChangeText}
-                            />
-                        </Grid>
                     </Grid>
-                    <Grid container spacing = {2}>
+                    <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
                                 variant="outlined"
@@ -189,25 +228,25 @@ export default function SignUp(props) {
                                 variant="outlined"
                                 required
                                 fullWidth
-                                name="password"
-                                label="Password"
-                                type="password"
-                                id="password"
-                                autoComplete="current-password"
+                                name="username"
+                                label="Username"
+                                id="username"
+                                autoComplete="username"
                                 onChange={onChangeText}
                             />
                         </Grid>
                     </Grid>
-                    <Grid container spacing = {2}>
+                    <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
                                 variant="outlined"
                                 required
                                 fullWidth
-                                name="birthday"
-                                label="Date of Birth"
-                                id="birthday"
-                                autoComplete="dob"
+                                name="password"
+                                label="Password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
                                 onChange={onChangeText}
                             />
                         </Grid>
@@ -224,23 +263,69 @@ export default function SignUp(props) {
                                 onChange={e=> setConfirmPassword(e.target.value)}
                             />
                         </Grid>
+                    </Grid>
+                        <h3>Select your birthday</h3>
+                    <Grid container spacing = {2} justify="center">
+                        <Grid item xs={12} sm={3}>
+                            <Calendar
+                                onChange = {onChangeBirthday}
+                                value = {userInfo.birthday}
+                            />
+                        </Grid>
+                    <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
                                 variant="outlined"
-                                required
                                 fullWidth
-                                name="username"
-                                label="Username"
-                                id="username"
-                                autoComplete="username"
+                                id="placeBirth"
+                                label="Place of Birth"
+                                name="placeBirth"
+                                autoComplete="pbirth"
                                 onChange={onChangeText}
                             />
                         </Grid>
+                        <Grid item xs={12} sm={3}>
+                            <TextField
+                                variant="outlined"
+                                fullWidth
+                                id="timeBirth"
+                                label="Time of Birth (ex: 12:34)"
+                                name="birthtime"
+                                autoComplete="tbirth"
+                                onChange={onChangeText}
+                            />
+                        </Grid>
+                        <Grid>
+                        <label>
+                        <input
+                            name = "AM"
+                            type = "radio"
+                            value = "option1"
+                            checked = {AM_PM === "AM"}
+                            onChange = {onAM_PMChange}>
+                        </input>
+                            AM
+                        </label>
+                        <label>
+                            <input
+                                name = "PM"
+                                type = "radio"
+                                value = "option2"
+                                checked = {AM_PM === "PM"}
+                                onChange = {onAM_PMChange}>
+                            </input>
+                            PM
+                        </label>
+                        </Grid>
                     </Grid>
-                    <FormControlLabel
+                    </Grid>
+                    {/* <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Recieve Email updates"
-                    />
+                    /> */}
+                    <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
+                    <div>{userInfo.birthtime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
+                    <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"
                         //enable button if passwords match

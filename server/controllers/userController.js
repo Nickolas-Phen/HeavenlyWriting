@@ -23,14 +23,18 @@ export const create = async (req, res) => {
     //creates user and saves it at the same time
     try {
         //create sign token, showing success
+        console.log("Creating user");
+        console.log(req.body);
         const user = await User.create(req.body);
+        console.log("user created");
         const token = await authHelper.signToken(user);
         res.json({success: true, message: "User created with token", token});
         console.log("User added to database!");
     }
     catch
     {
-        res.json({success: false, code: err.code});
+        console.log("failed to add user to database");
+        //res.json({success: false, code: err.code});
     }
     //calls the function that adds the user to mailchimp
      mail(req, res);
@@ -42,6 +46,18 @@ export const create = async (req, res) => {
 export const findByUsername = (reqUsername, res) =>
 {
     Schema.find({username:reqUsername}, (err, data) =>
+    {
+        if (err) {console.log(err);}
+        //else { res.send(data);}
+        res.send(data);
+    })
+};
+
+export const findByEmail = (reqEmail, res) =>
+{
+    console.log(reqEmail);
+    console.log("DDFDFD");
+    Schema.find({username:reqEmail}, (err, data) =>
     {
         if (err) {console.log(err);}
         //else { res.send(data);}
