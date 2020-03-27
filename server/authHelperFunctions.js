@@ -7,6 +7,7 @@ const jwt_secret = process.env.secret || config.secret;
 
 // function to create tokens
 export const signToken = (user) => {
+    console.log("In sign tokeN" + user);
     const userData = user.toObject();
     delete userData.password;
     return jwt.sign(userData, jwt_secret)
