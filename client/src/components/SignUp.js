@@ -72,6 +72,35 @@ export default function SignUp(props) {
         return ((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword))
     };
 
+    const checkValidTime = () =>
+    {
+        //make sure the time field is a time
+        const time = userInfo.birthtime;
+        if (time.length !== 5)
+            return false;
+
+        const hours = time[0] + time[1]; //grab hour part of string
+        const hours_int = parseInt(hours); //make sure it is an int
+        if (isNaN(hours_int) || (hours_int > 12))//make sure hours are a number less than 13
+        {
+            return false;
+        }
+        if (time[2] !== ':')//make sure time has colon
+            return false;
+
+        const minutes = time[3] + time[4];
+        const minutes_int = parseInt(minutes);
+        return !(isNaN(minutes_int) || (minutes_int > 59)); //make sure minutes are numbers and less than 60
+
+    };
+
+    const checkValidEmail = () =>
+    {
+        const email = userInfo.email;
+        return email.includes("@") && email.includes(".com");
+
+    };
+
     const onChangeBirthday = (date) =>
     {
       setBirthday({date});
@@ -292,6 +321,8 @@ export default function SignUp(props) {
                     </Grid>
                     </Grid>
                     <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
+                    <div>{userInfo.birthtime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
+                    <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"
                         //enable button if passwords match
