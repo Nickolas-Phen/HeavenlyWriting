@@ -177,11 +177,6 @@ export default function SignUp(props) {
         <Container component="main" maxWidth= "md">
             <CssBaseline />
             <div className={classes.paper}>
-                <img src = {defaultPicture}></img>
-                {/*<Avatar className={classes.avatar}>*/}
-                {/*    <LockOutlinedIcon />*/}
-
-                {/*</Avatar>*/}
                 <h1 component="h1" variant="h5">
                     Sign up
                 </h1>
