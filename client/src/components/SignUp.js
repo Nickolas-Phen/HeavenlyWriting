@@ -105,6 +105,7 @@ export default function SignUp(props) {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
         //add AM or PM to birth time based on selected radio button
+
         if (AM_PM === "AM")
         {
             userInfo.birthtime += " AM";
@@ -290,6 +291,7 @@ export default function SignUp(props) {
                         </Grid>
                     </Grid>
                     </Grid>
+                    <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"
                         //enable button if passwords match
