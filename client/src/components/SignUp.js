@@ -13,6 +13,8 @@ import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 function Copyright() {
     return (
@@ -147,7 +149,7 @@ export default function SignUp(props) {
                         <Grid item xs={12} sm={3}>
                             <TextField
                                 variant="outlined"
-                                // required
+                                required
                                 fullWidth
                                 id="placeBirth"
                                 label="Place of Birth"
@@ -235,6 +237,10 @@ export default function SignUp(props) {
                             />
                         </Grid>
                     </Grid>
+                    <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Recieve Email updates"
+                    />
                     <Button
                         component = {Link} to ="/user"
                         //enable button if passwords match
@@ -256,6 +262,7 @@ export default function SignUp(props) {
                         </Grid>
                     </Grid>
                 </form>
+               
             </div>
             <Box mt={5}>
                 <Copyright />

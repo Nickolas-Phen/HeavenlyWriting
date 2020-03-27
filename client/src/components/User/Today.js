@@ -138,19 +138,17 @@ export default function Today() {
     return (
       <div className={classes.paper}>
         <div className={classes.quote}>
+        <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
+          <div>
+
           <img 
             className={classes.image}
             src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
             alt="Rick"
           />
-          <br></br>
-          <h2>Today's moon:  {moonPhase}</h2>
-          <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
-          
-          
-          {/* <span className={classes.quoteText}>{quote}</span> */}
-                   
-
+            <h2 class="info"><br></br>Today's moon:  {moonPhase}</h2>
+          </div>
+   
         </div>
         <div>
         <span className={classes.quoteText}>Quote of the day:</span>
