@@ -53,6 +53,18 @@ export const findByUsername = (reqUsername, res) =>
     })
 };
 
+export const findByEmail = (reqEmail, res) =>
+{
+    console.log(reqEmail);
+    console.log("DDFDFD");
+    Schema.find({username:reqEmail}, (err, data) =>
+    {
+        if (err) {console.log(err);}
+        //else { res.send(data);}
+        res.send(data);
+    })
+};
+
 //finds a user by the id
 export const read = (req, res) =>
 {

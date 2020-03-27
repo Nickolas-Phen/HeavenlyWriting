@@ -90,15 +90,18 @@ export default function SignUp(props) {
 
         const minutes = time[3] + time[4];
         const minutes_int = parseInt(minutes);
-        return !(isNaN(minutes_int) || (minutes_int > 59)); //make sure minutes are numbers and less than 60
-
+        if (isNaN(minutes_int) || (minutes_int > 59)) //make sure minutes are numbers under 60
+            return false;
+        return true;
     };
 
-    const checkValidEmail = () =>
+    const checkValidEmail = async () =>
     {
         const email = userInfo.email;
-        return email.includes("@") && email.includes(".com");
-
+        if (!email.includes("@") || !email.includes(".com"))//make sure email has @ and .com in it
+            return false;
+        const response = await axios.get('/api/user/email/' + email);
+        console.log(response);
     };
 
     const onChangeBirthday = (date) =>

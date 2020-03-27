@@ -11,17 +11,18 @@ import * as authHelper from '../authHelperFunctions.js'
 
 //userRouter.get('/', getMoonLoc, user.list);
 
-//route for sending signup info
+//route for sending signup inf
 //userRouter.post('/signup', user.create);
 
 //copy and pasted from authentication tutorial
-userRouter.route('/').get(user.index).post(user.create);
+userRouter.post('/', user.create);
 userRouter.post('/authenticate', user.authenticate);
 userRouter.use(authHelper.verifyToken);
 userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
 
 // ':' = url parameter
-userRouter.get('/:userId', user.read);
+userRouter.get('/id/:userId', user.read);
+userRouter.get('/', user.findByEmail);
 userRouter.put('/:userId', /*getMoonLoc ,*/ user.update);
 userRouter.delete('/:userId', user.remove);
 
