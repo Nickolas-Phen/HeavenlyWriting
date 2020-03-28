@@ -14,27 +14,38 @@ app.use(bodyParser.urlencoded({extended: true}));
 
 var mailchimpInstance   = 'us19',
     listUniqueId        = 'de644ad1de',
-    mailchimpApiKey     = '31d36951a5db54c9db20da653fb109b3-us19';
+    mailchimpApiKey     = '31d36951a5db54c9db20da653fb109b3-us19',
+    mailchimpClientId   = '175466601412',
+    mailchimpSecretKey  = '5d835fb683d1825acd624c20698d3bbcb1103926a3a5ca31ed';
 
 
 //function to create a new object
 //req is the object to be created
 export const create = async (req, res) => {
     //creates user and saves it at the same time
+    
+   // /*
     try {
         //create sign token, showing success
+        console.log("Creating user");
+        console.log(req.body);
         const user = await User.create(req.body);
+        console.log("user created");
         const token = await authHelper.signToken(user);
         res.json({success: true, message: "User created with token", token});
         console.log("User added to database!");
     }
     catch
     {
-        res.json({success: false, code: err.code});
+        console.log("failed to add user to database");
+        //res.json({success: false, code: err.code});
     }
+//*/
+
     //calls the function that adds the user to mailchimp
      mail(req, res);
 };
+
 
 
 //finds a user by the username
@@ -42,6 +53,18 @@ export const create = async (req, res) => {
 export const findByUsername = (reqUsername, res) =>
 {
     Schema.find({username:reqUsername}, (err, data) =>
+    {
+        if (err) {console.log(err);}
+        //else { res.send(data);}
+        res.send(data);
+    })
+};
+
+export const findByEmail = (reqEmail, res) =>
+{
+    console.log(reqEmail);
+    console.log("DDFDFD");
+    Schema.find({username:reqEmail}, (err, data) =>
     {
         if (err) {console.log(err);}
         //else { res.send(data);}
@@ -183,7 +206,7 @@ export const mail = (input, res) =>
         .end(function(err, response) {
           if (response.status < 300 || (response.status === 400 && response.body.title === "Member Exists")) {
             console.log('Signed Up for Mailchimp!');
-            response.send("Submitted!");
+            //response.send("Submitted!");
           } else {
             console.log('Mailchimp Sign Up Failed');
           }
@@ -216,10 +239,11 @@ const addNonRequired = (req, res) =>
 
 //sets the zodiac sign for the user
 export const findZodiac = (req, res) => {
-    if(req.brithday.getMonth()  ==  0)
+   
+    if(req.birthday.getMonth()  ==  0)
     {
         if(req.birthday.getDay() <=  19)
-        {req.zodiac   = "Capricorn";}
+        {req.body.zodiac   = "Capricorn";}
 
         else
         {
@@ -227,23 +251,23 @@ export const findZodiac = (req, res) => {
         }
     }
 
-    else if (req.brithday.getMonth()   == 1)
+    else if (req.body.brithday.getMonth()   == 1)
     {
-        if(req.brithday.getDay()<= 18)
+        if(req.body.brithday.getDay()<= 18)
             {req.zodiac  =   "Aquarius";}
         else
             {req.zodiac  =  "Pisces";}
     }
 
-    else if (req.brithday.getMonth()   == 2)
+    else if (req.body.brithday.getMonth()   == 2)
     {
-        if(req.brithday.getDay()<= 20)
+        if(req.body.brithday.getDay()<= 20)
             {req.zodiac  =   "Pisces";}
         else
             {req.zodiac  =  "Aries";}
     }
 
-    else if (req.brithday.getMonth()   == 3)
+    else if (req.body.brithday.getMonth()   == 3)
     {
         if(req.brithday.getDay()<= 19)
             {req.zodiac  =   "Aries";}
