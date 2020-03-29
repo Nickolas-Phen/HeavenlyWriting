@@ -30,7 +30,8 @@ function Copyright() {
     );
 }
 export default function HomePage(props) {
-    props.onLogOut();
+    //UNCOMMENT 
+    // props.onLogOut();
 return (
 <div>
      {/* If I end up having a problem with background image just switch it to div and remove from body in css */}
@@ -62,13 +63,13 @@ Connects people to a more nature-based, embodied sense of time.
 </p>
 </div>
 {/* These are the 2 buttons */}
-<h3> If you are interested create an account</h3>
-<Button class="button" component = {Link} to ="/signup">Sign up</Button>
+<h3> If you are interested create an account <a href="./signup" class="link">Sign Up</a></h3>
+{/* <Button class="button" component = {Link} to ="/signup">Sign up</Button> */}
 
 <h3> If you already have an account you can <a href="./signin" class="link">Sign in</a></h3>
 {/* <button class="button" ><a href="./signin">Sign in</a></button> */}
 {/* this ^ works or you can also do this */}
-<Button class="button" component = {Link} to ="/signin">Sign in</Button>
+{/*      */}
 <hr></hr>
 
 <Box mt={8} class="cr">

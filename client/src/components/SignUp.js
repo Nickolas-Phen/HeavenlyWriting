@@ -13,9 +13,10 @@ import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
+//import Calendaimport FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
 import 'react-calendar/dist/Calendar.css';
-
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -318,6 +319,10 @@ export default function SignUp(props) {
                         </Grid>
                     </Grid>
                     </Grid>
+                    {/* <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Recieve Email updates"
+                    /> */}
                     <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
                     <div>{userInfo.birthtime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
                     <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
@@ -342,6 +347,7 @@ export default function SignUp(props) {
                         </Grid>
                     </Grid>
                 </form>
+               
             </div>
             <Box mt={5}>
                 <Copyright />
