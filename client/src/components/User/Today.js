@@ -65,6 +65,7 @@ export default function Today() {
         currentMoonSign: "",
         sunBirthSign: "",
         ascendantSign: "",
+        currentMoonHouse: "",
       }
   );
   // getData will load data from the backend only on load.
@@ -158,6 +159,7 @@ export default function Today() {
           <br></br>
           <h2>Today's moon:  {moonPhase}</h2>
           <h2>Today's moon sign: {astrologyData.currentMoonSign}</h2>
+          <h2>Today's moon house: House {astrologyData.currentMoonHouse}</h2>
           <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
           <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
           

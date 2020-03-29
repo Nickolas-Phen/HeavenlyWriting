@@ -10,13 +10,19 @@ const flag = swisseph.SEFLG_SPEED;
 
 export const getAstrologyData = () =>
 {
+	//finds and returns currentMoonSign, sunBirthSign, and ascendant sign
 	const exampleBirthday = {year: 2020, month: 3, day: 28, hour: 18, min: 16};
 	const currentMoonPos = findCurrentMoonPosition();
 	const birthSunPos = findSunPosition(exampleBirthday);
 	const currentMoonSign = convertLatitudeToSign(currentMoonPos);
 	const sunBirthSign = convertLatitudeToSign(birthSunPos);
 	const ascendantSign = findAscendentSign(0,0);
-	var astrologyData = {currentMoonSign: currentMoonSign, sunBirthSign: sunBirthSign, ascendantSign: ascendantSign};
+	var astrologyData = {
+		currentMoonSign: currentMoonSign,
+		sunBirthSign: sunBirthSign,
+		ascendantSign: ascendantSign,
+		currentMoonHouse: findCurrentMoonHouse(ascendantSign),
+	};
 	return astrologyData;
 };
 //calculates the sun and moon positions
@@ -40,6 +46,7 @@ export const findCurrentMoonPosition = () =>
 
 export const findSunPosition = (date) =>
 {
+	//finds position of the sun at the input date
 	var sunPos;
 	swisseph.swe_julday (date.year, date.month, date.day, date.hour, swisseph.SE_GREG_CAL, function (julday_ut) {
 		//assert.equal (julday_ut, 2455927.5);
@@ -84,7 +91,7 @@ export const convertLatitudeToSign = (latitude) =>
 		return "Pisces";
 };
 
-const findAscendentSign = (lat, long) =>
+export const findAscendentSign = (lat, long) =>
 {
 	//MC is midheaven
 //geographical location of birth place
@@ -101,6 +108,61 @@ const findAscendentSign = (lat, long) =>
 	});
 	const ascendantSign = convertLatitudeToSign(ascendantLat);
 	return ascendantSign;
+};
+export const convertSignToInteger = (sign) =>
+{
+	//Aries = 1, Taurus = 2, etc., just maps the sign to an integer to help with ordering
+	var signDictionary = {
+		"Aries": 1,
+		"Taurus": 2,
+		"Gemini": 3,
+		"Cancer": 4,
+		"Leo": 5,
+		"Virgo": 6,
+		"Libra": 7,
+		"Scorpio": 8,
+		"Sagittarius": 9,
+		"Capricorn": 10,
+		"Aquarius": 11,
+		"Pisces": 12
+	};
+	const signInt = signDictionary[sign];
+	return signInt;
+};
+
+export const findCurrentMoonHouse = (userAscendant) =>
+{
+	//finds what house the moon is currently in based on its sign and the users Ascendant (page 6 of hightail site)
+	const currentMoonSign = convertLatitudeToSign(findCurrentMoonPosition());
+	const ascendantInteger = convertSignToInteger(userAscendant) - 1;
+	//shift 12 signs left by userAscendant -1, so if ascendant is Aries (1) shift left by 0, Taurus shift left by 1, etc
+	var houseDictionary = {
+		"Aries": 1 - ascendantInteger,
+		"Taurus": 2- ascendantInteger,
+		"Gemini": 3- ascendantInteger,
+		"Cancer": 4- ascendantInteger,
+		"Leo": 5- ascendantInteger,
+		"Virgo": 6- ascendantInteger,
+		"Libra": 7- ascendantInteger,
+		"Scorpio": 8- ascendantInteger,
+		"Sagittarius": 9- ascendantInteger,
+		"Capricorn": 10- ascendantInteger,
+		"Aquarius": 11- ascendantInteger,
+		"Pisces": 12- ascendantInteger
+	};
+	//loop signs that are 0 or less back around
+	//example: Ascendant is Gemini. Gemini = 3 normally. Gemini-1 = 2. Aries and Taurus are subtracted by 2.
+	//Aries now equals -1, Taurus = 0. Aries needs to equal 11 now and Taurus 12
+	//There is no house 0, starts at house 1
+	for (var sign in houseDictionary)
+	{
+		if (houseDictionary[sign] <= 0)
+		{
+			houseDictionary[sign] = 12 + houseDictionary[sign]
+		}
+	}
+	const currentMoonHouse = houseDictionary[currentMoonSign];
+	return currentMoonHouse;
 };
 
 //console.log(sunPos, moonPos);
