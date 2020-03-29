@@ -60,6 +60,13 @@ export default function Today() {
   // find something for picture.
   const [article, setArticle] = useState("");
   const [moonPhase, setMoonPhase] = useState("");
+  const [astrologyData, setAstrologyData] = useState(
+      {
+        currentMoonSign: "",
+        sunBirthSign: "",
+        ascendantSign: "",
+      }
+  );
   // getData will load data from the backend only on load.
   const getMoonPhase = () => {
     //creates url to send to api to get moon data
@@ -93,6 +100,11 @@ export default function Today() {
       phase = moon.phase[day].phaseName;
       console.log("Phase: " + phase);
       setMoonPhase(phase);
+    });
+    axios.get('/api/swiss/').then(res =>
+    {
+      console.log(res.data);
+      setAstrologyData(res.data);
     })
   };
   if (moonPhase === "")
@@ -145,6 +157,8 @@ export default function Today() {
           />
           <br></br>
           <h2>Today's moon:  {moonPhase}</h2>
+          <h2>Today's moon sign: {astrologyData.currentMoonSign}</h2>
+          <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
           <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
           
           

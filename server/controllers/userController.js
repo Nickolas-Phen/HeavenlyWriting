@@ -234,7 +234,7 @@ const addNonRequired = (req, res) =>
         {res.house = req.body.house;}
     if(req.zodiac)
         {res.zodiac = req.body.zodiac;}
-}
+};
 
 
 //sets the zodiac sign for the user

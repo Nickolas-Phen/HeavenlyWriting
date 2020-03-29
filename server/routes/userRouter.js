@@ -7,7 +7,7 @@ import * as authHelper from '../authHelperFunctions.js'
 
 //used for routing requests to correct req handler
 
-//heavily based on bootcamp 3  
+//heavily based on bootcamp 3
 
 //userRouter.get('/', getMoonLoc, user.list);
 
@@ -24,6 +24,6 @@ userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
 userRouter.get('/id/:userId', user.read);
 userRouter.get('/', user.findByEmail);
 userRouter.put('/:userId', /*getMoonLoc ,*/ user.update);
-userRouter.delete('/:userId', user.remove)
+userRouter.delete('/:userId', user.remove);
 
 export default userRouter;
