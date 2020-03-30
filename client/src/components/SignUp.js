@@ -138,7 +138,7 @@ export default function SignUp(props) {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
         //add AM or PM to birth time based on selected radio button
-
+        //TODO: make birthtime into military time by adding 12 hours for pm
         if (AM_PM === "AM")
         {
             userInfo.birthTime += " AM";

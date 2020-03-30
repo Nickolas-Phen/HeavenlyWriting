@@ -2,21 +2,26 @@ import swisseph from 'swisseph'
 
 swisseph.swe_set_ephe_path('./server/Ephe');
 //input the users birtday and time
-const date = {year: 2020, month: 3, day: 28, hour: 18, min: 16};
+//const date = {year: 2020, month: 3, day: 28, hour: 18, min: 16};
 //converts the dates into julian calender date
-const julday = swisseph.swe_julday (date.year, date.month, date.day, date.hour,date.min, swisseph.SE_GREG_CAL);
+//const julday = swisseph.swe_julday (date.year, date.month, date.day, date.hour,date.min, swisseph.SE_GREG_CAL);
 //sets flag as dates from gregorian calender
 const flag = swisseph.SEFLG_SPEED;
 
-export const getAstrologyData = () =>
+export const getAstrologyData = (birthday, birthTime, birthPlace) =>
 {
 	//finds and returns currentMoonSign, sunBirthSign, and ascendant sign
-	const exampleBirthday = {year: 2020, month: 3, day: 28, hour: 18, min: 16};
+	console.log("swisseph user: " + birthday)
+	const formattedBirthday = formatBirthdayFromSignup(birthday);//splits birthday into array of [year, month, day]
+	const formattedBirthTime = splitBirthTime(birthTime);//splits birthday into array of [hours, minutes]
+	const birthdayAndTime = {year: formattedBirthday[0], month: formattedBirthday[1], day: formattedBirthday[2], hour: formattedBirthTime[0], min: formattedBirthTime[1]};
+	console.log("birthday and time: " + birthdayAndTime.year + " " + birthdayAndTime.month + " " + birthdayAndTime.day)
+	const julday = swisseph.swe_julday (birthdayAndTime.year, birthdayAndTime.month, birthdayAndTime.day, birthdayAndTime.hour,birthdayAndTime.min, swisseph.SE_GREG_CAL);
 	const currentMoonPos = findCurrentMoonPosition();
-	const birthSunPos = findSunPosition(exampleBirthday);
+	const birthSunPos = findSunPosition(birthdayAndTime);
 	const currentMoonSign = convertLatitudeToSign(currentMoonPos);
 	const sunBirthSign = convertLatitudeToSign(birthSunPos);
-	const ascendantSign = findAscendentSign(0,0);
+	const ascendantSign = findAscendentSign(0,0, julday)
 	var astrologyData = {
 		currentMoonSign: currentMoonSign,
 		sunBirthSign: sunBirthSign,
@@ -91,13 +96,14 @@ export const convertLatitudeToSign = (latitude) =>
 		return "Pisces";
 };
 
-export const findAscendentSign = (lat, long) =>
+export const findAscendentSign = (lat, long, julday) =>
 {
 	//MC is midheaven
 //geographical location of birth place
 	//TODO: need openCage API to find lat and long for address
 	lat=29.6436;
 	long=-82.3549;
+	console.log("julday: " + julday)
 //used to find the signs and stuff
 	var ascendantLat = 0;
 	var h=swisseph.swe_houses(julday,lat,long,'W',function(result){
@@ -165,6 +171,24 @@ export const findCurrentMoonHouse = (userAscendant) =>
 	return currentMoonHouse;
 };
 
+export const formatBirthdayFromSignup = (birthday) =>
+{
+	console.log(birthday)
+	const year = parseInt(birthday.substring(0, 4));//parseInt converts string to int
+	const month = parseInt(birthday.substring(5,7));
+	const day = parseInt(birthday.substring(8,10));
+	const date = [year, month, day];
+	return date;
+};
+
+export const splitBirthTime = (birthTime) =>
+{
+	const hours = parseInt(birthTime.substring(0,2));
+	const minutes = parseInt(birthTime.substring(3,5));
+	const newBirthTime = [hours, minutes];
+	console.log(newBirthTime[0] + " " + newBirthTime[1])
+	return newBirthTime;
+};
 //console.log(sunPos, moonPos);
 /*
 if(date.month==  0)

@@ -34,11 +34,14 @@ app.use('api/reading', userRouter, (req, res) =>
 //api for readings made and updated by admin
 });
 
-app.use('/api/swiss/', (req, res) =>
+app.use('/api/swiss/', async (req, res) =>
 {
 //api for swissEph
-    console.log("username: " + req.query.username)
-    const data = swisseph.getAstrologyData();
+    const birthday = req.query.birthday;
+    const birthPlace = req.query.birthPlace;
+    const birthTime = req.query.birthTime
+    console.log("user: " + req.query.birthday);
+    const data = swisseph.getAstrologyData(birthday, birthTime, birthPlace)
     console.log(data);
     res.send(data)
 });
