@@ -24,11 +24,13 @@ var mailchimpInstance   = 'us19',
 export const create = async (req, res) => {
     //creates user and saves it at the same time
    // /*
+
     try {
         //create sign token, showing success
         console.log("Creating user");
         console.log(req.body);
         const user = await User.create(req.body);
+        console.log(user);
         console.log("user created");
         const token = await authHelper.signToken(user);
         res.json({success: true, message: "User created with token", token});
