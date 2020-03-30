@@ -172,7 +172,7 @@ export default function SignUp(props) {
 
     if (toUserPage)
     {
-        return <Redirect to = 'user'></Redirect>
+        return <Redirect to = 'today'></Redirect>
     }
     return (
         <Container component="main" maxWidth= "md">
