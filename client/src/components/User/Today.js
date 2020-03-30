@@ -105,7 +105,7 @@ export default function Today() {
     axios.get('/api/swiss/',
         {
           params: {
-            username: httpUser.getCurrentUser()
+            username: httpUser.getCurrentUser().username
           }
         }).then(res =>
     {

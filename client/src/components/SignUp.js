@@ -58,7 +58,7 @@ export default function SignUp(props) {
             birthday: '',
             email: '',
             password: '',
-            birthtime: 0,
+            birthTime: 0,
             username: '',
         }
     );
@@ -76,7 +76,7 @@ export default function SignUp(props) {
     const checkValidTime = () =>
     {
         //make sure the time field is a time
-        const time = userInfo.birthtime;
+        const time = userInfo.birthTime;
         if (time.length !== 5)
             return false;
 
@@ -141,11 +141,11 @@ export default function SignUp(props) {
 
         if (AM_PM === "AM")
         {
-            userInfo.birthtime += " AM";
+            userInfo.birthTime += " AM";
         }
         else
         {
-            userInfo.birthtime += " PM";
+            userInfo.birthTime += " PM";
         }
         //create account for user and get their token
         const user = await httpUser.signUp(userInfo);

@@ -34,10 +34,10 @@ app.use('api/reading', userRouter, (req, res) =>
 //api for readings made and updated by admin
 });
 
-app.use('/api/swiss', (req, res) =>
+app.use('/api/swiss/', (req, res) =>
 {
 //api for swissEph
-    console.log(req);
+    console.log("username: " + req.query.username)
     const data = swisseph.getAstrologyData();
     console.log(data);
     res.send(data)
@@ -46,3 +46,5 @@ app.use('/api/swiss', (req, res) =>
 app.all('*/', (req, res) => {
     res.send("Default response");
 });
+
+process.on('SIGINT', () => { console.log("Bye bye!"); process.exit(); })
