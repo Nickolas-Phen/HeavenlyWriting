@@ -156,7 +156,8 @@ export default function SignUp(props) {
                 birthday: '',
                 email: '',
                 password: '',
-                birthtime: 0,
+                birthTime: "",
+                birthPlace: "",
                 username: '',
             }
         );
@@ -277,9 +278,9 @@ export default function SignUp(props) {
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                id="placeBirth"
+                                id="birthPlace"
                                 label="Place of Birth"
-                                name="placeBirth"
+                                name="birthPlace"
                                 autoComplete="pbirth"
                                 onChange={onChangeText}
                             />
@@ -288,9 +289,9 @@ export default function SignUp(props) {
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                id="timeBirth"
-                                label="Time of Birth (ex: 12:34)"
-                                name="birthtime"
+                                id="birthTime"
+                                label="Time of Birth if known (ex: 12:34)"
+                                name="birthTime"
                                 autoComplete="tbirth"
                                 onChange={onChangeText}
                             />
@@ -324,7 +325,7 @@ export default function SignUp(props) {
                         label="Recieve Email updates"
                     /> */}
                     <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
-                    <div>{userInfo.birthtime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
+                    <div>{userInfo.birthTime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
                     <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"

@@ -23,7 +23,6 @@ var mailchimpInstance   = 'us19',
 //req is the object to be created
 export const create = async (req, res) => {
     //creates user and saves it at the same time
-    
    // /*
     try {
         //create sign token, showing success

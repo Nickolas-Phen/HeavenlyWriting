@@ -2,6 +2,7 @@ import * as user from '../controllers/userController.js'
 import express from 'express'
 const userRouter = express.Router();
 import * as authHelper from '../authHelperFunctions.js'
+import getCoordinates from '../controllers/coordinatesController.js';
 //import getMoonLoc from '../../client/src/api/getMoonData.js';
 //need to import the js file to obtain moon location (not written)
 

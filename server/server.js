@@ -37,6 +37,7 @@ app.use('api/reading', userRouter, (req, res) =>
 app.use('/api/swiss', (req, res) =>
 {
 //api for swissEph
+    console.log(req);
     const data = swisseph.getAstrologyData();
     console.log(data);
     res.send(data)

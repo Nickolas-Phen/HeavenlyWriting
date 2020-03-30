@@ -102,7 +102,12 @@ export default function Today() {
       console.log("Phase: " + phase);
       setMoonPhase(phase);
     });
-    axios.get('/api/swiss/').then(res =>
+    axios.get('/api/swiss/',
+        {
+          params: {
+            username: httpUser.getCurrentUser()
+          }
+        }).then(res =>
     {
       console.log(res.data);
       setAstrologyData(res.data);
