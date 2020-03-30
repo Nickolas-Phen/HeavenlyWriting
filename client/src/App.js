@@ -41,7 +41,7 @@ const App = () => {
         <SignIn onLoginSuccess={onLoginSuccess}/>
     </Route>
       <Route path="/">
-        <HomePage />
+        <HomePage onLogOut = {logOut}/>
       </Route>
     </Switch>
   );
