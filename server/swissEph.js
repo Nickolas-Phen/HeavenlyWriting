@@ -183,7 +183,7 @@ export const formatBirthdayFromSignup = (birthday) =>
 
 export const splitBirthTime = (birthTime) =>
 {
-	const hours = parseInt(birthTime.substring(0,2));
+	const hours = parseInt(birthTime.substring(0,2)) + 4;//add 4 to adjust for time zone TODO: timezone API to make this work for every timezone
 	const minutes = parseInt(birthTime.substring(3,5));
 	const newBirthTime = [hours, minutes];
 	console.log(newBirthTime[0] + " " + newBirthTime[1])
