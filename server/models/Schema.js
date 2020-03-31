@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+/*import mongoose from 'mongoose';
 
 //making a schema for the database
 
@@ -16,3 +16,4 @@ const userSchema = new Schema ({
     password: {type: String}
 
 })
+*/
