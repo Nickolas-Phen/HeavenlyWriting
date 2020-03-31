@@ -1,6 +1,6 @@
 //function to create a new object
 //req is the object to be created
-import Reading from "../models/readingSchema";
+import Reading from "../models/readingSchema.js";
 export const create = async (req, res) => {
     // console.log("find moon called");
     // findMoon();
@@ -10,7 +10,9 @@ export const create = async (req, res) => {
     temp.house = req.body.house;
     temp.sign = req.body.sign;
     temp.moonPhase = req.body.moonPhase;
-    temp.text = req.body.text;
+    temp.article = req.body.article;
+    temp.quote = req.body.quote;
+    temp.picture = req.body.picture;
 
     //saves when done
     // if theres an error it prints to the console
@@ -107,8 +109,9 @@ export const list = (req, res) => {
         }
         else
         {
-            console.log(json(readings));
-            res.json(readings);
+            console.log((readings));
+            const data = readings;
+            res.send(readings);
         }
     })
 };

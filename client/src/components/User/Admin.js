@@ -8,7 +8,7 @@ import DropDown from "../widgets/DropDown.js"
 import {Signs, Houses, MoonPhases} from "../astronomyInfo";
 import TextEditor from "../widgets/TextEditor";
 import PredictionTable from "./PredictionTable";
-import axios from "./AxiosConfig";
+import axios from "axios";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -26,6 +26,7 @@ export default function Admin() {
   const GetPredictionInfo =() => 
     axios.get('/api/reading') // do edits in axionController.js
     .then(response => {
+        console.log(response.data);
       setdbData(response.data);
       setLoading(false);
     })
