@@ -1,6 +1,7 @@
 export default {
     db: {
-      uri: 'mongodb+srv://administrator:heavenlywr1t1ng@admindata-6gxfc.mongodb.net/test?retryWrites=true&w=majority'
+      uri: 'mongodb+srv://administrator:heavenlywr1t1ng@usersdatabase-f3y79.mongodb.net/test?retryWrites=true&w=majority'
+      // Will need to privatize user and password
     },
     databaseOptions: {
         user     : 'administrator',
