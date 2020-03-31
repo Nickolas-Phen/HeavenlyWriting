@@ -24,7 +24,7 @@ export default function Admin() {
   //For testing:{house: "H", sign: "S", moonPhase: "M", quote: "Q", picture: "P", article: "A"}, {house: 'Haa', sign: 'Saa', moonPhase: 'Maa', quote: 'Qaa', picture: 'Paa', article: 'Aaa'}
   const [dbData, setdbData] = useState([]);
   const GetPredictionInfo =() => 
-    axios.get('/GIVE THE RIGHT PORT') // do edits in axionController.js
+    axios.get('/api/reading') // do edits in axionController.js
     .then(response => {
       setdbData(response.data);
       setLoading(false);
