@@ -60,6 +60,14 @@ export default function Today() {
   // find something for picture.
   const [article, setArticle] = useState("");
   const [moonPhase, setMoonPhase] = useState("");
+  const [astrologyData, setAstrologyData] = useState(
+      {
+        currentMoonSign: "",
+        sunBirthSign: "",
+        ascendantSign: "",
+        currentMoonHouse: "",
+      }
+  );
   // getData will load data from the backend only on load.
   const getMoonPhase = () => {
     //creates url to send to api to get moon data
@@ -93,6 +101,18 @@ export default function Today() {
       phase = moon.phase[day].phaseName;
       console.log("Phase: " + phase);
       setMoonPhase(phase);
+    });
+    axios.get('/api/swiss/',
+        {
+          params: {
+            birthPlace: httpUser.getCurrentUser().birthPlace,
+            birthday: httpUser.getCurrentUser().birthday,
+            birthTime: httpUser.getCurrentUser().birthTime,
+          }
+        }).then(res =>
+    {
+      console.log(res.data);
+      setAstrologyData(res.data);
     })
   };
   if (moonPhase === "")
@@ -141,14 +161,25 @@ export default function Today() {
         <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
           <div>
 
-          <img 
+          <img
             className={classes.image}
             src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
             alt="Rick"
           />
+          <br></br>
+          <h2>Today's moon:  {moonPhase}</h2>
+          <h2>Today's moon sign: {astrologyData.currentMoonSign}</h2>
+          <h2>Today's moon house: House {astrologyData.currentMoonHouse}</h2>
+          <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
+          <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
+          
+          
+          {/* <span className={classes.quoteText}>{quote}</span> */}
+                   
+
             <h2 class="info"><br></br>Today's moon:  {moonPhase}</h2>
           </div>
-   
+
         </div>
         <div>
         <span className={classes.quoteText}>Quote of the day:</span>

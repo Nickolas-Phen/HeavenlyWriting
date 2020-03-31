@@ -29,6 +29,9 @@ module.exports.init = () => {
     //don't really know if needed? added it just in case, though possible errors might occur
     app.use(express.json());
 
+    //don't really know if needed? added it just in case, though possible errors might occur
+    app.use(express.json());
+
     // body parsing middleware
     app.use(bodyParser.json());
 

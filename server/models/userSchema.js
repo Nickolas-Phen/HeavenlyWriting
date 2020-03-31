@@ -11,8 +11,8 @@ const userSchema = new mongoose.Schema ({
     email: {type: String, required:true},
     
     middleName: {type: String},
-    birthHour: {type: Number},  //in military time unless we want to add an am/pm attribute
-    birthMinute: {type:Number}, //will have default times if none submitted
+    birthTime: {type: String},
+    birthPlace: {type: String},
     house: {type: String},
     zodiac: {type: String},
 
