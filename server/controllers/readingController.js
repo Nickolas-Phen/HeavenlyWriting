@@ -1,5 +1,6 @@
 //function to create a new object
 //req is the object to be created
+import Reading from '../models/readingSchema.js';
 export const create = async (req, res) => {
     // console.log("find moon called");
     // findMoon();

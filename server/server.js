@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import config from './config/config.js';
 import * as swisseph from "./swissEph.js";
+import readingRouter from "./routes/readingRouter.js";
 
 // Use env port or default
 
@@ -29,7 +30,7 @@ app.use('/api/user', userRouter, (req, res) => {
 //api for users
 });
 
-app.use('api/reading', userRouter, (req, res) =>
+app.use('/api/reading', readingRouter, (req, res) =>
 {
 //api for readings made and updated by admin
 });
@@ -37,7 +38,7 @@ app.use('api/reading', userRouter, (req, res) =>
 app.use('/api/swiss/', async (req, res) =>
 {
 //api for swissEph
-    const birthday = req.query.birthday;
+    const birthday = req.query.birthday
     const birthPlace = req.query.birthPlace;
     const birthTime = req.query.birthTime
     console.log("user: " + req.query.birthday);

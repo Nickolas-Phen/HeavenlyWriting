@@ -11,7 +11,7 @@ const flag = swisseph.SEFLG_SPEED;
 export const getAstrologyData = (birthday, birthTime, birthPlace) =>
 {
 	//finds and returns currentMoonSign, sunBirthSign, and ascendant sign
-	console.log("swisseph user: " + birthday)
+	console.log("swisseph user: " + birthday);
 	const formattedBirthday = formatBirthdayFromSignup(birthday);//splits birthday into array of [year, month, day]
 	const formattedBirthTime = splitBirthTime(birthTime);//splits birthday into array of [hours, minutes]
 	const birthdayAndTime = {year: formattedBirthday[0], month: formattedBirthday[1], day: formattedBirthday[2], hour: formattedBirthTime[0], min: formattedBirthTime[1]};
