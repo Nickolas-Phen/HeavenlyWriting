@@ -1,0 +1,50 @@
+{
+    "entries": [
+        {
+            "natalRisingSign": "1st House",
+            "moonPhase": "Wanning Gibbus",
+            "transitingMoonSign": "Emotional Pisces",  
+            "quote": "Conclude the day with a step towards health"
+        },
+        {
+            "natalRisingSign": "3rd House",
+            "natalSunSign": "Taurus",
+            "transitingSunPosition": "12:00",
+            "transitingMoonPosition": "18:33",
+            
+            "moonPhase": "Wanning Gibbus",
+            "transitingMoonSign": "Aquarius",  
+            "transitingMoonHouseWithSun": "3rd/4th House cusp.",
+            "quote": "Today shouldn't be routine, think openly."
+        },
+        {
+            "natalRisingSign": "5th house",
+            "natalSunSign": "Scorpio",
+            "transitingSunPosition": "02:30",
+            "transitingMoonPosition": "15:00",
+            
+            "moonPhase": "New Moon",
+            "transitingMoonSign": "Scorpio",  
+            "transitingMoonHouseWithSun": "6th House.",
+            "quote": "Your passion is in full swing."
+        },
+        {
+            "natalSunSign": "Capricorn",
+            "transitingSunPosition": "12:00",
+            
+            "moonPhase": "Wanning Crescent",
+            "transitingMoonSign": "Copernicus",  
+            "transitingMoonHouseWithSun": "N/A",
+            "quote": "Spend less money on dates and more on you."
+        },
+        {
+            "natalRisingSign": "8th house",
+            "natalSunSign": "Libra",
+            "transitingSunPosition": "06:00",
+            "transitingMoonPosition": "18:00",
+            
+            "moonPhase": "Wanning Crescent",
+            "transitingMoonSign": "Gemini"
+        }
+    ]
+}
