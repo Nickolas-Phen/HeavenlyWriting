@@ -14,19 +14,27 @@ const useStyles = makeStyles({
   },
 });
 
+function createRow(data){
+  return createData(data.house, data.sign, data.moonPhase, data.quote, data.picture, data.article);
+}
+
 function createData(house, sign, moonPhase, quote, picture, article) {
   return {house, sign, moonPhase, quote, picture, article };
 }
 
-const rows = [
-  createData('Haa', 'Saa', 'Maa', 'Qaa', 'Paa', 'Aaa'),
-  createData('H', 'S', 'M', 'Q', 'P', 'A'),
-  createData('H', 'S', 'M', 'Q', 'P', 'A'),
-  createData('H', 'S', 'M', 'Q', 'P', 'A'),
-  createData('H', 'S', 'M', 'Q', 'P', 'A'),
-];
+// const rows = [
+//   createData('Haa', 'Saa', 'Maa', 'Qaa', 'Paa', 'Aaa'),
+//   createData('H', 'S', 'M', 'Q', 'P', 'A'),
+//   createData('H', 'S', 'M', 'Q', 'P', 'A'),
+//   createData('H', 'S', 'M', 'Q', 'P', 'A'),
+//   createData('H', 'S', 'M', 'Q', 'P', 'A'),
+// ];
 
-export default function PredictionTable() {
+
+
+export default function PredictionTable(props) {
+  const {dbData} = props;
+ // const rows = createRow(dbData);
   const classes = useStyles();
 
   return (
@@ -44,7 +52,7 @@ export default function PredictionTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {dbData.map(createRow).map((row) => (
             <TableRow key={row.house}>
               <TableCell align="right">
                 {row.house}

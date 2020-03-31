@@ -21,9 +21,10 @@ const useStyles = makeStyles(theme => ({
 export default function Admin() {
   const classes = useStyles();
   const [isLoading, setLoading] = useState(true);
-  const [dbData, setdbData] = useState([{house: "H", sign: "S", moonPhase: "M", quote: "Q", picture: "P", article: "A"}]);
+  //For testing:{house: "H", sign: "S", moonPhase: "M", quote: "Q", picture: "P", article: "A"}, {house: 'Haa', sign: 'Saa', moonPhase: 'Maa', quote: 'Qaa', picture: 'Paa', article: 'Aaa'}
+  const [dbData, setdbData] = useState([]);
   const GetPredictionInfo =() => 
-    axios.get('/GIVE THE RIGHT PORT')
+    axios.get('/GIVE THE RIGHT PORT') // do edits in axionController.js
     .then(response => {
       setdbData(response.data);
       setLoading(false);
@@ -36,7 +37,9 @@ export default function Admin() {
   
   return (
     <div className={classes.paper}>
-      <PredictionTable />
+      <PredictionTable 
+        dbData={dbData}
+      />
       <Typography paragraph>Select the information corresponding to the interpretation you wish to edit</Typography>
       <Container component="main" maxWidth= "md">
         <Grid container spacing={2}>
