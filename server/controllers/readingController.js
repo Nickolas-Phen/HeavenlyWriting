@@ -29,7 +29,7 @@ export const findByUniqueCombo = (req, res) =>
     Schema.find({house: req.body.house, sign: req.body.sign, moonPhase: req.body.moonPhase}, (err, data) =>
     {
         //if found, send it
-        if (err) {console.log(err);}
+        if (err) {console.log(err)}
         //else { res.send(data);}
         res.send(data);
     })

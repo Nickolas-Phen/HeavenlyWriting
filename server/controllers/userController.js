@@ -27,7 +27,7 @@ export const create = async (req, res) => {
 
     try {
         //create sign token, showing success
-        console.log("Creating user");
+        console.log("Creating user")
         console.log(req.body);
         const user = await User.create(req.body);
         console.log(user);
