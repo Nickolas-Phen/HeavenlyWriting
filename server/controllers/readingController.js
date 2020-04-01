@@ -5,7 +5,7 @@ export const create = async (req, res) => {
     // console.log("find moon called");
     // findMoon();
     let temp = new Reading();
-
+    console.log("body is "+ req.body.house);
     //initializes the required variables
     temp.house = req.body.house;
     temp.sign = req.body.sign;

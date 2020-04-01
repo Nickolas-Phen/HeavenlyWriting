@@ -9,6 +9,8 @@ import {Signs, Houses, MoonPhases} from "../astronomyInfo";
 import TextEditor from "../widgets/TextEditor";
 import PredictionTable from "./PredictionTable";
 import axios from "axios";
+import TextField from '@material-ui/core/TextField';
+import Add from "./AddToDb"
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -38,10 +40,15 @@ export default function Admin() {
   
   return (
     <div className={classes.paper}>
+      
+     
+      
       <PredictionTable 
         dbData={dbData}
       />
-      <Typography paragraph>Select the information corresponding to the interpretation you wish to edit</Typography>
+      <br></br>
+      <Add/>
+      {/* <Typography paragraph>Select the information corresponding to the interpretation you wish to edit</Typography>
       <Container component="main" maxWidth= "md">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={3}>
@@ -55,7 +62,9 @@ export default function Admin() {
           </Grid>
         </Grid>
         <TextEditor/>
-      </Container>
+      </Container> */}
+    
     </div>
+    
   );
 }
