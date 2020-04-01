@@ -37,9 +37,10 @@ export const create = async (req, res) => {
         res.json({success: true, message: "User created with token", token});
         console.log("User added to database!");
     }
-    catch
+    catch (err)
     {
         console.log("failed to add user to database");
+        console.log(err);
         //res.json({success: false, code: err.code});
     }
 //*/
