@@ -7,7 +7,9 @@ const readingSchema = new mongoose.Schema ({
     house: {type: String, required: true},
     sign: {type: String, required: true},
     moonPhase: {type: String, required: true},
-    text: {type: String, required:true},
+    quote: {type: String, required:true},
+    picture: {type: String, required:true},
+    article: {type: String, required:true},
     //one reading corresponds to one combination of house, sign, and moonPhase
 });
 

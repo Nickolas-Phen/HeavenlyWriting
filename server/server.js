@@ -1,5 +1,6 @@
 import express from 'express'
 import userRouter from './routes/userRouter.js'
+import readingRouter from "./routes/readingRouter.js";
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import config from './config/config.js';
@@ -29,7 +30,7 @@ app.use('/api/user', userRouter, (req, res) => {
 //api for users
 });
 
-app.use('api/reading', userRouter, (req, res) =>
+app.use('/api/reading', readingRouter, (req, res) =>
 {
 //api for readings made and updated by admin
 });
