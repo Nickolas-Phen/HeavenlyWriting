@@ -14,6 +14,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import defaultPicture from "../assets/defaultSignInPic.jpeg";
 import {Redirect} from 'react-router-dom'
+import axios from 'axios';
+import httpUser from '../httpUser.js'
 
 
 function Copyright() {
@@ -56,25 +58,41 @@ const useStyles = makeStyles(theme => ({
 export default function SignIn(props) {
     const classes = useStyles();
     const [toUserPage, setToUserPage] = useState(false);
-
-    const loginPressed = () =>
-    {
-        setToUserPage(true);
+    const [fields, setFields] = useState(
+        {
+            username: '',
+            password: '',
+        }
+    );
+    const onChangeText = (e) => {
+        //when a user types in info to any box, update userInfo state to match
+        const newState = {...fields};
+        newState[e.target.name] = e.target.value;
+        setFields(newState);
     };
+
+    const loginPressed = async (e) =>
+    {
+        e.preventDefault();
+        const user = await httpUser.logIn(fields); //returns user token if user is in db
+        if (user) {
+            //travel to user page
+            setToUserPage(true);
+            //sets current user to the logged in user
+            props.onLoginSuccess(user);
+        }
+    };
+
 
     if (toUserPage)
     {
-        return <Redirect to = 'user'></Redirect>
+        return <Redirect to = 'today'></Redirect>
     }
 
     return (
         <Container component="main" maxWidth="md">
             <CssBaseline />
             <div className={classes.paper}>
-                <img className = {classes.image} src = {defaultPicture} border = "5"></img>
-                {/*<Avatar className={classes.avatar}>*/}
-                {/*    <LockOutlinedIcon />*/}
-                {/*</Avatar>*/}
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
@@ -89,6 +107,7 @@ export default function SignIn(props) {
                         name="username"
                         autoComplete="username"
                         autoFocus
+                        onChange={onChangeText}
                     />
                     <TextField
                         variant="outlined"
@@ -100,6 +119,7 @@ export default function SignIn(props) {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={onChangeText}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}

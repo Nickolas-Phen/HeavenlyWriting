@@ -1,5 +1,5 @@
 import React from "react";
-
+import httpUser from "../../httpUser";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -16,13 +16,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
-import { Switch, Route, useHistory } from "react-router-dom";
+import {Switch, Route, useHistory, Redirect} from "react-router-dom";
 
 import Today from "./Today";
 import Previous from "./Previous";
 import Feedback from "./Feedback";
 import Admin from "./Admin";
-
+import Home from "../HomePage";
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -101,6 +101,7 @@ function DrawerTest(props) {
     history.push(tab.toLowerCase());
   };
 
+  if(httpUser.getCurrentUser().username === "admin"){
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -122,7 +123,10 @@ function DrawerTest(props) {
 
           </IconButton>
           <Typography variant="h6" noWrap>
-            {tab} {/*display name of card*/}
+            {
+            history.location.pathname[1].toUpperCase() + 
+            history.location.pathname.slice(2)
+              } {/*display name of card*/}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -146,7 +150,7 @@ function DrawerTest(props) {
         </div>
         <Divider />
         <List>
-          {["Today", "Previous", "Feedback", "Admin"].map(text => (
+          {["Today", "Previous", "Feedback", "Admin","Log out"].map(text => (
             <ListItem button key={text} onClick={() => changeTab(text)}>
               <ListItemText primary={text} />
             </ListItem>
@@ -160,6 +164,9 @@ function DrawerTest(props) {
       >
         <div className={classes.drawerHeader} />
         <Switch>
+          <Route path="/Log out">
+            <Redirect to = 'Home'></Redirect>
+          </Route>
           <Route path="/previous">
             <Previous />
           </Route>
@@ -172,16 +179,99 @@ function DrawerTest(props) {
           <Route path="/">
             <Today />
           </Route>
+          
         </Switch>
       </main>
     </div>
   );
+      }else{ return (
+        <div className={classes.root}>
+          <CssBaseline />
+          <AppBar
+            position="fixed"
+            className={clsx(classes.appBar, {
+              [classes.appBarShift]: open
+            })}
+          >
+            <Toolbar>
+              <IconButton
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, open && classes.hide)}
+              >
+                <MenuIcon />
+    
+              </IconButton>
+              <Typography variant="h6" noWrap>
+                {
+                history.location.pathname[1].toUpperCase() + 
+                history.location.pathname.slice(2)
+                  } {/*display name of card*/}
+              </Typography>
+            </Toolbar>
+          </AppBar>
+          <Drawer
+            className={classes.drawer}
+            variant="persistent"
+            anchor="left"
+            open={open}
+            classes={{
+              paper: classes.drawerPaper
+            }}
+          >
+            <div className={classes.drawerHeader}>
+              <IconButton onClick={handleDrawerClose}>
+                {theme.direction === "ltr" ? (
+                  <ChevronLeftIcon />
+                ) : (
+                  <ChevronRightIcon />
+                )}
+              </IconButton>
+            </div>
+            <Divider />
+            <List>
+              {["Today", "Previous", "Feedback", "Log out"].map(text => (
+                <ListItem button key={text} onClick={() => changeTab(text)}>
+                  <ListItemText primary={text} />
+                </ListItem>
+              ))}
+            </List>
+          </Drawer>
+          <main
+            className={clsx(classes.content, {
+              [classes.contentShift]: open
+            })}
+          >
+            <div className={classes.drawerHeader} />
+            <Switch>
+              <Route path="/Log out">
+                <Redirect to = 'Home'></Redirect>
+              </Route>
+              <Route path="/previous">
+                <Previous />
+              </Route>
+              <Route path="/feedback">
+                <Feedback />
+              </Route>
+              {/* <Route path="/admin">
+                <Admin />
+              </Route> */}
+              <Route path="/">
+                <Today />
+              </Route>
+              
+            </Switch>
+          </main>
+        </div>
+      );}
 }
 
 export default function User() {
   return (
     <div>
-      <DrawerTest />
+      <DrawerTest/>
     </div>
   );
 }
