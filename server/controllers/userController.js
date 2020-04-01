@@ -30,7 +30,6 @@ export const create = async (req, res) => {
         console.log("Creating user");
         console.log(req.body);
         const user = await User.create(req.body);
-        console.log("THIS POINT");
         console.log(user);
         console.log("user created");
         const token = await authHelper.signToken(user);
