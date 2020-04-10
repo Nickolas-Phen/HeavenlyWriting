@@ -7,6 +7,8 @@ import request from 'superagent';
 import express from 'express'
 import bodyParser from 'body-parser';
 
+//import coordinates from './coordinatesController.js';
+
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -42,7 +44,7 @@ export const create = async (req, res) => {
        // console.log(err);
         //res.json({success: false, code: err.code});
     }
-//*/
+
 
     //calls the function that adds the user to mailchimp
      mail(req, res);
@@ -241,11 +243,12 @@ const addNonRequired = (req, res) =>
 
 //sets the zodiac sign for the user
 export const findZodiac = (req, res) => {
-   
-    if(req.birthday.getMonth()  ==  0)
+   var day = new Date('12-12-1212');
+   console.log(day.getMonth());
+    if(day.getMonth()  ==  0)
     {
-        if(req.birthday.getDay() <=  19)
-        {req.body.zodiac   = "Capricorn";}
+        if(req.body.birthday.getDay() <=  19)
+        {req.zodiac   = "Capricorn";}
 
         else
         {

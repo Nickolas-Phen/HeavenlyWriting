@@ -9,7 +9,10 @@ const userSchema = new mongoose.Schema ({
     lastName: {type: String, required: true},
     birthday: {type: Date, required: true},
     email: {type: String, required:true},
+    phoneNumber: {type: String, required: true},
+    placeBirth: {type: String, required: true},
     
+
     middleName: {type: String},
     birthTime: {type: String},
     birthPlace: {type: String},
@@ -17,6 +20,8 @@ const userSchema = new mongoose.Schema ({
     zodiac: {type: String},
 
     //add moon location?
+   // longitude: {type: Number},
+   // latitude: {type: Number},
     
     //find a way to protect this?
     username: {type: String, required: true, unique:true},
