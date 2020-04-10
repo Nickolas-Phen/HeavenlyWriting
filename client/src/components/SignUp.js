@@ -127,7 +127,7 @@ export default function SignUp(props) {
 
     const checkValidPhoneNumber = () =>
     {
-        //make sure the time field is a time
+        //make sure the phone number is valid
         let phoneNum = userInfo.phoneNumber;
         if (!((phoneNum.length === 10) || (phoneNum.length === 12)))
         {
@@ -135,7 +135,7 @@ export default function SignUp(props) {
             return false;
         }
 
-        if (phoneNum[3] === '-' && phoneNum[7] == '-')
+        if (phoneNum[3] === '-' && phoneNum[7] === '-')
         {
             let temp = '';
             for (var i = 0; i < phoneNum.length; i++)
@@ -154,7 +154,7 @@ export default function SignUp(props) {
         return true;
     };
 
-    const checkValidEmail = async () =>
+    const checkValidEmail = () =>
     {
         const email = userInfo.email;
         if (!email.includes("@") || !email.includes(".com"))//make sure email has @ and .com in it
@@ -162,8 +162,9 @@ export default function SignUp(props) {
             console.log("Email does not contain '@' or '.com'");
             return false;
         }
-        const response = await axios.get('/api/user/email/' + email);
+        const response = axios.get('/api/user/email/' + email);
         console.log(response);
+        return true;
     };
 
     const onChangeBirthday = (date) =>
@@ -235,7 +236,6 @@ export default function SignUp(props) {
                 placeOfBirth: "",
                 username: '',
                 phoneNumber: '',
-                placeOfBirth: '',
                 mailchimp: 'false',
             }
         );
