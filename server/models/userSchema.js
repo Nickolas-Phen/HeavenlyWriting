@@ -9,7 +9,10 @@ const userSchema = new mongoose.Schema ({
     lastName: {type: String, required: true},
     birthday: {type: Date, required: true},
     email: {type: String, required:true},
+    phoneNumber: {type: String, required: true},
+    placeBirth: {type: String, required: true},
     
+
     middleName: {type: String},
     birthHour: {type: Number},  //in military time unless we want to add an am/pm attribute
     birthMinute: {type:Number}, //will have default times if none submitted
@@ -17,6 +20,8 @@ const userSchema = new mongoose.Schema ({
     zodiac: {type: String},
 
     //add moon location?
+   // longitude: {type: Number},
+   // latitude: {type: Number},
     
     //find a way to protect this?
     username: {type: String, required: true, unique:true},

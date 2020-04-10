@@ -7,6 +7,8 @@ import request from 'superagent';
 import express from 'express'
 import bodyParser from 'body-parser';
 
+//import coordinates from './coordinatesController.js';
+
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
@@ -24,7 +26,18 @@ var mailchimpInstance   = 'us19',
 export const create = async (req, res) => {
     //creates user and saves it at the same time
     
-   // /*
+   
+/*
+console.log(req.coordinates.longitude);
+console.log(req.coordinates.latitude);
+req.longitude = req.coordinates.longitude;
+req.longitude = req.coordinates.longitude;
+*/
+
+    if (req)
+    {
+        
+    }
     try {
         //create sign token, showing success
         console.log("Creating user");
@@ -35,12 +48,13 @@ export const create = async (req, res) => {
         res.json({success: true, message: "User created with token", token});
         console.log("User added to database!");
     }
-    catch
+    catch (err)
     {
         console.log("failed to add user to database");
-        //res.json({success: false, code: err.code});
+        console.log();
+        console.log(err);
     }
-//*/
+
 
     //calls the function that adds the user to mailchimp
      mail(req, res);
@@ -239,11 +253,12 @@ const addNonRequired = (req, res) =>
 
 //sets the zodiac sign for the user
 export const findZodiac = (req, res) => {
-   
-    if(req.birthday.getMonth()  ==  0)
+   var day = new Date('12-12-1212');
+   console.log(day.getMonth());
+    if(day.getMonth()  ==  0)
     {
-        if(req.birthday.getDay() <=  19)
-        {req.body.zodiac   = "Capricorn";}
+        if(req.body.birthday.getDay() <=  19)
+        {req.zodiac   = "Capricorn";}
 
         else
         {
