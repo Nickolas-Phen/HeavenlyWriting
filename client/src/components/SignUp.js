@@ -122,6 +122,35 @@ export default function SignUp(props) {
         return true;
     };
 
+    const checkValidPhoneNumber = () =>
+    {
+        //make sure the time field is a time
+        let phoneNum = userInfo.phoneNumber;
+        if (!((phoneNum.length === 10) || (phoneNum.length === 12)))
+        {
+            console.log("Invalid length for phone number.")
+            return false;
+        }
+
+        if (phoneNum[3] === '-' && phoneNum[7] == '-')
+        {
+            let temp = '';
+            for (var i = 0; i < phoneNum.length; i++)
+            {
+                if (i !== 3 && i!== 7)
+                {
+                    temp = temp + phoneNum[i];
+                }
+            }
+            phoneNum = temp;
+        }
+        const phone_int = parseInt(phoneNum); //make sure it is an int
+        console.log(phone_int);
+        if ((phone_int < 1000000000) || (phone_int > 9999999999))
+            {return false;}
+        return true;
+    };
+
     const checkValidEmail = async () =>
     {
         const email = userInfo.email;
@@ -376,6 +405,8 @@ export default function SignUp(props) {
                     <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
                     <div>{userInfo.birthTime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
                     <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
+                    <div>{userInfo.phoneNumber && (!checkValidPhoneNumber()) ? <font color = "red" >Invalid phone number.</font> : null}</div>
+                    
                     <Button
                         component = {Link} to ="/user"
                         //enable button if passwords match
