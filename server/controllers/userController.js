@@ -25,24 +25,14 @@ var mailchimpInstance   = 'us19',
 //req is the object to be created
 export const create = async (req, res) => {
     //creates user and saves it at the same time
-    
-   
-/*
-console.log(req.coordinates.longitude);
-console.log(req.coordinates.latitude);
-req.longitude = req.coordinates.longitude;
-req.longitude = req.coordinates.longitude;
-*/
+   // /*
 
-    if (req)
-    {
-        
-    }
     try {
         //create sign token, showing success
         console.log("Creating user");
         console.log(req.body);
         const user = await User.create(req.body);
+        console.log(user);
         console.log("user created");
         const token = await authHelper.signToken(user);
         res.json({success: true, message: "User created with token", token});
@@ -51,8 +41,8 @@ req.longitude = req.coordinates.longitude;
     catch (err)
     {
         console.log("failed to add user to database");
-        console.log();
         console.log(err);
+        //res.json({success: false, code: err.code});
     }
 
 
@@ -248,7 +238,7 @@ const addNonRequired = (req, res) =>
         {res.house = req.body.house;}
     if(req.zodiac)
         {res.zodiac = req.body.zodiac;}
-}
+};
 
 
 //sets the zodiac sign for the user

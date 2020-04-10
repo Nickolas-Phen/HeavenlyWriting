@@ -54,12 +54,21 @@ const mockGetArticle = () =>
   });
 
 export default function Today() {
+  var data;
   const classes = useStyles();
   const [isLoading, setLoading] = useState(true);
   const [quote, setQuote] = useState("");
   // find something for picture.
   const [article, setArticle] = useState("");
   const [moonPhase, setMoonPhase] = useState("");
+  const [astrologyData, setAstrologyData] = useState(
+      {
+        currentMoonSign: "",
+        sunBirthSign: "",
+        ascendantSign: "",
+        currentMoonHouse: "",
+      }
+  );
   // getData will load data from the backend only on load.
   const getMoonPhase = () => {
     //creates url to send to api to get moon data
@@ -93,6 +102,18 @@ export default function Today() {
       phase = moon.phase[day].phaseName;
       console.log("Phase: " + phase);
       setMoonPhase(phase);
+    });
+    axios.get('/api/swiss/',
+        {
+          params: {
+            birthPlace: httpUser.getCurrentUser().birthPlace,
+            birthday: httpUser.getCurrentUser().birthday,
+            birthTime: httpUser.getCurrentUser().birthTime,
+          }
+        }).then(res =>
+    {
+      console.log(res.data);
+      setAstrologyData(res.data);
     })
   };
   if (moonPhase === "")
@@ -117,6 +138,18 @@ export default function Today() {
         setQuote("Quote '404' not found");
       });
 
+      fetch("	http://ohmanda.com/api/horoscope/aquarius")
+  .then(response => response.json())
+  .then((jsonData) => {
+    // jsonData is parsed json object received from url
+    data = jsonData;
+    console.log("here" +jsonData);
+  })
+  .catch((error) => {
+    // handle your errors here
+    console.error(error);
+  });
+
     mockGetArticle()
       .then(newArticle => {
         increaseCounter();
@@ -128,6 +161,17 @@ export default function Today() {
       });
   }, []);
 
+  function api() {
+    return fetch('http://ohmanda.com/api/horoscope/aquarius')
+    .then((response) => response.json())
+    .then((responseJson) => {
+      return responseJson.movies;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+ }
+
   if (isLoading) {
     return (
       <div className={classes.paper}>
@@ -136,30 +180,66 @@ export default function Today() {
     );
   } else {
     return (
-      <div className={classes.paper}>
+      <div>
+        <h1 onChange={api}>{data}</h1>
         <div className={classes.quote}>
-          <img 
-            className={classes.image}
-            src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
-            alt="Rick"
-          />
-          <br></br>
-          <h2>Today's moon:  {moonPhase}</h2>
-          <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
-          
-          
-          {/* <span className={classes.quoteText}>{quote}</span> */}
-                   
-
+        <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
         </div>
         <div>
-        <span className={classes.quoteText}>Quote of the day:</span>
-        </div>
-        <span className={classes.quoteText}>Future predictions:</span>
-        {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
+            <img
+             className={classes.image}
+             src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
+             alt="Rick"
+           />
+           <h2 class="text">Today's Moon is: {moonPhase}.</h2>
+          </div>
+          
+           <div class="margin">
+        <h2 >According to your date of birth you have entered {httpUser.getCurrentUser().birthday.substring(0,10)} :</h2>
+        <br></br>
+             <h2> Moon sign: {astrologyData.currentMoonSign}</h2>
+           <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
+           <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
+           <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
+          </div>
+          {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
           return <span>{i}<br /></span>;
         })) }</Typography> */}
       </div>
+     
+      // <div className={classes.paper}>
+      //   <div className={classes.quote}>
+      //   <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
+      //     <div>
+
+      //     <img
+      //       className={classes.image}
+      //       src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
+      //       alt="Rick"
+      //     />
+      //     <br></br>
+      //     <h2>Today's moon:  {moonPhase}</h2>
+      //     <h2>Today's moon sign: {astrologyData.currentMoonSign}</h2>
+      //     <h2>Today's moon house: House {astrologyData.currentMoonHouse}</h2>
+      //     <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
+      //     <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
+          
+          
+      //     {/* <span className={classes.quoteText}>{quote}</span> */}
+                   
+
+      //       <h2 class="info"><br></br>Today's moon:  {moonPhase}</h2>
+      //     </div>
+
+      //   </div>
+      //   <div>
+      //   <span className={classes.quoteText}>Quote of the day:</span>
+      //   </div>
+      //   <span className={classes.quoteText}>Future predictions:</span>
+      //   {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
+      //     return <span>{i}<br /></span>;
+      //   })) }</Typography> */}
+      // </div>
     );
   }
 }

@@ -13,9 +13,10 @@ import Container from '@material-ui/core/Container';
 import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
+//import Calendaimport FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
 import 'react-calendar/dist/Calendar.css';
-
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -57,7 +58,7 @@ export default function SignUp(props) {
             birthday: '',
             email: '',
             password: '',
-            birthtime: 0,
+            birthTime: 0,
             username: '',
             phoneNumber: '',
             placeBirth: '',
@@ -92,7 +93,7 @@ export default function SignUp(props) {
     const checkValidTime = () =>
     {
         //make sure the time field is a time
-        const time = userInfo.birthtime;
+        const time = userInfo.birthTime;
         if (time.length !== 5)
         {
             console.log("Invalid length for time of birth.")
@@ -166,14 +167,14 @@ export default function SignUp(props) {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
         //add AM or PM to birth time based on selected radio button
-
+        //TODO: make birthtime into military time by adding 12 hours for pm
         if (AM_PM === "AM")
         {
-            userInfo.birthtime += " AM";
+            userInfo.birthTime += " AM";
         }
         else
         {
-            userInfo.birthtime += " PM";
+            userInfo.birthTime += " PM";
         }
         //create account for user and get their token
         
@@ -185,7 +186,8 @@ export default function SignUp(props) {
                 birthday: '',
                 email: '',
                 password: '',
-                birthtime: 0,
+                birthTime: "",
+                birthPlace: "",
                 username: '',
                 phoneNumber: '',
                 placeOfBirth: '',
@@ -203,7 +205,7 @@ export default function SignUp(props) {
 
     if (toUserPage)
     {
-        return <Redirect to = 'user'></Redirect>
+        return <Redirect to = 'today'></Redirect>
     }
     return (
         <Container component="main" maxWidth= "md">
@@ -325,9 +327,9 @@ export default function SignUp(props) {
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                id="placeBirth"
+                                id="birthPlace"
                                 label="Place of Birth"
-                                name="placeBirth"
+                                name="birthPlace"
                                 autoComplete="pbirth"
                                 onChange={onChangeText}
                             />
@@ -336,9 +338,9 @@ export default function SignUp(props) {
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                id="timeBirth"
-                                label="Time of Birth (ex: 12:34)"
-                                name="birthtime"
+                                id="birthTime"
+                                label="Time of Birth if known (ex: 12:34)"
+                                name="birthTime"
                                 autoComplete="tbirth"
                                 onChange={onChangeText}
                             />
@@ -367,9 +369,12 @@ export default function SignUp(props) {
                         </Grid>
                     </Grid>
                     </Grid>
-                    <div>{!userInfo.username ? <font color = "red" >Username is not unique</font> : null}</div>
+                    {/* <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Recieve Email updates"
+                    /> */}
                     <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
-                    <div>{userInfo.birthtime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
+                    <div>{userInfo.birthTime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
                     <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"
@@ -392,6 +397,7 @@ export default function SignUp(props) {
                         </Grid>
                     </Grid>
                 </form>
+               
             </div>
             <Box mt={5}>
                 <Copyright />

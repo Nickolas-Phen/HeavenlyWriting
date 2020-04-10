@@ -86,7 +86,7 @@ export default function SignIn(props) {
 
     if (toUserPage)
     {
-        return <Redirect to = 'user'></Redirect>
+        return <Redirect to = 'today'></Redirect>
     }
 
     return (

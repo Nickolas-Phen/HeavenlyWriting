@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import User from "./components/User/User";
-import Home from "./components/HomePage";
+import HomePage from "./components/HomePage";
 import { Switch, Route, useHistory } from "react-router-dom";
 import httpUser from './httpUser'
 
@@ -21,20 +21,65 @@ const App = () => {
     };
   return (
     <Switch>
-      <Route path="/home">
-        <Home onLogOut = {logOut}/>
-      </Route>
       <Route path="/signup">
         <SignUp onSignUpSuccess={onLoginSuccess}/>
       </Route>
+      <Route path="/today">
+        <User />
+        </Route>
+       <Route path="/previous">
+       <User />
+         </Route> 
+         <Route path="/feedback">
+       <User />
+         </Route> 
+         <Route path="/admin">
+       <User />
+         </Route> 
+      
     <Route path="/signin">
         <SignIn onLoginSuccess={onLoginSuccess}/>
     </Route>
       <Route path="/">
-        <User/>
+        <HomePage onLogOut = {logOut}/>
       </Route>
     </Switch>
   );
 };
 
 export default App;
+{/* <Route path="/feedback">
+    <User /> 
+    <Route path="/admin">         
+    <User />
+  </Route> 
+  <Route path="/previous">
+     <User /> */}
+  //    <Switch>
+  //    <Route path="/signup">
+  //      <SignUp />
+  //    </Route>
+  //    <Route path="/today">
+  //      <User />
+  //    </Route>
+  //  <Route path="/signin">
+  //      <SignIn />
+  //  </Route>
+  //    <Route path="/">
+  //      <HomePage />
+  //    </Route>
+  //working one
+//   <Switch>
+//   <Route path="/home">
+//     <Home onLogOut = {logOut}/>
+//   </Route>
+//   <Route path="/signup">
+//     <SignUp onSignUpSuccess={onLoginSuccess}/>
+//   </Route>
+// <Route path="/signin">
+//     <SignIn onLoginSuccess={onLoginSuccess}/>
+// </Route>
+//   <Route path="/">
+//     <User/>
+//   </Route>
+// </Switch>

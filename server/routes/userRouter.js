@@ -2,12 +2,13 @@ import * as user from '../controllers/userController.js'
 import express from 'express'
 const userRouter = express.Router();
 import * as authHelper from '../authHelperFunctions.js'
+import getCoordinates from '../controllers/coordinatesController.js';
 //import getMoonLoc from '../../client/src/api/getMoonData.js';
 //need to import the js file to obtain moon location (not written)
 
 //used for routing requests to correct req handler
 
-//heavily based on bootcamp 3  
+//heavily based on bootcamp 3
 
 //userRouter.get('/', getMoonLoc, user.list);
 
@@ -24,6 +25,6 @@ userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
 userRouter.get('/id/:userId', user.read);
 userRouter.get('/', user.findByEmail);
 userRouter.put('/:userId', /*getMoonLoc ,*/ user.update);
-userRouter.delete('/:userId', user.remove)
+userRouter.delete('/:userId', user.remove);
 
 export default userRouter;
