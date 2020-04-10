@@ -17,6 +17,8 @@ import httpUser from '../httpUser'
 import Checkbox from '@material-ui/core/Checkbox';
 import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
 import 'react-calendar/dist/Calendar.css';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 function Copyright() {
     return (
         <Typography variant="body2" color="textSecondary" align="center">
@@ -62,6 +64,7 @@ export default function SignUp(props) {
             username: '',
             phoneNumber: '',
             placeOfBirth: '',
+            mailchimp: 'false',
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
@@ -192,6 +195,19 @@ export default function SignUp(props) {
         }
     };
 
+    const onMailchimpChange = (e) => {
+        const target = e.target;
+        console.log(target);
+        if (userInfo.mailchimp == 'false')
+        {
+            userInfo.mailchimp = 'true';
+        }
+        else 
+        {
+            userInfo.mailchimp = 'false';
+        }
+    }
+
     const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
@@ -220,6 +236,7 @@ export default function SignUp(props) {
                 username: '',
                 phoneNumber: '',
                 placeOfBirth: '',
+                mailchimp: 'false',
             }
         );
         if(user)
@@ -397,6 +414,11 @@ export default function SignUp(props) {
                         </label>
                         </Grid>
                     </Grid>
+                    <FormControlLabel
+                        control={<Checkbox value="mailchimp" color="primary" />}
+                        label="Opt into Mailchimp"
+                        onChange = {onMailchimpChange}
+                    />
                     </Grid>
                     {/* <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}

@@ -47,7 +47,14 @@ export const create = async (req, res) => {
 
 
     //calls the function that adds the user to mailchimp
+    if (req.body.mailchimp === 'true')
+    {
      mail(req, res);
+    }
+    else 
+    {
+        console.log("User opted out of mailchimp.")
+    }
 };
 
 
