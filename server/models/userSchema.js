@@ -7,15 +7,14 @@ import bcrypt from 'bcrypt'
 const userSchema = new mongoose.Schema ({
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
-    birthday: {type: Date, required: true},
+    birthday: {type: Date /*, required: true*/},
     email: {type: String, required:true},
     phoneNumber: {type: String, required: true},
-    placeBirth: {type: String, required: true},
+    placeOfBirth: {type: String, required: true},
     
 
     middleName: {type: String},
     birthTime: {type: String},
-    birthPlace: {type: String},
     house: {type: String},
     zodiac: {type: String},
 

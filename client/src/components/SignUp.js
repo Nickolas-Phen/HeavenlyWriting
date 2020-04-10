@@ -61,7 +61,7 @@ export default function SignUp(props) {
             birthTime: 0,
             username: '',
             phoneNumber: '',
-            placeBirth: '',
+            placeOfBirth: '',
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
@@ -216,7 +216,7 @@ export default function SignUp(props) {
                 email: '',
                 password: '',
                 birthTime: "",
-                birthPlace: "",
+                placeOfBirth: "",
                 username: '',
                 phoneNumber: '',
                 placeOfBirth: '',
@@ -356,9 +356,9 @@ export default function SignUp(props) {
                             <TextField
                                 variant="outlined"
                                 fullWidth
-                                id="birthPlace"
+                                id="placeOfBirth"
                                 label="Place of Birth"
-                                name="birthPlace"
+                                name="placeOfBirth"
                                 autoComplete="pbirth"
                                 onChange={onChangeText}
                             />
