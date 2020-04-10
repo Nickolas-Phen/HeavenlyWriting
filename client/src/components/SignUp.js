@@ -72,6 +72,7 @@ export default function SignUp(props) {
     const [birthday, setBirthday] = useState('');
     const [AM_PM, setAM_PM] = useState("AM");
     const [phoneNumber, setPhoneNumber] = useState(0);
+    const [uniqueEmail, setUniqueEmail] = useState(true);
 
     const uniqueUsername = () =>
     {
@@ -154,7 +155,7 @@ export default function SignUp(props) {
         return true;
     };
 
-    const checkValidEmail = () =>
+    const checkValidEmail = async () =>
     {
         const email = userInfo.email;
         if (!email.includes("@") || !email.includes(".com"))//make sure email has @ and .com in it
@@ -162,9 +163,23 @@ export default function SignUp(props) {
             console.log("Email does not contain '@' or '.com'");
             return false;
         }
-        const response = axios.get('/api/user/email/' + email);
-        console.log(response);
         return true;
+    };
+
+    const emailIsUnique = async () =>
+    {
+        const email = userInfo.email;
+        //check if email is unique
+        const response = await axios.get('/api/user/email/' + email);
+        if (response.data.message === "not unique")//if email is not unique
+        {
+            console.log("Email is not unique");
+            setUniqueEmail(false);
+        }
+        else
+        {
+            setUniqueEmail(true);
+        }
     };
 
     const onChangeBirthday = (date) =>
@@ -181,6 +196,7 @@ export default function SignUp(props) {
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
+        emailIsUnique();//check if email is unique
     };
 
     const onAM_PMChange = (e) => {
@@ -427,12 +443,13 @@ export default function SignUp(props) {
                     <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
                     <div>{userInfo.birthTime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
                     <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
+                    <div>{!uniqueEmail ? <font color = "red" >That email is already in use</font> : null}</div>
                     <div>{userInfo.phoneNumber && (!checkValidPhoneNumber()) ? <font color = "red" >Invalid phone number.</font> : null}</div>
                     
                     <Button
                         component = {Link} to ="/user"
-                        //enable button if passwords match
-                        disabled = {!passwordsMatch()}
+                        //enable button if all info is valid
+                        disabled = {!passwordsMatch() || !checkValidTime() || !checkValidEmail() || !checkValidPhoneNumber() || !uniqueEmail}
                         type="submit"
                         fullWidth
                         variant="contained"
