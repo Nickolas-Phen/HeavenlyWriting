@@ -37,11 +37,13 @@ export const findByUniqueCombo = (req, res) =>
     })
 };
 
-//finds a reading by the id
+//finds a reading by the moon sign TEMPERORY
 export const read = (req, res) =>
 {
-    Schema.findById(req.params.readingId, (err, data) =>
+    Reading.find(req.params.sign, (err, data) =>
     {
+
+        console.log(req.params.sign);
         if (err) {console.log(err);}
         //else { res.send(data);}
         res.send(data);
@@ -103,12 +105,18 @@ export const remove = (req, res) => {
 export const list = (req, res) => {
     Reading.find({}, (err, readings) =>
     {
+        console.log("in list");
+                    //get sign only, these 2 dont work
+        // console.log(req.body.sign);
+        // console.log(readings.sign);
         if (err)
         {
             res.status(404).send('Error: Readings could not be found');
+            console.log("ERROR");
         }
         else
         {
+            
             console.log((readings));
             const data = readings;
             res.send(readings);

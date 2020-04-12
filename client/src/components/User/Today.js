@@ -138,17 +138,7 @@ export default function Today() {
         setQuote("Quote '404' not found");
       });
 
-      fetch("	http://ohmanda.com/api/horoscope/aquarius")
-  .then(response => response.json())
-  .then((jsonData) => {
-    // jsonData is parsed json object received from url
-    data = jsonData;
-    console.log("here" +jsonData);
-  })
-  .catch((error) => {
-    // handle your errors here
-    console.error(error);
-  });
+
 
     mockGetArticle()
       .then(newArticle => {
@@ -161,16 +151,24 @@ export default function Today() {
       });
   }, []);
 
-  function api() {
-    return fetch('http://ohmanda.com/api/horoscope/aquarius')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      return responseJson.movies;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
- }
+  const GetPrediction =() => 
+  axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign) 
+  .then(response => {
+      console.log("find: " + response.data);
+  
+  })
+  .catch(err => console.log(err));
+
+//   function api() {
+//     return fetch('http://ohmanda.com/api/horoscope/aquarius')
+//     .then((response) => response.json())
+//     .then((responseJson) => {
+//       return responseJson.movies;
+//     })
+//     .catch((error) => {
+//       console.error(error);
+//     });
+//  }
 
   if (isLoading) {
     return (
@@ -181,7 +179,7 @@ export default function Today() {
   } else {
     return (
       <div>
-        <h1 onChange={api}>{data}</h1>
+        <button onClick={GetPrediction}>temp</button>
         <div className={classes.quote}>
         <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
         </div>
@@ -201,6 +199,7 @@ export default function Today() {
            <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
+           <h2>Prediction:</h2>
           </div>
           {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
           return <span>{i}<br /></span>;

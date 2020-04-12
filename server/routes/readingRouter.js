@@ -4,7 +4,8 @@ const readingRouter = express.Router();
 
 //route for creating new reading
 readingRouter.post('/', reading.create);
-
+//to get one 
+readingRouter.get('/:sign', reading.read);
 // ':' = url parameter
 readingRouter.get('/', reading.list);//returns all readings in database
 readingRouter.put('/:userId', reading.update);
