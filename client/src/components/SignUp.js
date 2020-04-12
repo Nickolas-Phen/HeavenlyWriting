@@ -123,7 +123,6 @@ export default function SignUp(props) {
         let phoneNum = userInfo.phoneNumber;
         if (!((phoneNum.length === 10) || (phoneNum.length === 12)))
         {
-            console.log("Invalid length for phone number.")
             return false;
         }
 
@@ -151,7 +150,6 @@ export default function SignUp(props) {
         const email = userInfo.email;
         if (!email.includes("@") || !email.includes(".com"))//make sure email has @ and .com in it
         {
-            console.log("Email does not contain '@' or '.com'");
             return false;
         }
         return true;
@@ -161,16 +159,12 @@ export default function SignUp(props) {
     {
         //check if email is unique
         const response = await axios.get('/api/user/email/' + email);
-        console.log("Message: " + response.data.message);
-        console.log("Email: " + email);
         if (response.data.message === "not unique")//if email is not unique
         {
-            console.log("Email is not unique");
             setUniqueEmail(false);
         }
         else
         {
-            console.log("Email is unique");
             setUniqueEmail(true);
         }
     };
@@ -181,12 +175,10 @@ export default function SignUp(props) {
         const response = await axios.get('/api/user/username/' + username);
         if (response.data.message === "not unique")//if username is not unique
         {
-            console.log("Username is not unique");
             setUniqueUsername(false);
         }
         else
         {
-            console.log("Username is unique");
             setUniqueUsername(true);
         }
     };
@@ -207,7 +199,7 @@ export default function SignUp(props) {
         setUserInfo(newState);
         if (e.target.name === "email")
             emailIsUnique(e.target.value);//check if email is unique
-        if (e.target.username === "username")
+        else if (e.target.name === "username")
             usernameIsUnique(e.target.value);//check if username is unique
     };
 
@@ -462,7 +454,8 @@ export default function SignUp(props) {
                     <Button
                         component = {Link} to ="/user"
                         //enable button if all info is valid
-                        disabled = {!passwordsMatch() || !checkValidTime() || !checkValidEmail() || !checkValidPhoneNumber() || !uniqueEmail}
+                        disabled = {!passwordsMatch() || !checkValidTime() ||
+                        !checkValidEmail() || !checkValidPhoneNumber() || !uniqueEmail || !uniqueUsername}
                         type="submit"
                         fullWidth
                         variant="contained"

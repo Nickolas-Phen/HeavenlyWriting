@@ -11,7 +11,7 @@ import * as swisseph from "./swissEph.js";
 //add your db uri to config.js to test database on your computer, like in bootcamp 2, 3
 mongoose.connect(config.db.uri, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}).then(() => {
     console.log(`Successfully connected to mongoose database.`)
-});
+})
 
 const port = process.env.PORT || 5000;
 
