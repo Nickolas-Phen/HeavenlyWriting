@@ -40,13 +40,17 @@ export const findByUniqueCombo = (req, res) =>
 //finds a reading by the moon sign TEMPERORY
 export const read = (req, res) =>
 {
-    Reading.find(req.params.sign, (err, data) =>
+    Reading.find(req.params, (err, data) =>
     {
-
-        console.log(req.params.sign);
-        if (err) {console.log(err);}
-        //else { res.send(data);}
-        res.send(data);
+        console.log(req.params);
+        if (err) {
+            console.log("ERROR BIH!");
+            console.log(err);   
+        }else{
+            console.log("passed " + data + " here");
+            res.send(data);
+        }
+ 
     })
 };
 
