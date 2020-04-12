@@ -61,13 +61,22 @@ export const create = async (req, res) => {
 
 //finds a user by the username
 //input is the username requested
-export const findByUsername = (reqUsername, res) =>
+export const findByUsername = (req, res) =>
 {
-    Schema.find({username:reqUsername}, (err, data) =>
+    User.find({username:req.params.username}).then(user =>
     {
-        if (err) {console.log(err);}
+        if (user.length === 0) {//if no user by the entered username is found, the returned user object is an empty array, []
+            return res.status(200).send({
+                message: "unique"
+            });
+        }
         //else { res.send(data);}
-        res.send(data);
+        else
+        {
+            return res.status(200).send({
+                message: "not unique"
+            });
+        }
     })
 };
 

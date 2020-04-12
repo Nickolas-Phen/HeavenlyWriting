@@ -73,22 +73,13 @@ export default function SignUp(props) {
     const [AM_PM, setAM_PM] = useState("AM");
     const [phoneNumber, setPhoneNumber] = useState(0);
     const [uniqueEmail, setUniqueEmail] = useState(true);
-
-    const uniqueUsername = () =>
-    {
-        //if username already exists
-        if(!((userInfo.username)))
-        {
-            console.log("The username is not unique");
-        }
-
-    };
+    const [uniqueUsername, setUniqueUsername] = useState(true);
 
     const passwordsMatch = () =>
     {
         if(!((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword)))
         {
-            console.log("The passwords do not match");
+            //console.log("The passwords do not match");
         }
         //if both password fields have input and are equal, return true
         return ((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword))
@@ -166,11 +157,12 @@ export default function SignUp(props) {
         return true;
     };
 
-    const emailIsUnique = async () =>
+    const emailIsUnique = async (email) =>
     {
-        const email = userInfo.email;
         //check if email is unique
         const response = await axios.get('/api/user/email/' + email);
+        console.log("Message: " + response.data.message);
+        console.log("Email: " + email);
         if (response.data.message === "not unique")//if email is not unique
         {
             console.log("Email is not unique");
@@ -178,7 +170,24 @@ export default function SignUp(props) {
         }
         else
         {
+            console.log("Email is unique");
             setUniqueEmail(true);
+        }
+    };
+
+    const usernameIsUnique = async (username) =>
+    {
+        //check if email is unique
+        const response = await axios.get('/api/user/username/' + username);
+        if (response.data.message === "not unique")//if username is not unique
+        {
+            console.log("Username is not unique");
+            setUniqueUsername(false);
+        }
+        else
+        {
+            console.log("Username is unique");
+            setUniqueUsername(true);
         }
     };
 
@@ -196,7 +205,10 @@ export default function SignUp(props) {
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
-        emailIsUnique();//check if email is unique
+        if (e.target.name === "email")
+            emailIsUnique(e.target.value);//check if email is unique
+        if (e.target.username === "username")
+            usernameIsUnique(e.target.value);//check if username is unique
     };
 
     const onAM_PMChange = (e) => {
@@ -444,6 +456,7 @@ export default function SignUp(props) {
                     <div>{userInfo.birthTime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
                     <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
                     <div>{!uniqueEmail ? <font color = "red" >That email is already in use</font> : null}</div>
+                    <div>{!uniqueUsername ? <font color = "red" >That username is already in use</font> : null}</div>
                     <div>{userInfo.phoneNumber && (!checkValidPhoneNumber()) ? <font color = "red" >Invalid phone number.</font> : null}</div>
                     
                     <Button
