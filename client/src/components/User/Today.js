@@ -150,15 +150,15 @@ export default function Today() {
         setArticle("Nothing to do today");
       });
   }, []);
-
+  const [pred, setpred] = useState([]);
   const GetPrediction =() => 
   axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign) 
   .then(response => {
       console.log("find: " + response.data);
-  
+    setpred(response.data);
   })
   .catch(err => console.log(err));
-
+//URL WORKS WITH GET
 //   function api() {
 //     return fetch('http://ohmanda.com/api/horoscope/aquarius')
 //     .then((response) => response.json())
@@ -200,6 +200,7 @@ export default function Today() {
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
            <h2>Prediction:</h2>
+           {/* add a js file and pass pred and map it */}
           </div>
           {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
           return <span>{i}<br /></span>;
