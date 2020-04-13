@@ -90,7 +90,7 @@ export default function SignUp(props) {
         const time = userInfo.birthTime;
         if (time.length !== 5)
         {
-            console.log("Invalid length for time of birth.")
+            //console.log("Invalid length for time of birth.")
             return false;
         }
 
@@ -98,19 +98,19 @@ export default function SignUp(props) {
         const hours_int = parseInt(hours); //make sure it is an int
         if (isNaN(hours_int) || (hours_int > 12))//make sure hours are a number less than 13
         {
-            console.log("Error: Hour value greater than 12");
+            //console.log("Error: Hour value greater than 12");
             return false;
         }
         if (time[2] !== ':')//make sure time has colon
         {
-            console.log("Error: No colon in time statement.");
+            //console.log("Error: No colon in time statement.");
             return false;
         }
         const minutes = time[3] + time[4];
         const minutes_int = parseInt(minutes);
         if (isNaN(minutes_int) || (minutes_int > 59)) //make sure minutes are numbers under 60
         {
-            console.log("Error: Minute value greater than 60");
+            //console.log("Error: Minute value greater than 60");
             return false;
         }
         return true;
@@ -188,7 +188,7 @@ export default function SignUp(props) {
         const birthday = userInfo.birthday;
         if (birthday.length !== 10)
         {
-            console.log("Invalid length for birthday")
+            //console.log("Invalid length for birthday");
             return false;
         }
 
@@ -198,24 +198,24 @@ export default function SignUp(props) {
 
         if (isNaN(month) || (month > 12) ||(month < 1))//make sure month exists
         {
-            console.log("Error: month value greater than 12 or less than 1");
+            //console.log("Error: month value greater than 12 or less than 1");
             return false;
         }
         if (birthday[2] !== '/' || birthday[5] !== '/')//make sure birthday has slashes
         {
-            console.log("Error: Missing slash in birthday");
+            //console.log("Error: Missing slash in birthday");
             return false;
         }
         if (isNaN(day) || (day > 31) || (day < 1)) //make sure calendar day exists
         {
-            console.log("Error: Invalid day");
+            //console.log("Error: Invalid day");
             return false;
         }
         //make sure calendar days exist for specific months
         const shortMonths = [4,6,9,11]; //months with 30 days
         if (shortMonths.includes(month) && day > 30)//make sure max day for short months is 30
         {
-            console.log("Error: day doesn't exist for that month");
+            //console.log("Error: day doesn't exist for that month");
             return false;
         }
         if (month === 2)//special case for February, lots of logic for determining leap year
@@ -227,7 +227,7 @@ export default function SignUp(props) {
                     if (year % 400 === 0) {
                         //is a leap year
                         if (day > 29) {
-                            console.log("Error: over 29 days for leap year");
+                            //console.log("Error: over 29 days for leap year");
                             return false;
                         }
                     }
@@ -235,14 +235,14 @@ export default function SignUp(props) {
                     {//centennial year that is not divisible by 400 is not a leap year (ex: 1900)
                         if (day > 28)
                         {
-                            console.log("Error: not a leap year, over 28 days");
+                            //console.log("Error: not a leap year, over 28 days");
                             return false;
                         }
                     }
                 }
                 //is a leap year
                 if (day > 29) {
-                    console.log("Error: leap year, over 29 days");
+                    //console.log("Error: leap year, over 29 days");
                     return false;
                 }
             }
@@ -250,7 +250,7 @@ export default function SignUp(props) {
                 //is not a leap year
                 if (day > 28)
                 {
-                    console.log("Error: not a leap year, over 28 days 2");
+                    //console.log("Error: not a leap year, over 28 days 2");
                     return false;
                 }
             }
