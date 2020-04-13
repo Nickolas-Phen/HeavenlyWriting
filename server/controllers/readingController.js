@@ -39,10 +39,12 @@ export const findByUniqueCombo = (req, res) =>
 
 //finds a reading by the moon sign TEMPERORY
 export const read = (req, res) =>
-{//for multiple in today create const{house:'',sign:''....}and send it instead of ascendent 
-    Reading.find(req.params, (err, data) =>
+{
+        Reading.find(req.params, (err, data) =>
     {
-        console.log(req.params);
+        //the problem is I am passing an object so how to fix that 
+        //works when I pass one thing, but still cant get one of the things inside the object
+        console.log("is it this? "+JSON.stringify(req.params));
         if (err) {
             console.log("ERROR BIH!");
             console.log(err);   

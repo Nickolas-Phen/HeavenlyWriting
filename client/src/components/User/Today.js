@@ -150,26 +150,15 @@ export default function Today() {
         setArticle("Nothing to do today");
       });
   }, []);
-  const [pred, setpred] = useState([]);
-  const [predict, setPredict] = useState(
-    {
-        _id: '',
-        house: '',
-        sign: '',
-        moonPhase: '',
-        article: '',
-        quote: '',
-        picture: '',
-        _v:''
-    }
-  );
-  const newState = {...predict};
+  const find = {
+    sign: astrologyData.ascendantSign,
+    moonPhase: moonPhase
+  }
   const GetPrediction =() => 
-  axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign) 
+  //axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign)
+  axios.get('/api/reading/'+find,find) 
   .then(response => {
       console.log("find: " + response.data);
-    //setpred(response.data);
-    setPredict(response.data);
 //    response.data.quote = response.data.quote.toString();
     var myJSON = JSON.stringify(response.data);
     console.log("JSON is: "+myJSON);
