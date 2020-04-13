@@ -39,7 +39,7 @@ export const findByUniqueCombo = (req, res) =>
 
 //finds a reading by the moon sign TEMPERORY
 export const read = (req, res) =>
-{
+{//for multiple in today create const{house:'',sign:''....}and send it instead of ascendent 
     Reading.find(req.params, (err, data) =>
     {
         console.log(req.params);
