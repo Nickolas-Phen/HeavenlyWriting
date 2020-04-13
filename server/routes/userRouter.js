@@ -18,13 +18,14 @@ import getCoordinates from '../controllers/coordinatesController.js';
 //copy and pasted from authentication tutorial
 userRouter.post('/', user.create);
 userRouter.post('/authenticate', user.authenticate);
-userRouter.use(authHelper.verifyToken);
 userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
 
 // ':' = url parameter
 userRouter.get('/id/:userId', user.read);
-userRouter.get('/', user.findByEmail);
+userRouter.get('/email/:email', user.findByEmail);
+userRouter.get('/username/:username', user.findByUsername);
 userRouter.put('/:userId', /*getMoonLoc ,*/ user.update);
 userRouter.delete('/:userId', user.remove);
+userRouter.use(authHelper.verifyToken);//make sure this middleware is after the others
 
 export default userRouter;
