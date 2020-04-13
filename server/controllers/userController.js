@@ -27,10 +27,36 @@ export const create = async (req, res) => {
     //creates user and saves it at the same time
    // /*
 
+   //turns the birthtime into military time
+   //formatting afterwards is "HH:MM"
+    let time = req.body.birthTime;
+    if (time[6] === 'A')
+    {
+        if (time[0] === '1' && time[1] === '2')
+        {
+            time[0] = '0'; 
+            time[1] = '0';
+        }
+        time = time[0]+time[1] + time[2] + time[3] + time[4];
+    }
+    else 
+    {
+        if (time[0] === '1' && time[1] === '2')
+        {
+            time = time[0] + time[1] + time[2] + time[3] + time[4];
+        }
+        else 
+        {
+            const hours = time[0] + time[1]; //grab hour part of string
+            let hours_int = (parseInt(hours) + 12); //make it into an int
+            time = hours_int + time[2] + time[3] + time[4];
+        }
+    }
+    req.body.birthTime = time;
     try {
         //create sign token, showing success
-        console.log("Creating user");
-        console.log(req.body);
+      //  console.log("Creating user");
+      //  console.log(req.body);
         const user = await User.create(req.body);
         console.log(user);
         console.log("user created");
@@ -116,7 +142,6 @@ export const update = (req, res) => {
 
             //calls functions to add more info to the user
             //addNonRequired(req,temp);
-            //findZodiac(req, temp);
 
 
              /* Save the user */
@@ -150,6 +175,24 @@ export const remove = (req, res) => {
             res.json({success: true, message: "User deleted", user});
         }
     });
+};
+
+export const makeAdmin = (req, res) =>
+{
+    Schema.find({username:req.body.username}, (err, data) =>
+    {
+        if (err) {console.log(err);}
+        //else { res.send(data);}
+        if (data.admin === 'false' || !data.admin)
+        {
+            data.admin = 'true';
+        }
+        else
+        {
+            data.admin = 'false';
+        }
+        res.send(data);
+    })
 };
 
 
