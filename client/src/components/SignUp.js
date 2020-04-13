@@ -300,15 +300,18 @@ export default function SignUp(props) {
     const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        //add AM or PM to birth time based on selected radio button
-        //TODO: make birthtime into military time by adding 12 hours for pm
-        if (AM_PM === "AM")
+
+        //make birthtime into military time by adding 12 hours for pm
+        if (AM_PM === "PM")
         {
-            userInfo.birthTime += " AM";
-        }
-        else
-        {
-            userInfo.birthTime += " PM";
+            var hours = parseInt(userInfo.birthTime[0] + userInfo.birthTime[1]);
+            hours += 12;
+            const hours_string = hours.toString();
+            const newState = {...userInfo};
+            const newTime = hours_string + userInfo.birthTime.substring(2,6);
+            console.log("new time: " + newTime);
+            newState["birthTime"] = newTime;
+            setUserInfo(newState);
         }
         //create account for user and get their token
         
