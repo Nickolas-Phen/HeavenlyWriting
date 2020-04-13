@@ -313,20 +313,6 @@ export default function SignUp(props) {
         //create account for user and get their token
         
         const user = await httpUser.signUp(userInfo);
-        //reset fields back to defaults
-        setUserInfo({
-                firstName: '',
-                lastName: '',
-                birthday: '',
-                email: '',
-                password: '',
-                birthTime: "",
-                placeOfBirth: "",
-                username: '',
-                phoneNumber: '',
-                mailchimp: 'false',
-            }
-        );
         if(user)
         {
             //sign user in

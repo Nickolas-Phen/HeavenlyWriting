@@ -16,9 +16,9 @@ import getCoordinates from '../controllers/coordinatesController.js';
 //userRouter.post('/signup', user.create);
 
 //copy and pasted from authentication tutorial
-//userRouter.post('/', user.create);
+userRouter.post('/', user.create);
 userRouter.post('/authenticate', user.authenticate);
-//userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
+userRouter.route('/:id').get(user.show).patch(user.update).delete(user.remove);
 
 // ':' = url parameter
 userRouter.get('/id/:userId', user.read);
