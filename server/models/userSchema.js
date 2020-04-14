@@ -11,9 +11,9 @@ const userSchema = new mongoose.Schema ({
     email: {type: String, required:true},
     phoneNumber: {type: String, required: true},
     placeOfBirth: {type: String, required: true},
-    
+    admin: {type: String},
 
-    middleName: {type: String},
+    //middleName: {type: String},
     birthTime: {type: String},
     house: {type: String},
     zodiac: {type: String},
