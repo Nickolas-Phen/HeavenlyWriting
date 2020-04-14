@@ -29,31 +29,35 @@ export const create = async (req, res) => {
 
    //turns the birthtime into military time
    //formatting afterwards is "HH:MM"
-  /*  let time = req.body.birthTime;
+  ///*
+    let time = req.body.birthTime;
+    let temp = '';
     if (time[6] === 'A')
     {
         if (time[0] === '1' && time[1] === '2')
         {
-            time[0] = '0'; 
-            time[1] = '0';
+            temp  = '00';
         }
-        time = time[0]+time[1] + time[2] + time[3] + time[4];
+        else {
+            temp = time[0] + time[1];
+        }
+        temp = temp + time[2] + time[3] + time[4];
     }
     else 
     {
         if (time[0] === '1' && time[1] === '2')
         {
-            time = time[0] + time[1] + time[2] + time[3] + time[4];
+            temp = time[0] + time[1] + time[2] + time[3] + time[4];
         }
         else 
         {
             const hours = time[0] + time[1]; //grab hour part of string
             let hours_int = (parseInt(hours) + 12); //make it into an int
-            time = hours_int + time[2] + time[3] + time[4];
+            temp = hours_int + time[2] + time[3] + time[4];
         }
     }
-    req.body.birthTime = time;
-    */
+    req.body.birthTime = temp;
+  //  */
     try {
         //create sign token, showing success
       //  console.log("Creating user");
