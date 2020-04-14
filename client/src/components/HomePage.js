@@ -30,8 +30,8 @@ function Copyright() {
     );
 }
 export default function HomePage(props) {
-    //UNCOMMENT 
-    // props.onLogOut();
+    //Log out user when they go to the home page
+     props.onLogOut();
 return (
 <div>
      {/* If I end up having a problem with background image just switch it to div and remove from body in css */}

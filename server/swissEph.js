@@ -15,7 +15,7 @@ export const getAstrologyData = (birthday, birthTime, birthPlace) =>
 	const formattedBirthday = formatBirthdayFromSignup(birthday);//splits birthday into array of [year, month, day]
 	const formattedBirthTime = splitBirthTime(birthTime);//splits birthday into array of [hours, minutes]
 	const birthdayAndTime = {year: formattedBirthday[0], month: formattedBirthday[1], day: formattedBirthday[2], hour: formattedBirthTime[0], min: formattedBirthTime[1]};
-	console.log("birthday and time: " + birthdayAndTime.year + " " + birthdayAndTime.month + " " + birthdayAndTime.day)
+	console.log("birthday and time: " + birthdayAndTime.year + " " + birthdayAndTime.month + " " + birthdayAndTime.day + " " + birthdayAndTime.hour);
 	const julday = swisseph.swe_julday (birthdayAndTime.year, birthdayAndTime.month, birthdayAndTime.day, birthdayAndTime.hour,birthdayAndTime.min, swisseph.SE_GREG_CAL);
 	const currentMoonPos = findCurrentMoonPosition();
 	const birthSunPos = findSunPosition(birthdayAndTime);
@@ -173,7 +173,7 @@ export const findCurrentMoonHouse = (userAscendant) =>
 
 export const formatBirthdayFromSignup = (birthday) =>
 {
-	console.log(birthday)
+	console.log(birthday);
 	const year = parseInt(birthday.substring(0, 4));//parseInt converts string to int
 	const month = parseInt(birthday.substring(5,7));
 	const day = parseInt(birthday.substring(8,10));
@@ -186,7 +186,7 @@ export const splitBirthTime = (birthTime) =>
 	const hours = parseInt(birthTime.substring(0,2)) + 4;//add 4 to adjust for time zone TODO: timezone API to make this work for every timezone
 	const minutes = parseInt(birthTime.substring(3,5));
 	const newBirthTime = [hours, minutes];
-	console.log(newBirthTime[0] + " " + newBirthTime[1])
+	console.log(newBirthTime[0] + " " + newBirthTime[1]);
 	return newBirthTime;
 };
 //console.log(sunPos, moonPos);
