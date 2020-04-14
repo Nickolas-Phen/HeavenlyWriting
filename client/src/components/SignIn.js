@@ -46,12 +46,19 @@ export default function SignIn(props) {
             password: '',
         }
     );
+    const [rememberMe, setRememberMe] = useState(false);//state for whether the user wants their info remembered
     const [loginFailed, setLoginFailed] = useState(false);//state for showing failed to log in message
     const onChangeText = (e) => {
         //when a user types in info to any box, update fields state to match
         const newState = {...fields};
         newState[e.target.name] = e.target.value;
         setFields(newState);
+    };
+
+    const boxChecked = () =>
+    {
+        //remember me box checked/unchecked
+        setRememberMe(!rememberMe);
     };
 
     const loginPressed = async (e) =>
@@ -96,6 +103,8 @@ export default function SignIn(props) {
                         autoComplete="username"
                         autoFocus
                         onChange={onChangeText}
+                        //if user selected remember me, show their previous info
+                        defaultValue={rememberMe ? httpUser.getCurrentUser().username : ''}
                     />
                     <TextField
                         variant="outlined"
@@ -110,7 +119,7 @@ export default function SignIn(props) {
                         onChange={onChangeText}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox onChange = {boxChecked} value="remember" color="primary" />}
                         label="Remember me"
                     />
                     <div>{loginFailed ? <font color = "red" >Incorrect username or password</font> : null}</div>
