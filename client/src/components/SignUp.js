@@ -42,7 +42,7 @@ export default function SignUp(props) {
             birthday: '',
             email: '',
             password: '',
-            birthTime: 0,
+            birthTime: '',
             username: '',
             phoneNumber: '',
             placeOfBirth: '',
@@ -451,7 +451,7 @@ export default function SignUp(props) {
                                 variant="outlined"
                                 fullWidth
                                 id="birthTime"
-                                label="Time of Birth if known (ex: 12:34)"
+                                label="Time of birth if known (ex: 12:34)"
                                 name="birthTime"
                                 autoComplete="tbirth"
                                 onChange={onChangeText}
@@ -482,7 +482,7 @@ export default function SignUp(props) {
                     </Grid>
                     <FormControlLabel
                         control={<Checkbox value="mailchimp" color="primary" />}
-                        label="Opt into Mailchimp"
+                        label="Sign up to receive emails that notify you when your zodiac interpretation changes"
                         onChange = {onMailchimpChange}
                     />
                     </Grid>
