@@ -46,6 +46,7 @@ export default function SignIn(props) {
             password: '',
         }
     );
+    const [loginFailed, setLoginFailed] = useState(false);//state for showing failed to log in message
     const onChangeText = (e) => {
         //when a user types in info to any box, update fields state to match
         const newState = {...fields};
@@ -62,6 +63,11 @@ export default function SignIn(props) {
             setToUserPage(true);
             //sets current user to the logged in user
             props.onLoginSuccess(user);
+        }
+        else
+        {
+            //failed to login, show failure message
+            setLoginFailed(true);
         }
     };
 
@@ -107,6 +113,7 @@ export default function SignIn(props) {
                         control={<Checkbox value="remember" color="primary" />}
                         label="Remember me"
                     />
+                    <div>{loginFailed ? <font color = "red" >Incorrect username or password</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"
                         type="submit"
