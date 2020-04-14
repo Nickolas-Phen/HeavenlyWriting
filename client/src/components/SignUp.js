@@ -342,13 +342,13 @@ export default function SignUp(props) {
         e.preventDefault();
 
         //make birthtime into military time by adding 12 hours for pm
-        if (AM_PM === "PM")
+        if (AM_PM === "AM")
         {
-            userInfo.birthTime += " AM";
+            userInfo.birthTime += "AM";
         }
         else
         {
-            userInfo.birthTime += " PM";
+            userInfo.birthTime += "PM";
         }
         //create account for user and get their token
         
