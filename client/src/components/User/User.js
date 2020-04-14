@@ -22,7 +22,7 @@ import Today from "./Today";
 import Previous from "./Previous";
 import Feedback from "./Feedback";
 import Admin from "./Admin";
-import Home from "../HomePage";
+import Account from "./Account"
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
@@ -157,7 +157,7 @@ function DrawerTest(props) {
         </div>
         <Divider />
         <List>
-          {["Today", "Previous", "Feedback", "Admin","Log out"].map(text => (
+          {["Today", "Previous", "Feedback", "Admin","Log out", "Account"].map(text => (
             <ListItem button key={text} onClick={() => changeTab(text)}>
               <ListItemText primary={text} />
             </ListItem>
@@ -186,6 +186,9 @@ function DrawerTest(props) {
           <Route path="/">
             <Today />
           </Route>
+        <Route path="/account">
+          <Account />
+        </Route>
           
         </Switch>
       </main>
@@ -239,7 +242,7 @@ function DrawerTest(props) {
             </div>
             <Divider />
             <List>
-              {["Today", "Previous", "Feedback", "Log out"].map(text => (
+              {["Today", "Previous", "Feedback", "Log out", "Account"].map(text => (
                 <ListItem button key={text} onClick={() => changeTab(text)}>
                   <ListItemText primary={text} />
                 </ListItem>
@@ -267,6 +270,9 @@ function DrawerTest(props) {
               </Route> */}
               <Route path="/">
                 <Today />
+              </Route>
+              <Route path="/account">
+                <Account />
               </Route>
               
             </Switch>

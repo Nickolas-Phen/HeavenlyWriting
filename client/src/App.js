@@ -36,9 +36,12 @@ const App = () => {
          </Route> 
          <Route path="/admin">
        <User />
-         </Route> 
-      
-    <Route path="/signin">
+         </Route>
+        <Route path="/account">
+            <User />
+        </Route>
+
+        <Route path="/signin">
         <SignIn onLoginSuccess={onLoginSuccess}/>
     </Route>
     <Route path="/forgotpassword">
