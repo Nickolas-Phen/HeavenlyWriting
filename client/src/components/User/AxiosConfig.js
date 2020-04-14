@@ -1,8 +1,10 @@
-import axios from "axios";
+// I don't know why but this file causes errors so I'm using default axios instead
 
-const axiosConfig = axios.create({
-  baseURL: 'https://localhost:8008/',
-  timeout: 1000,
-});
-
-export default axiosConfig;
+// import axios from "axios";
+//
+// const axiosConfig = axios.create({
+//   baseURL: 'https://localhost:5000/',
+//   timeout: 1000,
+// });
+//
+// export default axiosConfig;

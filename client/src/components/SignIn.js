@@ -7,27 +7,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Link}    from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-//import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import defaultPicture from "../assets/defaultSignInPic.jpeg";
 import {Redirect} from 'react-router-dom'
-
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import httpUser from '../httpUser.js'
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -56,25 +40,54 @@ const useStyles = makeStyles(theme => ({
 export default function SignIn(props) {
     const classes = useStyles();
     const [toUserPage, setToUserPage] = useState(false);
-
-    const loginPressed = () =>
-    {
-        setToUserPage(true);
+    const [fields, setFields] = useState(
+        {
+            username: '',
+            password: '',
+        }
+    );
+    const [rememberMe, setRememberMe] = useState(false);//state for whether the user wants their info remembered
+    const [loginFailed, setLoginFailed] = useState(false);//state for showing failed to log in message
+    const onChangeText = (e) => {
+        //when a user types in info to any box, update fields state to match
+        const newState = {...fields};
+        newState[e.target.name] = e.target.value;
+        setFields(newState);
     };
+
+    const boxChecked = () =>
+    {
+        //remember me box checked/unchecked
+        setRememberMe(!rememberMe);
+    };
+
+    const loginPressed = async (e) =>
+    {
+        e.preventDefault();
+        const user = await httpUser.logIn(fields); //returns user token if user is in db
+        if (user) {
+            //travel to user page
+            setToUserPage(true);
+            //sets current user to the logged in user
+            props.onLoginSuccess(user);
+        }
+        else
+        {
+            //failed to login, show failure message
+            setLoginFailed(true);
+        }
+    };
+
 
     if (toUserPage)
     {
-        return <Redirect to = 'user'></Redirect>
+        return <Redirect to = 'today'></Redirect>
     }
 
     return (
         <Container component="main" maxWidth="md">
             <CssBaseline />
             <div className={classes.paper}>
-                <img className = {classes.image} src = {defaultPicture} border = "5"></img>
-                {/*<Avatar className={classes.avatar}>*/}
-                {/*    <LockOutlinedIcon />*/}
-                {/*</Avatar>*/}
                 <Typography component="h1" variant="h5">
                     Sign in
                 </Typography>
@@ -89,6 +102,9 @@ export default function SignIn(props) {
                         name="username"
                         autoComplete="username"
                         autoFocus
+                        onChange={onChangeText}
+                        //if user selected remember me, show their previous info
+                        defaultValue={rememberMe ? httpUser.getCurrentUser().username : ''}
                     />
                     <TextField
                         variant="outlined"
@@ -100,11 +116,13 @@ export default function SignIn(props) {
                         type="password"
                         id="password"
                         autoComplete="current-password"
+                        onChange={onChangeText}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox onChange = {boxChecked} value="remember" color="primary" />}
                         label="Remember me"
                     />
+                    <div>{loginFailed ? <font color = "red" >Incorrect username or password</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"
                         type="submit"
@@ -118,7 +136,7 @@ export default function SignIn(props) {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link variant="body2">
+                            <Link to = "/forgotpassword" variant="body2">
                                 Forgot password?
                             </Link>
                         </Grid>
@@ -130,9 +148,6 @@ export default function SignIn(props) {
                     </Grid>
                 </form>
             </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
         </Container>
     );
 }

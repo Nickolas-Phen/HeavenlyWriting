@@ -6,7 +6,7 @@ const readingRouter = express.Router();
 readingRouter.post('/', reading.create);
 
 // ':' = url parameter
-readingRouter.get('/:userId', reading.read);
+readingRouter.get('/', reading.list);//returns all readings in database
 readingRouter.put('/:userId', reading.update);
 readingRouter.delete('/:userId', reading.remove);
 

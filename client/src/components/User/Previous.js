@@ -16,31 +16,9 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-// const mockGetIdPrevious = () =>
-//   new Promise(resolve => {
-//     setTimeout(() => {
-//       resolve([1, 1, 1]);
-//     }, 500);
-//   });
-
-// const mockGetEachPrevious = (id) =>
-//   new Promise(resolve => {
-//     setTimeout(() => {
-//       resolve({id: 1, quote: "Rick Astley - Never Gonna Give You Up", article: Song});
-//     }, 500);
-//   });
-
-// const printInfo = (id, loadedInfo) => {
-//   if(id === loadedInfo.id){
-
-//   }
-// };
-
-
 export default function Previous() {
   const classes = useStyles();
   const [isLoading, setLoading] = useState(true);
-  //{quote: "Test", picture: "a",article: Song}, {quote: "Test", picture: "a",article: Song}
   const [previousMap, setPreviousMap] = useState([{quote: "Test", picture: "h",article: Song}, {quote: "Test", picture: "a",article: Song}]);
 
   const GetTodayInfo =() => 
