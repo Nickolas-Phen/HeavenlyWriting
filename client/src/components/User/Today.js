@@ -7,6 +7,7 @@ import Song from "./MocArticle";
 import axios from "axios";
 import './today.css'
 import httpUser from "../../httpUser";
+import Predictions from "./Predictions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -56,6 +57,7 @@ const mockGetArticle = () =>
 export default function Today() {
   var data;
   const classes = useStyles();
+  const [test, setTest] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [quote, setQuote] = useState("");
   // find something for picture.
@@ -150,22 +152,26 @@ export default function Today() {
         setArticle("Nothing to do today");
       });
   }, []);
-  const find = {
-    sign: astrologyData.ascendantSign,
-    moonPhase: moonPhase
-  }
+  // const find = {
+  //   sign: astrologyData.ascendantSign,
+  //   moonPhase: moonPhase
+  // }
+  data = astrologyData.ascendantSign;
+  
+  //setTest(astrologyData.ascendantSign);
+  
   const GetPrediction =() => 
-  //axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign)
-  axios.get('/api/reading/'+find,find) 
+  axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign)
+  //axios.get('/api/reading/'+find,find) 
   .then(response => {
-      console.log("find: " + response.data);
+      console.log("find: " + response.data.sign);
 //    response.data.quote = response.data.quote.toString();
     var myJSON = JSON.stringify(response.data);
-    console.log("JSON is: "+myJSON);
-  
-    
+    console.log("JSON is: "+myJSON);    
   })
   .catch(err => console.log(err));
+
+
 //URL WORKS WITH GET
 //   function api() {
 //     return fetch('http://ohmanda.com/api/horoscope/aquarius')
@@ -207,7 +213,10 @@ export default function Today() {
            <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-           <h2>Prediction:</h2>
+    <h2>Prediction: </h2>
+           {/* <Predictions
+           data={data}
+           /> */}
            {/* add a js file and pass pred and map it */}
           </div>
           {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {

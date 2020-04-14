@@ -45,6 +45,7 @@ export const read = (req, res) =>
         //the problem is I am passing an object so how to fix that 
         //works when I pass one thing, but still cant get one of the things inside the object
         console.log("is it this? "+JSON.stringify(req.params));
+        //console.log("is it this? "+req.params);
         if (err) {
             console.log("ERROR BIH!");
             console.log(err);   
