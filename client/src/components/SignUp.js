@@ -1,5 +1,5 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -54,6 +54,61 @@ export default function SignUp(props) {
     const [AM_PM, setAM_PM] = useState("AM");
     const [uniqueEmail, setUniqueEmail] = useState(true);
     const [uniqueUsername, setUniqueUsername] = useState(true);
+
+    const [query, setQuery] = useState("");
+    const autoCompleteRef = useRef(null);
+
+        //places: AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE
+        //maps: AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8
+        //both: AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY
+      //  let apikey = 'AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE';
+     //   let apikey = 'AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8';
+        let apikey = 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY';
+
+
+
+        let autoComplete;
+
+        const loadScript = (url, callback) => {
+          let script = document.createElement("script");
+          script.type = "text/javascript";
+
+          if (script.readyState) {
+            script.onreadystatechange = function() {
+              if (script.readyState === "loaded" || script.readyState === "complete") {
+                script.onreadystatechange = null;
+                callback();
+              }
+            };
+          } else {
+            script.onload = () => callback();
+          }
+
+          script.src = url;
+          document.getElementsByTagName("head")[0].appendChild(script);
+        };
+
+        function handleScriptLoad(updateQuery, autoCompleteRef) {
+          autoComplete = new window.google.maps.places.Autocomplete(
+            autoCompleteRef.current,
+            { types: ["(cities)"], componentRestrictions: { country: "us" } }
+          );
+          autoComplete.setFields(["address_components", "formatted_address"]);
+          autoComplete.addListener("place_changed", () =>
+            handlePlaceSelect(updateQuery)
+          );
+        }
+
+        async function handlePlaceSelect(updateQuery) {
+          const addressObject = autoComplete.getPlace();
+          const query = addressObject.formatted_address;
+          updateQuery(query);
+          console.log(addressObject);
+        }
+
+
+
+
 
     const passwordsMatch = () =>
     {
@@ -250,6 +305,10 @@ export default function SignUp(props) {
             usernameIsUnique(e.target.value);//check if username is unique
         // else if (e.target.name === "birthday")//check if birthday is in valid format
         //     checkValidBirthday(e.target.value);
+        if (e.target.name === "placeOfBirth")
+        {
+            setQuery(e.target.value);
+        }
     };
 
     const onAM_PMChange = (e) => {
@@ -285,14 +344,11 @@ export default function SignUp(props) {
         //make birthtime into military time by adding 12 hours for pm
         if (AM_PM === "PM")
         {
-            var hours = parseInt(userInfo.birthTime[0] + userInfo.birthTime[1]);
-            hours += 12;
-            const hours_string = hours.toString();
-            const newState = {...userInfo};
-            const newTime = hours_string + userInfo.birthTime.substring(2,6);
-            console.log("new time: " + newTime);
-            newState["birthTime"] = newTime;
-            setUserInfo(newState);
+            userInfo.birthTime += " AM";
+        }
+        else
+        {
+            userInfo.birthTime += " PM";
         }
         //create account for user and get their token
         
@@ -306,6 +362,16 @@ export default function SignUp(props) {
         }
     };
     const classes = useStyles();
+
+
+    useEffect(() => {
+        loadScript(
+
+          `https://maps.googleapis.com/maps/api/js?key=${apikey}&libraries=places`,
+          () => handleScriptLoad(setQuery, autoCompleteRef)
+        );
+      }, []);
+
 
     if (toUserPage)
     {
@@ -420,6 +486,20 @@ export default function SignUp(props) {
                     </Grid>
                         <h3>Select your birthday</h3>
                     <Grid container spacing = {2} justify="center">
+
+                        <div className="search-location-input">
+                        <input
+
+                            id="placeOfBirth"
+                            name="placeOfBirth"
+                            ref={autoCompleteRef}
+                            onChange={onChangeText}
+                            placeholder="Enter a City"
+                            value={query}
+                        />
+                        </div>
+
+                    <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
 
@@ -431,18 +511,6 @@ export default function SignUp(props) {
                                 type="birthday"
                                 id="birthday"
                                 autoComplete="birthday"
-                                onChange={onChangeText}
-                            />
-                        </Grid>
-                    <Grid container spacing = {2} justify="center">
-                        <Grid item xs={12} sm={3}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="placeOfBirth"
-                                label="Place of Birth"
-                                name="placeOfBirth"
-                                autoComplete="pbirth"
                                 onChange={onChangeText}
                             />
                         </Grid>
@@ -482,7 +550,7 @@ export default function SignUp(props) {
                     </Grid>
                     <FormControlLabel
                         control={<Checkbox value="mailchimp" color="primary" />}
-                        label="Sign up to receive emails that notify you when your zodiac interpretation changes"
+                        label="Opt into Mailchimp"
                         onChange = {onMailchimpChange}
                     />
                     </Grid>
