@@ -101,6 +101,13 @@ function DrawerTest(props) {
     history.push(tab.toLowerCase());
   };
 
+  //if user isn't logged in, redirect them to sign in page
+  if (httpUser.getCurrentUser().username === "No one logged in")//if default user, 'No one logged in', is logged in
+  {
+    return <Redirect to = 'signin'></Redirect>
+  }
+
+  //if user is an admin, show page with admin tab
   if(httpUser.getCurrentUser().username === "admin"){
   return (
     <div className={classes.root}>
