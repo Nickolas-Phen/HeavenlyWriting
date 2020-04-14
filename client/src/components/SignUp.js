@@ -1,5 +1,5 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -18,6 +18,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
 import 'react-calendar/dist/Calendar.css';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 function Copyright() {
     return (
@@ -73,6 +74,61 @@ export default function SignUp(props) {
     const [phoneNumber, setPhoneNumber] = useState(0);
     const [uniqueEmail, setUniqueEmail] = useState(true);
     const [uniqueUsername, setUniqueUsername] = useState(true);
+
+    const [query, setQuery] = useState("");
+    const autoCompleteRef = useRef(null);
+  
+        //places: AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE
+        //maps: AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8
+        //both: AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY
+      //  let apikey = 'AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE';
+     //   let apikey = 'AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8';
+        let apikey = 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY';
+
+        
+
+        let autoComplete;
+
+        const loadScript = (url, callback) => {
+          let script = document.createElement("script");
+          script.type = "text/javascript";
+        
+          if (script.readyState) {
+            script.onreadystatechange = function() {
+              if (script.readyState === "loaded" || script.readyState === "complete") {
+                script.onreadystatechange = null;
+                callback();
+              }
+            };
+          } else {
+            script.onload = () => callback();
+          }
+        
+          script.src = url;
+          document.getElementsByTagName("head")[0].appendChild(script);
+        };
+        
+        function handleScriptLoad(updateQuery, autoCompleteRef) {
+          autoComplete = new window.google.maps.places.Autocomplete(
+            autoCompleteRef.current,
+            { types: ["(cities)"], componentRestrictions: { country: "us" } }
+          );
+          autoComplete.setFields(["address_components", "formatted_address"]);
+          autoComplete.addListener("place_changed", () =>
+            handlePlaceSelect(updateQuery)
+          );
+        }
+        
+        async function handlePlaceSelect(updateQuery) {
+          const addressObject = autoComplete.getPlace();
+          const query = addressObject.formatted_address;
+          updateQuery(query);
+          console.log(addressObject);
+        }
+
+
+
+        
 
     const passwordsMatch = () =>
     {
@@ -269,6 +325,10 @@ export default function SignUp(props) {
             usernameIsUnique(e.target.value);//check if username is unique
         // else if (e.target.name === "birthday")//check if birthday is in valid format
         //     checkValidBirthday(e.target.value);
+        if (e.target.name === "placeOfBirth")
+        {
+            setQuery(e.target.value);
+        }
     };
 
     const onAM_PMChange = (e) => {
@@ -287,7 +347,7 @@ export default function SignUp(props) {
     const onMailchimpChange = (e) => {
         const target = e.target;
         console.log(target);
-        if (userInfo.mailchimp == 'false')
+        if (userInfo.mailchimp === 'false')
         {
             userInfo.mailchimp = 'true';
         }
@@ -322,6 +382,16 @@ export default function SignUp(props) {
         }
     };
     const classes = useStyles();
+
+
+    useEffect(() => {
+        loadScript(
+         
+          `https://maps.googleapis.com/maps/api/js?key=${apikey}&libraries=places`,
+          () => handleScriptLoad(setQuery, autoCompleteRef)
+        );
+      }, []);
+
 
     if (toUserPage)
     {
@@ -436,6 +506,20 @@ export default function SignUp(props) {
                     </Grid>
                         <h3>Select your birthday</h3>
                     <Grid container spacing = {2} justify="center">
+                        
+                        <div className="search-location-input">
+                        <input
+                        
+                            id="placeOfBirth"
+                            name="placeOfBirth"
+                            ref={autoCompleteRef}
+                            onChange={onChangeText}
+                            placeholder="Enter a City"
+                            value={query}
+                        />
+                        </div>
+                        
+                    <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
 
@@ -447,18 +531,6 @@ export default function SignUp(props) {
                                 type="birthday"
                                 id="birthday"
                                 autoComplete="birthday"
-                                onChange={onChangeText}
-                            />
-                        </Grid>
-                    <Grid container spacing = {2} justify="center">
-                        <Grid item xs={12} sm={3}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="placeOfBirth"
-                                label="Place of Birth"
-                                name="placeOfBirth"
-                                autoComplete="pbirth"
                                 onChange={onChangeText}
                             />
                         </Grid>
