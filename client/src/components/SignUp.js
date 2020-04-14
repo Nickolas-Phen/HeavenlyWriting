@@ -6,31 +6,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import {Link}    from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
-//import Calendaimport FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
-import 'react-calendar/dist/Calendar.css';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Heavenly Writing
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -70,7 +52,6 @@ export default function SignUp(props) {
     const [toUserPage, setToUserPage] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [AM_PM, setAM_PM] = useState("AM");
-    const [phoneNumber, setPhoneNumber] = useState(0);
     const [uniqueEmail, setUniqueEmail] = useState(true);
     const [uniqueUsername, setUniqueUsername] = useState(true);
 
@@ -287,7 +268,7 @@ export default function SignUp(props) {
     const onMailchimpChange = (e) => {
         const target = e.target;
         console.log(target);
-        if (userInfo.mailchimp == 'false')
+        if (userInfo.mailchimp === 'false')
         {
             userInfo.mailchimp = 'true';
         }
@@ -295,7 +276,7 @@ export default function SignUp(props) {
         {
             userInfo.mailchimp = 'false';
         }
-    }
+    };
 
     const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
@@ -334,7 +315,7 @@ export default function SignUp(props) {
         <Container component="main" maxWidth= "md">
             <CssBaseline />
             <div className={classes.paper}>
-                <h1 component="h1" variant="h5">
+                <h1>
                     Sign up
                 </h1>
                 {/* adding get post inside of form */}
@@ -541,9 +522,6 @@ export default function SignUp(props) {
                 </form>
                
             </div>
-            <Box mt={5}>
-                <Copyright />
-            </Box>
         </Container>
     );
 }

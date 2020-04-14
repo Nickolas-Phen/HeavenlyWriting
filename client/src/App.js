@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
+import ForgotPassword from "./components/ForgotPassword";
 import User from "./components/User/User";
 import HomePage from "./components/HomePage";
-import { Switch, Route, useHistory } from "react-router-dom";
+import { Switch, Route} from "react-router-dom";
 import httpUser from './httpUser'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,6 +40,9 @@ const App = () => {
       
     <Route path="/signin">
         <SignIn onLoginSuccess={onLoginSuccess}/>
+    </Route>
+    <Route path="/forgotpassword">
+        <ForgotPassword/>
     </Route>
       <Route path="/">
         <HomePage onLogOut = {logOut}/>
