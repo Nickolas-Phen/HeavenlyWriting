@@ -152,19 +152,19 @@ export default function Today() {
         setArticle("Nothing to do today");
       });
   }, []);
-  // const find = {
-  //   sign: astrologyData.ascendantSign,
-  //   moonPhase: moonPhase
-  // }
+  const find = {
+    sign: astrologyData.ascendantSign,
+    moonPhase: moonPhase
+  }
   data = astrologyData.ascendantSign;
   
   //setTest(astrologyData.ascendantSign);
   
   const GetPrediction =() => 
   axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign)
-  //axios.get('/api/reading/'+find,find) 
+  //axios.get('/api/reading/'+[find.sign,find.moonPhase],[find.sign,find.moonPhase]) 
   .then(response => {
-      console.log("find: " + response.data.sign);
+      console.log("find: " + response.data[2].quote);
 //    response.data.quote = response.data.quote.toString();
     var myJSON = JSON.stringify(response.data);
     console.log("JSON is: "+myJSON);    
