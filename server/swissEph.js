@@ -1,34 +1,57 @@
 import swisseph from 'swisseph'
+import config from './config/config.js'
+import  request  from 'request';
 
 swisseph.swe_set_ephe_path('./server/Ephe');
 //input the users birtday and time
-//const date = {year: 2020, month: 3, day: 28, hour: 18, min: 16};
+let localTime = {year: 2020, month: 3, day: 28, hour: 22, min: 15, sec:0.0};
 //converts the dates into julian calender date
 //const julday = swisseph.swe_julday (date.year, date.month, date.day, date.hour,date.min, swisseph.SE_GREG_CAL);
 //sets flag as dates from gregorian calender
 const flag = swisseph.SEFLG_SPEED;
 
-export const getAstrologyData = (birthday, birthTime, birthPlace) =>
+
+
+export const getAstrologyData = async(birthday, birthTime, birthPlace) =>
 {
+	let astrologyData = null;
 	//finds and returns currentMoonSign, sunBirthSign, and ascendant sign
-	console.log("swisseph user: " + birthday)
-	const formattedBirthday = formatBirthdayFromSignup(birthday);//splits birthday into array of [year, month, day]
-	const formattedBirthTime = splitBirthTime(birthTime);//splits birthday into array of [hours, minutes]
-	const birthdayAndTime = {year: formattedBirthday[0], month: formattedBirthday[1], day: formattedBirthday[2], hour: formattedBirthTime[0], min: formattedBirthTime[1]};
-	console.log("birthday and time: " + birthdayAndTime.year + " " + birthdayAndTime.month + " " + birthdayAndTime.day)
-	const julday = swisseph.swe_julday (birthdayAndTime.year, birthdayAndTime.month, birthdayAndTime.day, birthdayAndTime.hour,birthdayAndTime.min, swisseph.SE_GREG_CAL);
-	const currentMoonPos = findCurrentMoonPosition();
-	const birthSunPos = findSunPosition(birthdayAndTime);
-	const currentMoonSign = convertLatitudeToSign(currentMoonPos);
-	const sunBirthSign = convertLatitudeToSign(birthSunPos);
-	const ascendantSign = findAscendentSign(0,0, julday)
-	var astrologyData = {
-		currentMoonSign: currentMoonSign,
-		sunBirthSign: sunBirthSign,
-		ascendantSign: ascendantSign,
-		currentMoonHouse: findCurrentMoonHouse(ascendantSign),
-	};
+	try {
+		const formattedBirthday = formatBirthdayFromSignup(birthday);	//splits birthday into array of [year, month, day]
+		const formattedBirthTime = splitBirthTime(birthTime);	//splits birthday into array of [hours, minutes]
+		const birthdayAndTime = { year: formattedBirthday[0], month: formattedBirthday[1], day: formattedBirthday[2], hour: formattedBirthTime[0], min: formattedBirthTime[1] };
+		//console.log("birthday and time: " + birthdayAndTime.year + " " + birthdayAndTime.month + " " + birthdayAndTime.day + " " + birthdayAndTime.hour + " " + birthdayAndTime.min);
+		//console.log(birthdayAndTime);
+		let url = 'https://dev.virtualearth.net/REST/v1/TimeZone/';
+		let coords = await getCoords(birthPlace);//get from coordinateController api implementation
+		let formattedCoords=coords.lat+","+coords.lng;
+		//console.log(formattedCoords);
+		let formattedBdaytime =formatEverything(birthdayAndTime);
+		
+		url = url + formattedCoords +'?datetime='+formattedBdaytime + '&key=' + config.bingMap.key;
+		//console.log(url);
+		//console.log("------------------Finding JulDAy");
+		const julday = await getJD(birthdayAndTime, url);
+		//console.log(julday);
+		//console.log("------------------Julday found");
+		
+		const currentMoonPos = findCurrentMoonPosition();
+		const birthSunPos = findSunPosition(julday);
+		const currentMoonSign = convertLatitudeToSign(currentMoonPos);
+		const sunBirthSign = convertLatitudeToSign(birthSunPos);
+		const ascendantSign = findAscendentSign(coords.lat,coords.lng,julday);
+		astrologyData = {
+			currentMoonSign: currentMoonSign,
+			sunBirthSign: sunBirthSign,
+			ascendantSign: ascendantSign,
+			currentMoonHouse: findCurrentMoonHouse(ascendantSign),
+		};
+	} catch (err) {
+		console.log(err);
+	}
+	//console.log(astrologyData);
 	return astrologyData;
+
 };
 //calculates the sun and moon positions
 export const findCurrentMoonPosition = () =>
@@ -37,33 +60,30 @@ export const findCurrentMoonPosition = () =>
 	var moonPos;
 	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDay(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
 		//assert.equal (julday_ut, 2455927.5);
-		console.log ('Julian UT day for date:', julday_ut);
+		//console.log ('Julian UT day for date:', julday_ut);
 
 		// Moon position
 		swisseph.swe_calc_ut (julday_ut, swisseph.SE_MOON, flag, function (body) {
 			//assert (!body.error, body.error);
-			console.log ('Moon position:', body.longitude, body.latitude);
+			//console.log ('Moon position:', body.longitude, body.latitude);
 			moonPos=body.longitude;
 		});
 	});
 	return moonPos;
 };
 
-export const findSunPosition = (date) =>
+export const findSunPosition = (julday_ut) =>
 {
 	//finds position of the sun at the input date
 	var sunPos;
-	swisseph.swe_julday (date.year, date.month, date.day, date.hour, swisseph.SE_GREG_CAL, function (julday_ut) {
-		//assert.equal (julday_ut, 2455927.5);
-		console.log ('Julian UT day for date:', julday_ut);
 
-		// Sun position
-		swisseph.swe_calc_ut (julday_ut, swisseph.SE_SUN, flag, function (body) {
-			//assert (!body.error, body.error);
-			console.log ('Sun position:', body.longitude, body.latitude);
-			sunPos=body.longitude;
-		});
+	// Sun position
+	swisseph.swe_calc_ut(julday_ut, swisseph.SE_SUN, flag, function (body) {
+		//assert (!body.error, body.error);
+		//console.log('Sun position:', body.longitude, body.latitude);
+		sunPos = body.longitude;
 	});
+
 	return sunPos;
 };
 
@@ -101,15 +121,14 @@ export const findAscendentSign = (lat, long, julday) =>
 	//MC is midheaven
 //geographical location of birth place
 	//TODO: need openCage API to find lat and long for address
-	lat=29.6436;
-	long=-82.3549;
-	console.log("julday: " + julday)
+
+	//console.log("julday: " + julday)
 //used to find the signs and stuff
 	var ascendantLat = 0;
 	var h=swisseph.swe_houses(julday,lat,long,'W',function(result){
-		console.log("result: ");
-		console.log(result);
-		console.log(result.ascendant);
+		//console.log("result: ");
+		//console.log(result);
+		//console.log(result.ascendant);
 		ascendantLat = result.ascendant;
 	});
 	const ascendantSign = convertLatitudeToSign(ascendantLat);
@@ -173,7 +192,7 @@ export const findCurrentMoonHouse = (userAscendant) =>
 
 export const formatBirthdayFromSignup = (birthday) =>
 {
-	console.log(birthday)
+	//console.log("Birthday formatted");
 	const year = parseInt(birthday.substring(0, 4));//parseInt converts string to int
 	const month = parseInt(birthday.substring(5,7));
 	const day = parseInt(birthday.substring(8,10));
@@ -183,98 +202,101 @@ export const formatBirthdayFromSignup = (birthday) =>
 
 export const splitBirthTime = (birthTime) =>
 {
-	const hours = parseInt(birthTime.substring(0,2)) + 4;//add 4 to adjust for time zone TODO: timezone API to make this work for every timezone
+	const hours = parseInt(birthTime.substring(0,2));//add 4 to adjust for time zone TODO: timezone API to make this work for every timezone
 	const minutes = parseInt(birthTime.substring(3,5));
 	const newBirthTime = [hours, minutes];
-	console.log(newBirthTime[0] + " " + newBirthTime[1])
+	//console.log(newBirthTime[0] + " " + newBirthTime[1])
 	return newBirthTime;
 };
-//console.log(sunPos, moonPos);
-/*
-if(date.month==  0)
-    {
-        if(date.day<=  19)
-        {zodiac   = "Capricorn";}
 
-        else
-        {
-            zodiac   = "Aquarius";
-        }
-    }
-    else if (date.month== 1)
-    {
-        if(date.day<= 18)
-            {zodiac  =   "Aquarius";}
-        else
-            {zodiac  =  "Pisces";}
-    }
-    else if (date.month== 2)
-    {
-        if(date.day<= 20)
-            {zodiac  =   "Pisces";}
-        else
-            {zodiac  =  "Aries";}
-    }
-    else if (date.month== 3)
-    {
-        if(date.day<= 19)
-            {zodiac  =   "Aries";}
-        else
-            {zodiac  =  "Taurus";}
-    }
-    else if (date.month== 4)
-    {
-        if(date.day<= 20)
-            {zodiac  =   "Taurus";}
-        else
-            {zodiac  =  "Gemini";}
-    }
-    else if (date.month== 5)
-    {
-        if(date.day<= 20)
-            {zodiac  =   "Gemini";}
-        else
-            {zodiac  =  "Cancer";}
-    }
-    else if (date.month == 6)
-    {
-        if(date.day<= 22)
-            {zodiac  =   "Cancer";}
-        else
-            {zodiac  =  "Leo";}
-    }
-    else if (date.month   == 7)
-    {
-        if(date.day<= 22)
-            {zodiac  =   "Leo";}
-        else
-            {zodiac  =  "Virgo";}
-    }
-    else if (date.month   == 8)
-    {
-        if(date.day<= 22)
-            {zodiac  =   "Virgo";}
-        else
-            {zodiac  =  "Libra";}
-    }
-    else if (date.month  == 9)
-    {
-        if(date.day<= 22)
-            {zodiac  =   "Libra";}
-        else
-            {zodiac  =  "Scorpio";}
-    }
-    else if (date.month == 10)
-    {
-        if(date.day<= 21)
-            {zodiac  =   "Scorpio";}
-        else
-            {zodiac  =  "Sagittarius";}
-    }
-    else if (date.month == 11)
-    {
-        if(date.day<= 21)
-            {zodiac  =   "Sagittarius";}
-        else
-            {zodiac  =  "Capricorn";}
-    }*/
+export const getCoords=async(addy)=>{
+	// This code replaces all whitespace and commas with the appropriate url-encoded replacement value.
+	const addressTemp = addy.toLowerCase().replace(/\s/g, "%20").replace(/,/g, "%2C");
+	//console.log(addressTemp);
+	// Setup your options q and key are provided. Feel free to add others to make the JSON response less verbose and easier to read
+	var coords;
+	// The below code makes a GET request to the specified URL.
+	return new Promise((resolve, reject) => {
+		request({
+			url: 'https://api.opencagedata.com/geocode/v1/json?q='+addressTemp+"&key="+config.openCage.key
+
+		}, async (error, response, body) => {
+			if (error)
+				throw error;
+			let data = JSON.parse(body);
+	
+			if (data.results.length > 0) {
+				coords = data.results[0].geometry;
+			}
+			else {
+				//console.log("results length is 0");
+				reject(coords);
+			}
+			//console.log(coords);
+			resolve(coords);
+		});
+	})
+	
+}
+
+export const getJD=async(localTime,url)=>{
+	return new Promise((resolve,reject)=>{
+		var utcTime = { year: 0, month: 0, day: 0, hour: 0, min: 0, sec: 0.0 };
+		request(
+			url,
+			async (error, response, body) => {
+				var data = JSON.parse(body);
+				//console.log(data);
+				let rS = data.resourceSets[0].resources[0].timeZone.convertedTime.utcOffsetWithDst;
+				//console.log('-----------------');
+				console.log(rS);
+				//console.log('-----------------');
+
+				swisseph.swe_utc_time_zone(localTime.year, localTime.month, localTime.day, localTime.hour, localTime.min, 0, parseFloat(rS), function (data) {
+					utcTime.year = data.year;
+					utcTime.month = data.month;
+					utcTime.day = data.day;
+					utcTime.hour = data.hour;
+					utcTime.min = data.minute;
+				});
+				//console.log(utcTime);
+				//console.log(localTime);
+				//console.log(utcTime);
+				var jd;
+				swisseph.swe_utc_to_jd(utcTime.year, utcTime.month, utcTime.day, utcTime.hour, utcTime.min, 0, swisseph.SE_GREG_CAL, function (body, err) {
+					//console.log(body.julianDayUT);
+					jd = body.julianDayUT;
+				});
+				resolve(jd);
+			}
+		);
+	});
+	
+}
+
+export const formatEverything=(birthdayAndTime)=>{
+	var year=birthdayAndTime.year.toString();
+	var month=birthdayAndTime.month.toString();
+	var day=birthdayAndTime.day.toString();
+	var hour=birthdayAndTime.hour.toString();
+	var min=birthdayAndTime.min.toString();
+	if(birthdayAndTime.month<10)
+		month='0'+month;
+	if(birthdayAndTime.day<10)
+		day='0'+day;
+	if(birthdayAndTime.hour<10)
+		hour='0'+hour;
+	if(birthdayAndTime.min<10)
+		min='0'+min;
+	return year+"-"+month+'-'+day+'T'+hour+':'+min+':00Z';
+}
+const birthday = '2000-02-21';
+const birthTime='02:30';
+const birthPlace="Gainesville,Florida";
+//getAstrologyData(birthday,birthTime,"null")
+var d=getAstrologyData(birthday,birthTime,birthPlace);
+console.log(d);
+
+
+//console.log(astrologyData);
+//console.log(sunPos, moonPos);
