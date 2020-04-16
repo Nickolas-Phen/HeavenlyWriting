@@ -13,7 +13,7 @@ mongoose.connect(config.db.uri, {useNewUrlParser: true, useUnifiedTopology: true
     console.log(`Successfully connected to mongoose database..`)
 })
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 5000;
 
 //initializes app
 const app = express();

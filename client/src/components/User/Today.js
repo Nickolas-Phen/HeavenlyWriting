@@ -105,10 +105,11 @@ export default function Today() {
       console.log("Phase: " + phase);
       setMoonPhase(phase);
     });
+    console.log("birthplace: " + httpUser.getCurrentUser().placeOfBirth);
     axios.get('/api/swiss/',
         {
           params: {
-            birthPlace: httpUser.getCurrentUser().birthPlace,
+            birthPlace: httpUser.getCurrentUser().placeOfBirth,
             birthday: httpUser.getCurrentUser().birthday,
             birthTime: httpUser.getCurrentUser().birthTime,
           }

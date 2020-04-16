@@ -49,7 +49,7 @@ export const getAstrologyData = async(birthday, birthTime, birthPlace) =>
 	} catch (err) {
 		console.log(err);
 	}
-	//console.log(astrologyData);
+	console.log(astrologyData);
 	return astrologyData;
 
 };
