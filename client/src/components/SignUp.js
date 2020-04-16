@@ -1,34 +1,18 @@
 //taken from https://github.com/mui-org/material-ui/tree/master/docs/src/pages/getting-started/templates/sign-up
-import React, {useState} from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import {Link}    from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
-//import Calendaimport FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
-import 'react-calendar/dist/Calendar.css';
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Heavenly Writing
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -58,33 +42,79 @@ export default function SignUp(props) {
             birthday: '',
             email: '',
             password: '',
-            birthTime: 0,
+            birthTime: '',
             username: '',
             phoneNumber: '',
-            placeBirth: '',
+            placeOfBirth: '',
+            mailchimp: 'false',
         }
     );
     const [toUserPage, setToUserPage] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [birthday, setBirthday] = useState('');
     const [AM_PM, setAM_PM] = useState("AM");
-    const [phoneNumber, setPhoneNumber] = useState(0);
+    const [uniqueEmail, setUniqueEmail] = useState(true);
+    const [uniqueUsername, setUniqueUsername] = useState(true);
 
-    const uniqueUsername = () =>
-    {
-        //if username already exists
-        if(!((userInfo.username)))
-        {
-            console.log("The username is not unique");
+    const [query, setQuery] = useState("");
+    const autoCompleteRef = useRef(null);
+
+        //places: AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE
+        //maps: AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8
+        //both: AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY
+      //  let apikey = 'AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE';
+     //   let apikey = 'AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8';
+        let apikey = 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY';
+
+
+
+        let autoComplete;
+
+        const loadScript = (url, callback) => {
+          let script = document.createElement("script");
+          script.type = "text/javascript";
+
+          if (script.readyState) {
+            script.onreadystatechange = function() {
+              if (script.readyState === "loaded" || script.readyState === "complete") {
+                script.onreadystatechange = null;
+                callback();
+              }
+            };
+          } else {
+            script.onload = () => callback();
+          }
+
+          script.src = url;
+          document.getElementsByTagName("head")[0].appendChild(script);
+        };
+
+        function handleScriptLoad(updateQuery, autoCompleteRef) {
+          autoComplete = new window.google.maps.places.Autocomplete(
+            autoCompleteRef.current,
+            { types: ["(cities)"], componentRestrictions: { country: "us" } }
+          );
+          autoComplete.setFields(["address_components", "formatted_address"]);
+          autoComplete.addListener("place_changed", () =>
+            handlePlaceSelect(updateQuery)
+          );
         }
 
-    };
+        async function handlePlaceSelect(updateQuery) {
+          const addressObject = autoComplete.getPlace();
+          const query = addressObject.formatted_address;
+          updateQuery(query);
+          console.log(addressObject);
+        }
+
+
+
+
 
     const passwordsMatch = () =>
     {
         if(!((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword)))
         {
-            console.log("The passwords do not match");
+            //console.log("The passwords do not match");
         }
         //if both password fields have input and are equal, return true
         return ((userInfo.password && confirmPassword) && (userInfo.password === confirmPassword))
@@ -96,7 +126,7 @@ export default function SignUp(props) {
         const time = userInfo.birthTime;
         if (time.length !== 5)
         {
-            console.log("Invalid length for time of birth.")
+            //console.log("Invalid length for time of birth.")
             return false;
         }
 
@@ -104,19 +134,19 @@ export default function SignUp(props) {
         const hours_int = parseInt(hours); //make sure it is an int
         if (isNaN(hours_int) || (hours_int > 12))//make sure hours are a number less than 13
         {
-            console.log("Error: Hour value greater than 12");
+            //console.log("Error: Hour value greater than 12");
             return false;
         }
         if (time[2] !== ':')//make sure time has colon
         {
-            console.log("Error: No colon in time statement.");
+            //console.log("Error: No colon in time statement.");
             return false;
         }
         const minutes = time[3] + time[4];
         const minutes_int = parseInt(minutes);
         if (isNaN(minutes_int) || (minutes_int > 59)) //make sure minutes are numbers under 60
         {
-            console.log("Error: Minute value greater than 60");
+            //console.log("Error: Minute value greater than 60");
             return false;
         }
         return true;
@@ -124,15 +154,14 @@ export default function SignUp(props) {
 
     const checkValidPhoneNumber = () =>
     {
-        //make sure the time field is a time
+        //make sure the phone number is valid
         let phoneNum = userInfo.phoneNumber;
         if (!((phoneNum.length === 10) || (phoneNum.length === 12)))
         {
-            console.log("Invalid length for phone number.")
             return false;
         }
 
-        if (phoneNum[3] === '-' && phoneNum[7] == '-')
+        if (phoneNum[3] === '-' && phoneNum[7] === '-')
         {
             let temp = '';
             for (var i = 0; i < phoneNum.length; i++)
@@ -156,20 +185,113 @@ export default function SignUp(props) {
         const email = userInfo.email;
         if (!email.includes("@") || !email.includes(".com"))//make sure email has @ and .com in it
         {
-            console.log("Email does not contain '@' or '.com'");
             return false;
         }
-        const response = await axios.get('/api/user/email/' + email);
-        console.log(response);
+        return true;
     };
 
-    const onChangeBirthday = (date) =>
+    const emailIsUnique = async (email) =>
     {
-      setBirthday({date});
-      const newState = {...userInfo};
-      newState.birthday = date;
-      console.log(newState.birthday);
-      setUserInfo(newState);
+        //check if email is unique
+        const response = await axios.get('/api/user/email/' + email);
+        if (response.data.message === "not unique")//if email is not unique
+        {
+            setUniqueEmail(false);
+        }
+        else
+        {
+            setUniqueEmail(true);
+        }
+    };
+
+    const usernameIsUnique = async (username) =>
+    {
+        //check if email is unique
+        const response = await axios.get('/api/user/username/' + username);
+        if (response.data.message === "not unique")//if username is not unique
+        {
+            setUniqueUsername(false);
+        }
+        else
+        {
+            setUniqueUsername(true);
+        }
+    };
+
+    const checkValidBirthday = () =>
+    {
+    //make sure the birthday field is in the correct format (01/31/2000)
+        const birthday = userInfo.birthday;
+        if (birthday.length !== 10)
+        {
+            //console.log("Invalid length for birthday");
+            return false;
+        }
+
+        const month = parseInt(birthday[0] + birthday[1]); //grab month part of string
+        const day = parseInt(birthday[3] + birthday[4]);//grab day part of string
+        const year = parseInt(birthday[6] + birthday[7] + birthday[8] + birthday[9]);//grab year part of string
+
+        if (isNaN(month) || (month > 12) ||(month < 1))//make sure month exists
+        {
+            //console.log("Error: month value greater than 12 or less than 1");
+            return false;
+        }
+        if (birthday[2] !== '/' || birthday[5] !== '/')//make sure birthday has slashes
+        {
+            //console.log("Error: Missing slash in birthday");
+            return false;
+        }
+        if (isNaN(day) || (day > 31) || (day < 1)) //make sure calendar day exists
+        {
+            //console.log("Error: Invalid day");
+            return false;
+        }
+        //make sure calendar days exist for specific months
+        const shortMonths = [4,6,9,11]; //months with 30 days
+        if (shortMonths.includes(month) && day > 30)//make sure max day for short months is 30
+        {
+            //console.log("Error: day doesn't exist for that month");
+            return false;
+        }
+        if (month === 2)//special case for February, lots of logic for determining leap year
+        {
+            if (year%4 === 0)
+            {
+                if (year % 100 === 0)
+                {
+                    if (year % 400 === 0) {
+                        //is a leap year
+                        if (day > 29) {
+                            //console.log("Error: over 29 days for leap year");
+                            return false;
+                        }
+                    }
+                    else if (year % 400 !== 0)
+                    {//centennial year that is not divisible by 400 is not a leap year (ex: 1900)
+                        if (day > 28)
+                        {
+                            //console.log("Error: not a leap year, over 28 days");
+                            return false;
+                        }
+                    }
+                }
+                //is a leap year
+                if (day > 29) {
+                    //console.log("Error: leap year, over 29 days");
+                    return false;
+                }
+            }
+            else {
+                //is not a leap year
+                if (day > 28)
+                {
+                    //console.log("Error: not a leap year, over 28 days 2");
+                    return false;
+                }
+            }
+        }
+        return true;
     };
 
     const onChangeText = (e) => {
@@ -177,6 +299,16 @@ export default function SignUp(props) {
         const newState = {...userInfo};
         newState[e.target.name] = e.target.value;
         setUserInfo(newState);
+        if (e.target.name === "email")
+            emailIsUnique(e.target.value);//check if email is unique
+        else if (e.target.name === "username")
+            usernameIsUnique(e.target.value);//check if username is unique
+        // else if (e.target.name === "birthday")//check if birthday is in valid format
+        //     checkValidBirthday(e.target.value);
+        if (e.target.name === "placeOfBirth")
+        {
+            setQuery(e.target.value);
+        }
     };
 
     const onAM_PMChange = (e) => {
@@ -192,36 +324,35 @@ export default function SignUp(props) {
         }
     };
 
+    const onMailchimpChange = (e) => {
+        const target = e.target;
+        console.log(target);
+        if (userInfo.mailchimp === 'false')
+        {
+            userInfo.mailchimp = 'true';
+        }
+        else 
+        {
+            userInfo.mailchimp = 'false';
+        }
+    };
+
     const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        //add AM or PM to birth time based on selected radio button
-        //TODO: make birthtime into military time by adding 12 hours for pm
+
+        //make birthtime into military time by adding 12 hours for pm
         if (AM_PM === "AM")
         {
-            userInfo.birthTime += " AM";
+            userInfo.birthTime += "AM";
         }
         else
         {
-            userInfo.birthTime += " PM";
+            userInfo.birthTime += "PM";
         }
         //create account for user and get their token
         
         const user = await httpUser.signUp(userInfo);
-        //reset fields back to defaults
-        setUserInfo({
-                firstName: '',
-                lastName: '',
-                birthday: '',
-                email: '',
-                password: '',
-                birthTime: "",
-                birthPlace: "",
-                username: '',
-                phoneNumber: '',
-                placeOfBirth: '',
-            }
-        );
         if(user)
         {
             //sign user in
@@ -232,6 +363,16 @@ export default function SignUp(props) {
     };
     const classes = useStyles();
 
+
+    useEffect(() => {
+        loadScript(
+
+          `https://maps.googleapis.com/maps/api/js?key=${apikey}&libraries=places`,
+          () => handleScriptLoad(setQuery, autoCompleteRef)
+        );
+      }, []);
+
+
     if (toUserPage)
     {
         return <Redirect to = 'today'></Redirect>
@@ -240,7 +381,7 @@ export default function SignUp(props) {
         <Container component="main" maxWidth= "md">
             <CssBaseline />
             <div className={classes.paper}>
-                <h1 component="h1" variant="h5">
+                <h1>
                     Sign up
                 </h1>
                 {/* adding get post inside of form */}
@@ -345,21 +486,31 @@ export default function SignUp(props) {
                     </Grid>
                         <h3>Select your birthday</h3>
                     <Grid container spacing = {2} justify="center">
-                        <Grid item xs={12} sm={3}>
-                            <Calendar
-                                onChange = {onChangeBirthday}
-                                value = {userInfo.birthday}
-                            />
-                        </Grid>
+
+                        <div className="search-location-input">
+                        <input
+
+                            id="placeOfBirth"
+                            name="placeOfBirth"
+                            ref={autoCompleteRef}
+                            onChange={onChangeText}
+                            placeholder="Enter a City"
+                            value={query}
+                        />
+                        </div>
+
                     <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
+
                                 variant="outlined"
+                                required
                                 fullWidth
-                                id="birthPlace"
-                                label="Place of Birth"
-                                name="birthPlace"
-                                autoComplete="pbirth"
+                                name="birthday"
+                                label="Birthday (ex: 01/30/2000)"
+                                type="birthday"
+                                id="birthday"
+                                autoComplete="birthday"
                                 onChange={onChangeText}
                             />
                         </Grid>
@@ -368,7 +519,7 @@ export default function SignUp(props) {
                                 variant="outlined"
                                 fullWidth
                                 id="birthTime"
-                                label="Time of Birth if known (ex: 12:34)"
+                                label="Time of birth if known (ex: 12:34)"
                                 name="birthTime"
                                 autoComplete="tbirth"
                                 onChange={onChangeText}
@@ -397,6 +548,11 @@ export default function SignUp(props) {
                         </label>
                         </Grid>
                     </Grid>
+                    <FormControlLabel
+                        control={<Checkbox value="mailchimp" color="primary" />}
+                        label="Opt into Mailchimp"
+                        onChange = {onMailchimpChange}
+                    />
                     </Grid>
                     {/* <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
@@ -405,12 +561,16 @@ export default function SignUp(props) {
                     <div>{userInfo.password !== confirmPassword ? <font color = "red" >Passwords don't match</font> : null}</div>
                     <div>{userInfo.birthTime && (!checkValidTime()) ? <font color = "red" >Invalid time</font> : null}</div>
                     <div>{userInfo.email && (!checkValidEmail()) ? <font color = "red" >That doesn't look like an email address</font> : null}</div>
+                    <div>{!uniqueEmail ? <font color = "red" >That email is already in use</font> : null}</div>
+                    <div>{!uniqueUsername ? <font color = "red" >That username is already in use</font> : null}</div>
                     <div>{userInfo.phoneNumber && (!checkValidPhoneNumber()) ? <font color = "red" >Invalid phone number.</font> : null}</div>
+                    <div>{userInfo.birthday && (!checkValidBirthday()) ? <font color = "red" >Invalid birthday</font> : null}</div>
                     
                     <Button
                         component = {Link} to ="/user"
-                        //enable button if passwords match
-                        disabled = {!passwordsMatch()}
+                        //enable button if all info is valid
+                        disabled = {!passwordsMatch() || !checkValidTime() ||
+                        !checkValidEmail() || !checkValidPhoneNumber() || !uniqueEmail || !uniqueUsername}
                         type="submit"
                         fullWidth
                         variant="contained"
@@ -430,9 +590,6 @@ export default function SignUp(props) {
                 </form>
                
             </div>
-            <Box mt={5}>
-                <Copyright />
-            </Box>
         </Container>
     );
 }

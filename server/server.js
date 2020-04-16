@@ -10,10 +10,10 @@ import * as swisseph from "./swissEph.js";
 
 //add your db uri to config.js to test database on your computer, like in bootcamp 2, 3
 mongoose.connect(config.db.uri, {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false}).then(() => {
-    console.log(`Successfully connected to mongoose database.`)
+    console.log(`Successfully connected to mongoose database..`)
 })
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3000;
 
 //initializes app
 const app = express();
@@ -38,7 +38,7 @@ app.use('/api/reading', readingRouter, (req, res) =>
 app.use('/api/swiss/', async (req, res) =>
 {
 //api for swissEph
-    const birthday = req.query.birthday;
+    const birthday = req.query.birthday
     const birthPlace = req.query.birthPlace;
     const birthTime = req.query.birthTime
     console.log("user: " + req.query.birthday);
