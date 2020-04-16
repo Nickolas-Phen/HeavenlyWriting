@@ -2,7 +2,8 @@ import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { useState, useEffect } from "react";
-import axios from "./AxiosConfig";
+//import axios from "./AxiosConfig";
+import axios from "axios";
 import List from "@material-ui/core/List";
 import DisplayInfo from "./DisplayInfo";
 import Song from "./MocArticle";
@@ -18,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 export default function Previous() {
   const classes = useStyles();
-  const [isLoading, setLoading] = useState(true);
+  const [isLoading, setLoading] = useState(false);
   const [previousMap, setPreviousMap] = useState([{quote: "Test", picture: "h",article: Song}, {quote: "Test", picture: "a",article: Song}]);
 
   const GetTodayInfo =() => 
@@ -46,7 +47,7 @@ export default function Previous() {
         <Typography paragraph>
           All the previous info:
         </Typography>
-        <List>
+        {/* <List>
           {previousMap.map((previous, index) => 
             <DisplayInfo
               date={previous.date}
@@ -55,7 +56,7 @@ export default function Previous() {
               article={previous.article}
             />
           )}
-        </List>
+        </List> */}
       </div>
     );
   }
