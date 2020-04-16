@@ -30,7 +30,90 @@ function createData(house, sign, moonPhase, quote, picture, article) {
 //   createData('H', 'S', 'M', 'Q', 'P', 'A'),
 // ];
 
+export default function MaterialTable(props) {
+  const [state, setState] = React.useState({
+    columns: [
+      {
+        title: 'House',
+        field: 'house',
+        lookup: {1: '1', 2: '2', 3: '3', 4: '4', 5: '5',
+          6: '6', 7: '7', 8: '8', 9: '9', 10: '10', 11: '11', 12: '12'},
+      },
+      {
+        title: 'Sign',
+        field: 'sign',
+        lookup: {
+          1: 'Aries', 2: 'Taurus', 3: 'Gemini', 4: 'Cancer',
+          5: 'Leo', 6: 'Virgo', 7: 'Libra', 8: 'Scorpio', 9: 'Sagittarius',
+          10: 'Capricorn', 11: 'Aquarius', 12: 'Pisces'
+        },
+      },
+      {
+        title: 'Moon Phase',
+        field: 'moonPhase',
+        lookup: {1: 'New Moon', 2: 'Crescent Moon', 3: 'First Quarter Moon', 4: 'Gibbous Moon',
+          5: 'Full Moon', 6: 'Disseminating Moon', 7: 'Third Quarter Moon', 8: 'Balsamic Moon'
+        },
+      },
+      {
+        title: 'Picture',
+        field: 'picture',
+      },
+      {
+        title: 'Article',
+        field: 'article',
+      },
+    ],
+    data: [
+        props.dbData
+    ],
+  });
 
+  return (
+      <MaterialTable
+          title="Editable Example"
+          columns={state.columns}
+          data={state.data}
+          editable={{
+            onRowAdd: (newData) =>
+                new Promise((resolve) => {
+                  setTimeout(() => {
+                    resolve();
+                    setState((prevState) => {
+                      const data = [...prevState.data];
+                      data.push(newData);
+                      return { ...prevState, data };
+                    });
+                  }, 600);
+                }),
+            onRowUpdate: (newData, oldData) =>
+                new Promise((resolve) => {
+                  setTimeout(() => {
+                    resolve();
+                    if (oldData) {
+                      setState((prevState) => {
+                        const data = [...prevState.data];
+                        data[data.indexOf(oldData)] = newData;
+                        return { ...prevState, data };
+                      });
+                    }
+                  }, 600);
+                }),
+            onRowDelete: (oldData) =>
+                new Promise((resolve) => {
+                  setTimeout(() => {
+                    resolve();
+                    setState((prevState) => {
+                      const data = [...prevState.data];
+                      data.splice(data.indexOf(oldData), 1);
+                      return { ...prevState, data };
+                    });
+                  }, 600);
+                }),
+          }}
+      />
+  );
+}
 
 export default function PredictionTable(props) {
   const {dbData} = props;
