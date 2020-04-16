@@ -171,21 +171,21 @@ export default function Today() {
       // to get something specific do response.data[#].var
     deets = response.data;
     setItems(response.data);
-    var myJSON = JSON.stringify(deets);
-    console.log("JSON is: "+myJSON);    
-    response.data.map(directory => {
-      console.log("in map: "+directory.moonPhase + " curr phase:... " + moonPhase);
-      if(directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
-      //   return(<div>
-      //     <h3>Quote is: {directory.quote}</h3>
-      //     <h3>Article is: {directory.article}</h3>
-      // </div>);
-        console.log("found!");
-      val = directory.quote;
-      art = directory.article;
-      console.log("val is: "+val+" and "+art);
-    }
-  })
+  //   var myJSON = JSON.stringify(deets);
+  //   console.log("JSON is: "+myJSON);    
+  //   response.data.map(directory => {
+  //     console.log("in map: "+directory.moonPhase + " curr phase:... " + moonPhase);
+  //     if(directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
+  //     //   return(<div>
+  //     //     <h3>Quote is: {directory.quote}</h3>
+  //     //     <h3>Article is: {directory.article}</h3>
+  //     // </div>);
+  //       console.log("found!");
+  //     val = directory.quote;
+  //     art = directory.article;
+  //     console.log("val is: "+val+" and "+art);
+  //   }
+  // })
   })
   .catch(err => console.log(err));
 console.log("items is: "+ items);
@@ -248,8 +248,7 @@ useEffect(() => {
       }
     })
     }
-
-          </div>
+             </div>
           
            {/* <Predictions
            temp17={temp17}
