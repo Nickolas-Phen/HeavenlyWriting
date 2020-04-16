@@ -10,12 +10,12 @@ const userSchema = new mongoose.Schema ({
     birthday: {type: Date, required: true},
     email: {type: String, required:true},
     phoneNumber: {type: String, required: true},
-    placeBirth: {type: String, required: true},
-    
+    birthPlace: {type: String, required: true},
+    //^this was placeBirth
 
     middleName: {type: String},
     birthTime: {type: String},
-    birthPlace: {type: String},
+    //birthPlace: {type: String},
     house: {type: String},
     zodiac: {type: String},
 

@@ -41,7 +41,7 @@ export const create = async (req, res) => {
     catch (err)
     {
         console.log("failed to add user to database");
-       // console.log(err);
+        console.log(err);
         //res.json({success: false, code: err.code});
     }
 

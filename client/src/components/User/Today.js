@@ -7,7 +7,7 @@ import Song from "./MocArticle";
 import axios from "axios";
 import './today.css'
 import httpUser from "../../httpUser";
-import Predictions from "./Predictions";
+
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -153,25 +153,46 @@ export default function Today() {
       });
   }, []);
   const find = {
+    house: astrologyData.currentMoonHouse,
     sign: astrologyData.ascendantSign,
     moonPhase: moonPhase
   }
-  data = astrologyData.ascendantSign;
+  const temp17 = astrologyData.ascendantSign;
+  //data = astrologyData.ascendantSign;
   
   //setTest(astrologyData.ascendantSign);
-  
+  const [items, setItems] = useState([]);
+  var val, art;
+  var deets;
   const GetPrediction =() => 
   axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign)
   //axios.get('/api/reading/'+[find.sign,find.moonPhase],[find.sign,find.moonPhase]) 
   .then(response => {
-      console.log("find: " + response.data[2].quote);
-//    response.data.quote = response.data.quote.toString();
-    var myJSON = JSON.stringify(response.data);
+      // to get something specific do response.data[#].var
+    deets = response.data;
+    setItems(response.data);
+    var myJSON = JSON.stringify(deets);
     console.log("JSON is: "+myJSON);    
+    response.data.map(directory => {
+      console.log("in map: "+directory.moonPhase + " curr phase:... " + moonPhase);
+      if(directory.house === astrologyData.currentMoonHouse.toString() && directory.moonPhase === moonPhase){
+      //   return(<div>
+      //     <h3>Quote is: {directory.quote}</h3>
+      //     <h3>Article is: {directory.article}</h3>
+      // </div>);
+        console.log("found!");
+      val = directory.quote;
+      art = directory.article;
+      console.log("val is: "+val+" and "+art);
+    }
+  })
   })
   .catch(err => console.log(err));
+console.log("items is: "+ items);
 
-
+useEffect(() => {
+  GetPrediction();
+}, []);
 //URL WORKS WITH GET
 //   function api() {
 //     return fetch('http://ohmanda.com/api/horoscope/aquarius')
@@ -193,7 +214,7 @@ export default function Today() {
   } else {
     return (
       <div>
-        <button onClick={GetPrediction}>temp</button>
+        {/* <button onClick={GetPrediction}>temp</button> */}
         <div className={classes.quote}>
         <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
         </div>
@@ -213,10 +234,28 @@ export default function Today() {
            <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-    <h2>Prediction: </h2>
+                     
+          <div>
+
+           { items.map(directory => {
+      if(directory.sign === astrologyData.ascendantSign && directory.house === astrologyData.currentMoonHouse.toString() && directory.moonPhase === moonPhase){
+        return(
+        <div key={directory.quote}>
+        <h2>Quote: {directory.quote}</h2> 
+         <h2>Article: {directory.article}</h2>
+        </div>
+        );
+      }
+    })
+    }
+
+          </div>
+          
            {/* <Predictions
-           data={data}
+           temp17={temp17}
+           find={find}
            /> */}
+           
            {/* add a js file and pass pred and map it */}
           </div>
           {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
@@ -259,4 +298,5 @@ export default function Today() {
       // </div>
     );
   }
+
 }
