@@ -175,7 +175,7 @@ export default function Today() {
     console.log("JSON is: "+myJSON);    
     response.data.map(directory => {
       console.log("in map: "+directory.moonPhase + " curr phase:... " + moonPhase);
-      if(directory.house === astrologyData.currentMoonHouse.toString() && directory.moonPhase === moonPhase){
+      if(directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
       //   return(<div>
       //     <h3>Quote is: {directory.quote}</h3>
       //     <h3>Article is: {directory.article}</h3>
@@ -238,7 +238,7 @@ useEffect(() => {
           <div>
 
            { items.map(directory => {
-      if(directory.sign === astrologyData.ascendantSign && directory.house === astrologyData.currentMoonHouse.toString() && directory.moonPhase === moonPhase){
+      if(directory.sign.toLowerCase() === astrologyData.ascendantSign.toLowerCase() && directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
         return(
         <div key={directory.quote}>
         <h2>Quote: {directory.quote}</h2> 
