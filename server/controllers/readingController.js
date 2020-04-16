@@ -1,5 +1,6 @@
 //function to create a new object
 //req is the object to be created
+import util from "util";
 import Reading from "../models/readingSchema.js";
 export const create = async (req, res) => {
     // console.log("find moon called");
@@ -37,14 +38,23 @@ export const findByUniqueCombo = (req, res) =>
     })
 };
 
-//finds a reading by the id
+//finds a reading by the moon sign TEMPERORY
 export const read = (req, res) =>
 {
-    Schema.findById(req.params.readingId, (err, data) =>
+        Reading.find(req.params, (err, data) =>
     {
-        if (err) {console.log(err);}
-        //else { res.send(data);}
-        res.send(data);
+        //the problem is I am passing an object so how to fix that 
+        //works when I pass one thing, but still cant get one of the things inside the object
+        console.log("is it this? %j",JSON.stringify(req.params));
+        console.log("is it this! "+req.params);
+        if (err) {
+            console.log("ERROR BIH!");
+            console.log(err);   
+        }else{
+            console.log("passed " + data + " here");
+            res.send(data);
+        }
+ 
     })
 };
 
@@ -103,12 +113,18 @@ export const remove = (req, res) => {
 export const list = (req, res) => {
     Reading.find({}, (err, readings) =>
     {
+        console.log("in list");
+                    //get sign only, these 2 dont work
+        // console.log(req.body.sign);
+        // console.log(readings.sign);
         if (err)
         {
             res.status(404).send('Error: Readings could not be found');
+            console.log("ERROR");
         }
         else
         {
+            
             console.log((readings));
             const data = readings;
             res.send(readings);
