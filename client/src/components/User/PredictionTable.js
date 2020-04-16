@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState, useEffect } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -7,6 +8,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import TablePagination from '@material-ui/core/TablePagination';
+import MaterialTable from 'material-table';
 
 const useStyles = makeStyles({
   table: {
@@ -30,93 +33,26 @@ function createData(house, sign, moonPhase, quote, picture, article) {
 //   createData('H', 'S', 'M', 'Q', 'P', 'A'),
 // ];
 
-export default function MaterialTable(props) {
-  const [state, setState] = React.useState({
-    columns: [
-      {
-        title: 'House',
-        field: 'house',
-        lookup: {1: '1', 2: '2', 3: '3', 4: '4', 5: '5',
-          6: '6', 7: '7', 8: '8', 9: '9', 10: '10', 11: '11', 12: '12'},
-      },
-      {
-        title: 'Sign',
-        field: 'sign',
-        lookup: {
-          1: 'Aries', 2: 'Taurus', 3: 'Gemini', 4: 'Cancer',
-          5: 'Leo', 6: 'Virgo', 7: 'Libra', 8: 'Scorpio', 9: 'Sagittarius',
-          10: 'Capricorn', 11: 'Aquarius', 12: 'Pisces'
-        },
-      },
-      {
-        title: 'Moon Phase',
-        field: 'moonPhase',
-        lookup: {1: 'New Moon', 2: 'Crescent Moon', 3: 'First Quarter Moon', 4: 'Gibbous Moon',
-          5: 'Full Moon', 6: 'Disseminating Moon', 7: 'Third Quarter Moon', 8: 'Balsamic Moon'
-        },
-      },
-      {
-        title: 'Picture',
-        field: 'picture',
-      },
-      {
-        title: 'Article',
-        field: 'article',
-      },
-    ],
-    data: [
-        props.dbData
-    ],
-  });
-
-  return (
-      <MaterialTable
-          title="Editable Example"
-          columns={state.columns}
-          data={state.data}
-          editable={{
-            onRowAdd: (newData) =>
-                new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve();
-                    setState((prevState) => {
-                      const data = [...prevState.data];
-                      data.push(newData);
-                      return { ...prevState, data };
-                    });
-                  }, 600);
-                }),
-            onRowUpdate: (newData, oldData) =>
-                new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve();
-                    if (oldData) {
-                      setState((prevState) => {
-                        const data = [...prevState.data];
-                        data[data.indexOf(oldData)] = newData;
-                        return { ...prevState, data };
-                      });
-                    }
-                  }, 600);
-                }),
-            onRowDelete: (oldData) =>
-                new Promise((resolve) => {
-                  setTimeout(() => {
-                    resolve();
-                    setState((prevState) => {
-                      const data = [...prevState.data];
-                      data.splice(data.indexOf(oldData), 1);
-                      return { ...prevState, data };
-                    });
-                  }, 600);
-                }),
-          }}
-      />
-  );
-}
+// export default function MaterialTableDemo() {
+//
+//   return (
+//       <MaterialTable
+//       />
+//   );
+// }
 
 export default function PredictionTable(props) {
+  const [page, setPage] = React.useState(0);
+  const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const {dbData} = props;
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const emptyRows = rowsPerPage - Math.min(rowsPerPage, dbData.length - page * rowsPerPage);
  // const rows = createRow(dbData);
   const classes = useStyles();
 
@@ -135,7 +71,7 @@ export default function PredictionTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {dbData.map(createRow).map((row) => (
+          {dbData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(createRow).map((row) => (
             <TableRow key={row.house}>
               <TableCell align="right">
                 {row.house}
@@ -149,6 +85,16 @@ export default function PredictionTable(props) {
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+          rowsPerPageOptions={[5, 10, 25]}
+          component="div"
+          count={dbData.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
+      />
     </TableContainer>
+
   );
 }
