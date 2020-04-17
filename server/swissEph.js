@@ -49,7 +49,6 @@ export const getAstrologyData = async(birthday, birthTime, birthPlace) =>
 	} catch (err) {
 		console.log(err);
 	}
-	console.log(astrologyData);
 	return astrologyData;
 
 };
@@ -249,7 +248,7 @@ export const getJD=async(localTime,url)=>{
 				//console.log(data);
 				let rS = data.resourceSets[0].resources[0].timeZone.convertedTime.utcOffsetWithDst;
 				//console.log('-----------------');
-				console.log(rS);
+				//console.log(rS);
 				//console.log('-----------------');
 
 				swisseph.swe_utc_time_zone(localTime.year, localTime.month, localTime.day, localTime.hour, localTime.min, 0, parseFloat(rS), function (data) {
@@ -290,13 +289,3 @@ export const formatEverything=(birthdayAndTime)=>{
 		min='0'+min;
 	return year+"-"+month+'-'+day+'T'+hour+':'+min+':00Z';
 }
-const birthday = '2000-02-21';
-const birthTime='02:30';
-const birthPlace="Gainesville,Florida";
-//getAstrologyData(birthday,birthTime,"null")
-var d=getAstrologyData(birthday,birthTime,birthPlace);
-console.log(d);
-
-
-//console.log(astrologyData);
-//console.log(sunPos, moonPos);

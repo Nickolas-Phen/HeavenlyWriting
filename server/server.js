@@ -38,12 +38,10 @@ app.use('/api/reading', readingRouter, (req, res) =>
 app.use('/api/swiss/', async (req, res) =>
 {
 //api for swissEph
-    const birthday = req.query.birthday
-    const birthPlace = req.query.birthPlace;
-    const birthTime = req.query.birthTime
-    //console.log("user: " + req.query.birthday);
-    const data = swisseph.getAstrologyData(birthday, birthTime, birthPlace)
-    //console.log(data);
+    const birthday = req.query.birthday;
+    const birthPlace = req.query.placeOfBirth;
+    const birthTime = req.query.birthTime;
+    const data = await swisseph.getAstrologyData(birthday, birthTime, birthPlace);
     res.send(data)
 });
 
