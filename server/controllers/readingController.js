@@ -29,11 +29,13 @@ export const create = async (req, res) => {
 export const findByUniqueCombo = (req, res) =>
 {
     //search for reading based on unique combo of house, sign, moonPhase
-    Schema.find({house: req.body.house, sign: req.body.sign, moonPhase: req.body.moonPhase}, (err, data) =>
+
+    Reading.find({house: req.query.house, sign: req.query.sign, moonPhase: req.query.moonPhase}, (err, data) =>
     {
         //if found, send it
         if (err) {console.log(err);}
         //else { res.send(data);}
+
         res.send(data);
     })
 };
