@@ -11,11 +11,11 @@ const flag = swisseph.SEFLG_SPEED;
 export const getAstrologyData = (birthday, birthTime, birthPlace) =>
 {
 	//finds and returns currentMoonSign, sunBirthSign, and ascendant sign
-	console.log("swisseph user: " + birthday)
+	//console.log("swisseph user: " + birthday)
 	const formattedBirthday = formatBirthdayFromSignup(birthday);//splits birthday into array of [year, month, day]
 	const formattedBirthTime = splitBirthTime(birthTime);//splits birthday into array of [hours, minutes]
 	const birthdayAndTime = {year: formattedBirthday[0], month: formattedBirthday[1], day: formattedBirthday[2], hour: formattedBirthTime[0], min: formattedBirthTime[1]};
-	console.log("birthday and time: " + birthdayAndTime.year + " " + birthdayAndTime.month + " " + birthdayAndTime.day + " " + birthdayAndTime.hour);
+	//console.log("birthday and time: " + birthdayAndTime.year + " " + birthdayAndTime.month + " " + birthdayAndTime.day + " " + birthdayAndTime.hour);
 	const julday = swisseph.swe_julday (birthdayAndTime.year, birthdayAndTime.month, birthdayAndTime.day, birthdayAndTime.hour,birthdayAndTime.min, swisseph.SE_GREG_CAL);
 	const currentMoonPos = findCurrentMoonPosition();
 	const birthSunPos = findSunPosition(birthdayAndTime);
@@ -37,12 +37,12 @@ export const findCurrentMoonPosition = () =>
 	var moonPos;
 	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDay(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
 		//assert.equal (julday_ut, 2455927.5);
-		console.log ('Julian UT day for date:', julday_ut);
+		//console.log ('Julian UT day for date:', julday_ut);
 
 		// Moon position
 		swisseph.swe_calc_ut (julday_ut, swisseph.SE_MOON, flag, function (body) {
 			//assert (!body.error, body.error);
-			console.log ('Moon position:', body.longitude, body.latitude);
+			//console.log ('Moon position:', body.longitude, body.latitude);
 			moonPos=body.longitude;
 		});
 	});
@@ -55,12 +55,12 @@ export const findSunPosition = (date) =>
 	var sunPos;
 	swisseph.swe_julday (date.year, date.month, date.day, date.hour, swisseph.SE_GREG_CAL, function (julday_ut) {
 		//assert.equal (julday_ut, 2455927.5);
-		console.log ('Julian UT day for date:', julday_ut);
+		//console.log ('Julian UT day for date:', julday_ut);
 
 		// Sun position
 		swisseph.swe_calc_ut (julday_ut, swisseph.SE_SUN, flag, function (body) {
 			//assert (!body.error, body.error);
-			console.log ('Sun position:', body.longitude, body.latitude);
+			//console.log ('Sun position:', body.longitude, body.latitude);
 			sunPos=body.longitude;
 		});
 	});
@@ -103,13 +103,13 @@ export const findAscendentSign = (lat, long, julday) =>
 	//TODO: need openCage API to find lat and long for address
 	lat=29.6436;
 	long=-82.3549;
-	console.log("julday: " + julday)
+	//console.log("julday: " + julday)
 //used to find the signs and stuff
 	var ascendantLat = 0;
 	var h=swisseph.swe_houses(julday,lat,long,'W',function(result){
-		console.log("result: ");
-		console.log(result);
-		console.log(result.ascendant);
+		// console.log("result: ");
+		// console.log(result);
+		// console.log(result.ascendant);
 		ascendantLat = result.ascendant;
 	});
 	const ascendantSign = convertLatitudeToSign(ascendantLat);
@@ -173,7 +173,7 @@ export const findCurrentMoonHouse = (userAscendant) =>
 
 export const formatBirthdayFromSignup = (birthday) =>
 {
-	console.log(birthday);
+	//console.log(birthday);
 	const year = parseInt(birthday.substring(0, 4));//parseInt converts string to int
 	const month = parseInt(birthday.substring(5,7));
 	const day = parseInt(birthday.substring(8,10));
@@ -186,7 +186,7 @@ export const splitBirthTime = (birthTime) =>
 	const hours = parseInt(birthTime.substring(0,2)) + 4;//add 4 to adjust for time zone TODO: timezone API to make this work for every timezone
 	const minutes = parseInt(birthTime.substring(3,5));
 	const newBirthTime = [hours, minutes];
-	console.log(newBirthTime[0] + " " + newBirthTime[1]);
+	//console.log(newBirthTime[0] + " " + newBirthTime[1]);
 	return newBirthTime;
 };
 //console.log(sunPos, moonPos);

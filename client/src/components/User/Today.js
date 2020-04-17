@@ -72,57 +72,78 @@ export default function Today() {
       }
   );
   // getData will load data from the backend only on load.
-  const getMoonPhase = () => {
-    //creates url to send to api to get moon data
-    var configMoon = {
-      lang  		:'en', // 'ca' 'de' 'en' 'es' 'fr' 'it' 'pl' 'pt' 'ru' 'zh' (*)
-      month 		:new Date().getMonth() + 1, // 1  - 12
-      year  		:new Date().getFullYear(),
-      size		:50, //pixels
-      lightColor	:"#FFFF88", //CSS color
-      shadeColor	:"#111111", //CSS color
-      sizeQuarter	:20, //pixels
-      texturize	:false //true - false
-    };
+  const getAllAstrologyData = () => {
+      //It would be much cleaner to separate getting the different astrology data as different functions,
+      //but I can only get it to work if I have them all in one ugly function
+      //creates url to send to api to get moon data
+      var configMoon = {
+          lang: 'en', // 'ca' 'de' 'en' 'es' 'fr' 'it' 'pl' 'pt' 'ru' 'zh' (*)
+          month: new Date().getMonth() + 1, // 1  - 12
+          year: new Date().getFullYear(),
+          size: 50, //pixels
+          lightColor: "#FFFF88", //CSS color
+          shadeColor: "#111111", //CSS color
+          sizeQuarter: 20, //pixels
+          texturize: false //true - false
+      };
 
-    //don't know what this does
-    configMoon.LDZ=new Date(configMoon.year,configMoon.month-1,1)/1000;
-    var obj = configMoon;
-    var gets=[];
-    //add url info to complete url accessed by api
-    for (var i in obj){
-      gets.push(i+"="+encodeURIComponent(obj[i]))
-    }
-    //final api url
-    var url = "https://www.icalendar37.net/lunar/api/?"+gets.join("&");
-    //get moon data from moon api
-    var phase = "dog";
-    axios.get(url).then(res =>
-    {
-      var day = new Date().getDate();
-      var moon = res.data;//moon dat
-      phase = moon.phase[day].phaseName;
-      console.log("Phase: " + phase);
-      setMoonPhase(phase);
-    });
-    axios.get('/api/swiss/',
-        {
-          params: {
-            birthPlace: httpUser.getCurrentUser().birthPlace,
-            birthday: httpUser.getCurrentUser().birthday,
-            birthTime: httpUser.getCurrentUser().birthTime,
-          }
-        }).then(res =>
-    {
-      console.log(res.data);
-      setAstrologyData(res.data);
-    })
+      configMoon.LDZ = new Date(configMoon.year, configMoon.month - 1, 1) / 1000;
+      var obj = configMoon;
+      var gets = [];
+      //add url info to complete url accessed by api
+      for (var i in obj) {
+          gets.push(i + "=" + encodeURIComponent(obj[i]))
+      }
+      //final api url
+      var url = "https://www.icalendar37.net/lunar/api/?" + gets.join("&");
+      //get moon data from moon api
+      var phase = "dog";
+      axios.get(url).then(res => {
+          var day = new Date().getDate();
+          var moon = res.data;//moon dat
+          phase = moon.phase[day].phaseName;
+          setMoonPhase(phase);
+          axios.get('/api/swiss/',
+              {
+                  params: {
+                      birthPlace: httpUser.getCurrentUser().birthPlace,
+                      birthday: httpUser.getCurrentUser().birthday,
+                      birthTime: httpUser.getCurrentUser().birthTime,
+                  }
+              }).then(response =>
+          {
+              setAstrologyData(response.data);
+              console.log("current moon sign: "+ response.data.currentMoonSign);
+              console.log("moon phase: " + phase);
+              axios.get('/api/reading/prediction',
+                  {
+                      params: {
+                          sign: response.data.currentMoonSign,
+                          house: response.data.currentMoonHouse,
+                          moonPhase: phase,
+                      }
+                  })
+                  .then(response => {
+                      console.log(response.data);
+                      setItems(response.data);
+                  })
+                  .catch(err => console.log(err));
+              console.log("items is: "+ items);
+          })
+      });
   };
-  if (moonPhase === "")
-  {
-    getMoonPhase();
-  }
+
+  // if (moonPhase === "")
+  // {
+  //   getMoonPhase();
+  // }
+  // if (astrologyData.currentMoonSign === "")
+  // {
+  //     console.log("get astrology data");
+  //     getAstrologyData();
+  // }
   useEffect(() => {
+      getAllAstrologyData();
     let loadCounter = 0;
     const increaseCounter = () => {
       loadCounter += 1;
@@ -152,58 +173,25 @@ export default function Today() {
         setArticle("Nothing to do today");
       });
   }, []);
-  const find = {
-    house: astrologyData.currentMoonHouse,
-    sign: astrologyData.ascendantSign,
-    moonPhase: moonPhase
-  }
-  const temp17 = astrologyData.ascendantSign;
   //data = astrologyData.ascendantSign;
   
   //setTest(astrologyData.ascendantSign);
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(
+      {
+          sign: "",
+          house: "",
+          moonPhase: "",
+          quote: "",
+          pic: "",
+          article: "",
+      }
+  );
   var val, art;
-  var deets;
-  const GetPrediction =() => 
-  axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign)
-  //axios.get('/api/reading/'+[find.sign,find.moonPhase],[find.sign,find.moonPhase]) 
-  .then(response => {
-      // to get something specific do response.data[#].var
-    deets = response.data;
-    setItems(response.data);
-  //   var myJSON = JSON.stringify(deets);
-  //   console.log("JSON is: "+myJSON);    
-  //   response.data.map(directory => {
-  //     console.log("in map: "+directory.moonPhase + " curr phase:... " + moonPhase);
-  //     if(directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
-  //     //   return(<div>
-  //     //     <h3>Quote is: {directory.quote}</h3>
-  //     //     <h3>Article is: {directory.article}</h3>
-  //     // </div>);
-  //       console.log("found!");
-  //     val = directory.quote;
-  //     art = directory.article;
-  //     console.log("val is: "+val+" and "+art);
-  //   }
-  // })
-  })
-  .catch(err => console.log(err));
-console.log("items is: "+ items);
+
 
 useEffect(() => {
-  GetPrediction();
+  //GetPrediction();
 }, []);
-//URL WORKS WITH GET
-//   function api() {
-//     return fetch('http://ohmanda.com/api/horoscope/aquarius')
-//     .then((response) => response.json())
-//     .then((responseJson) => {
-//       return responseJson.movies;
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-//  }
 
   if (isLoading) {
     return (
@@ -235,21 +223,12 @@ useEffect(() => {
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
                      
-          <div>
-
-           { items.map(directory => {
-               if (directory.sign && directory.house && directory.moonPhase)//make sure a prediction exists for this combo
-               {
-                  if(directory.sign.toLowerCase() === astrologyData.ascendantSign.toLowerCase() && directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()) {
-                      return (
-                          <div key={directory.quote}>
-                              <h2>Quote: {directory.quote}</h2>
-                              <h2>Article: {directory.article}</h2>
-                          </div>
-                      );
-                  }
-      }
-    })
+          <div>{!items[0].sign || !items[0].house || !items[0].moonPhase ? <h2>No prediction found</h2> :
+              <div>
+                  <h2>Quote: {items[0].quote}</h2>
+                  <h2>Article: {items[0].article}</h2>
+              </div>
+          }
     }
              </div>
           
