@@ -217,10 +217,9 @@ useEffect(() => {
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
           <div>{!prediction[0].sign || !prediction[0].house || !prediction[0].moonPhase ? <h2>No prediction found</h2> :
               <div>
-                  <h2>Quote: {prediction[0].quote}</h2>
-                  <h2>Article: {prediction[0].article}</h2>
+                  <h3>{prediction[0].quote}</h3>
+                  <h3>{prediction[0].article}</h3>
               </div>
-          }
     }
              </div>
           </div>
