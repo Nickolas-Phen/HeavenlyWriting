@@ -1,4 +1,4 @@
-export const Signs = [
+export const SignsLabels = [
     {value: 'aries', label: 'Aries'},
     {value: 'taurus', label: 'Taurus'},
     {value: 'gemini', label: 'Gemini'},
@@ -12,8 +12,11 @@ export const Signs = [
     {value: 'aquarius', label: 'Aquarius'},
     {value: 'pisces', label: 'Pisces'},
 ];
+export const Signs = ['Aries', 'Taurus','Gemini', 'Cancer', 'Leo', 'Virgo',
+    'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces'
+];
 
-export const Houses = [
+export const HousesLabels = [
     {value: '1', label: 'First House'},
     {value: '2', label: 'Second House'},
     {value: '3', label: 'Third House'},
@@ -28,7 +31,11 @@ export const Houses = [
     {value: '12', label: 'Twelfth House'},
 ];
 
-export const MoonPhases = [
+export const Houses = [
+'1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'
+];
+
+export const MoonPhasesLabels = [
     {value: 'newMoon', label: 'New Moon'},
     {value: 'crescentMoon', label: 'Crescent Moon'},
     {value: 'firstQuarterMoon', label: 'First Quarter Moon'},
@@ -37,4 +44,8 @@ export const MoonPhases = [
     {value: 'disseminatingMoon', label: 'Disseminating Moon'},
     {value: 'thirdQuarterMoon', label: 'Third Quarter Moon'},
     {value: 'balsamicMoon', label: 'Balsamic Moon'},
+];
+
+export const MoonPhases = ['New Moon', 'Crescent Moon', 'First Quarter Moon', 'Gibbous Moon',
+    'Full Moon', 'Disseminating Moon', 'Third Quarter Moon', 'Balsamic Moon',
 ];
