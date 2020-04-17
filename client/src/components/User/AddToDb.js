@@ -31,7 +31,7 @@ export default function AddToDb() {
         picture: deets.picture,
         article: deets.article
       }
-    console.log("PL is: " + params);
+    //console.log("PL is: " + params);
     axios.post('/api/reading', params) 
     .then(request => {
         window.alert("yay!");

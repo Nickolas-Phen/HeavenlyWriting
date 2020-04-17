@@ -6,32 +6,13 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import {Link}    from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import defaultPicture from "./../assets/defaultSignInPic.jpeg"
 import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
-//import Calendaimport FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
-import Calendar from 'react-calendar' //https://github.com/wojtekmaj/react-calendar
-import 'react-calendar/dist/Calendar.css';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Heavenly Writing
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -61,7 +42,7 @@ export default function SignUp(props) {
             birthday: '',
             email: '',
             password: '',
-            birthTime: 0,
+            birthTime: '',
             username: '',
             phoneNumber: '',
             placeOfBirth: '',
@@ -71,13 +52,12 @@ export default function SignUp(props) {
     const [toUserPage, setToUserPage] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [AM_PM, setAM_PM] = useState("AM");
-    const [phoneNumber, setPhoneNumber] = useState(0);
     const [uniqueEmail, setUniqueEmail] = useState(true);
     const [uniqueUsername, setUniqueUsername] = useState(true);
 
     const [query, setQuery] = useState("");
     const autoCompleteRef = useRef(null);
-  
+
         //places: AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE
         //maps: AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8
         //both: AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY
@@ -85,14 +65,14 @@ export default function SignUp(props) {
      //   let apikey = 'AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8';
         let apikey = 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY';
 
-        
+
 
         let autoComplete;
 
         const loadScript = (url, callback) => {
           let script = document.createElement("script");
           script.type = "text/javascript";
-        
+
           if (script.readyState) {
             script.onreadystatechange = function() {
               if (script.readyState === "loaded" || script.readyState === "complete") {
@@ -103,11 +83,11 @@ export default function SignUp(props) {
           } else {
             script.onload = () => callback();
           }
-        
+
           script.src = url;
           document.getElementsByTagName("head")[0].appendChild(script);
         };
-        
+
         function handleScriptLoad(updateQuery, autoCompleteRef) {
           autoComplete = new window.google.maps.places.Autocomplete(
             autoCompleteRef.current,
@@ -118,7 +98,7 @@ export default function SignUp(props) {
             handlePlaceSelect(updateQuery)
           );
         }
-        
+
         async function handlePlaceSelect(updateQuery) {
           const addressObject = autoComplete.getPlace();
           const query = addressObject.formatted_address;
@@ -128,7 +108,7 @@ export default function SignUp(props) {
 
 
 
-        
+
 
     const passwordsMatch = () =>
     {
@@ -355,20 +335,20 @@ export default function SignUp(props) {
         {
             userInfo.mailchimp = 'false';
         }
-    }
+    };
 
     const submitUserInfo = async (e) => {
         //When submit button is pressed, send post userInfo to /api/signup and place it in database
         e.preventDefault();
-        //add AM or PM to birth time based on selected radio button
-        //TODO: make birthtime into military time by adding 12 hours for pm
+
+        //make birthtime into military time by adding 12 hours for pm
         if (AM_PM === "AM")
         {
-            userInfo.birthTime += " AM";
+            userInfo.birthTime += "AM";
         }
         else
         {
-            userInfo.birthTime += " PM";
+            userInfo.birthTime += "PM";
         }
         //create account for user and get their token
         
@@ -386,7 +366,7 @@ export default function SignUp(props) {
 
     useEffect(() => {
         loadScript(
-         
+
           `https://maps.googleapis.com/maps/api/js?key=${apikey}&libraries=places`,
           () => handleScriptLoad(setQuery, autoCompleteRef)
         );
@@ -401,7 +381,7 @@ export default function SignUp(props) {
         <Container component="main" maxWidth= "md">
             <CssBaseline />
             <div className={classes.paper}>
-                <h1 component="h1" variant="h5">
+                <h1>
                     Sign up
                 </h1>
                 {/* adding get post inside of form */}
@@ -506,10 +486,10 @@ export default function SignUp(props) {
                     </Grid>
                         <h3>Select your birthday</h3>
                     <Grid container spacing = {2} justify="center">
-                        
+
                         <div className="search-location-input">
                         <input
-                        
+
                             id="placeOfBirth"
                             name="placeOfBirth"
                             ref={autoCompleteRef}
@@ -518,7 +498,7 @@ export default function SignUp(props) {
                             value={query}
                         />
                         </div>
-                        
+
                     <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
                             <TextField
@@ -539,7 +519,7 @@ export default function SignUp(props) {
                                 variant="outlined"
                                 fullWidth
                                 id="birthTime"
-                                label="Time of Birth if known (ex: 12:34)"
+                                label="Time of birth if known (ex: 12:34)"
                                 name="birthTime"
                                 autoComplete="tbirth"
                                 onChange={onChangeText}
@@ -610,9 +590,6 @@ export default function SignUp(props) {
                 </form>
                
             </div>
-            <Box mt={5}>
-                <Copyright />
-            </Box>
         </Container>
     );
 }
