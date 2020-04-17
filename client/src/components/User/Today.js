@@ -238,13 +238,16 @@ useEffect(() => {
           <div>
 
            { items.map(directory => {
-      if(directory.sign.toLowerCase() === astrologyData.ascendantSign.toLowerCase() && directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
-        return(
-        <div key={directory.quote}>
-        <h2>Quote: {directory.quote}</h2> 
-         <h2>Article: {directory.article}</h2>
-        </div>
-        );
+               if (directory.sign && directory.house && directory.moonPhase)//make sure a prediction exists for this combo
+               {
+                  if(directory.sign.toLowerCase() === astrologyData.ascendantSign.toLowerCase() && directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()) {
+                      return (
+                          <div key={directory.quote}>
+                              <h2>Quote: {directory.quote}</h2>
+                              <h2>Article: {directory.article}</h2>
+                          </div>
+                      );
+                  }
       }
     })
     }
