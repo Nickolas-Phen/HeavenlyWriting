@@ -101,7 +101,7 @@ function DrawerTest(props) {
     history.push(tab.toLowerCase());
   };
 
-  if(httpUser.getCurrentUser().username === "admin"){
+  if(httpUser.getCurrentUser().admin === "true"){
   return (
     <div className={classes.root}>
       <CssBaseline />

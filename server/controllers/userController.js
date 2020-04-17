@@ -57,6 +57,7 @@ export const create = async (req, res) => {
         }
     }
     req.body.birthTime = temp;
+    req.body.admin = 'false';
   //  */
     try {
         //create sign token, showing success
