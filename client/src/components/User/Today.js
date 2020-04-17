@@ -71,59 +71,91 @@ export default function Today() {
         currentMoonHouse: "",
       }
   );
-  // getData will load data from the backend only on load.
-  const getMoonPhase = () => {
-    //creates url to send to api to get moon data
-    var configMoon = {
-      lang  		:'en', // 'ca' 'de' 'en' 'es' 'fr' 'it' 'pl' 'pt' 'ru' 'zh' (*)
-      month 		:new Date().getMonth() + 1, // 1  - 12
-      year  		:new Date().getFullYear(),
-      size		:50, //pixels
-      lightColor	:"#FFFF88", //CSS color
-      shadeColor	:"#111111", //CSS color
-      sizeQuarter	:20, //pixels
-      texturize	:false //true - false
-    };
-
-    //don't know what this does
-    configMoon.LDZ=new Date(configMoon.year,configMoon.month-1,1)/1000;
-    var obj = configMoon;
-    var gets=[];
-    //add url info to complete url accessed by api
-    for (var i in obj){
-      gets.push(i+"="+encodeURIComponent(obj[i]))
-    }
-    //final api url
-    var url = "https://www.icalendar37.net/lunar/api/?"+gets.join("&");
-    //get moon data from moon api
-    var phase = "dog";
-    axios.get(url).then(res =>
-    {
-      var day = new Date().getDate();
-      var moon = res.data;//moon dat
-      phase = moon.phase[day].phaseName;
-      console.log("Phase: " + phase);
-      setMoonPhase(phase);
-    });
-    console.log("birthplace: " + httpUser.getCurrentUser().placeOfBirth);
-    axios.get('/api/swiss/',
+  const [prediction, setPrediction] = useState(
         {
-          params: {
-            birthPlace: httpUser.getCurrentUser().placeOfBirth,
-            birthday: httpUser.getCurrentUser().birthday,
-            birthTime: httpUser.getCurrentUser().birthTime,
-          }
-        }).then(res =>
-    {
-      console.log(res.data);
-      setAstrologyData(res.data);
-    })
+            sign: "",
+            house: "",
+            moonPhase: "",
+            quote: "",
+            pic: "",
+            article: "",
+        }
+    );
+  const getAllAstrologyData = () => {
+      /*
+      It would be much cleaner to separate getting the different astrology data as different functions,
+        but I can only get it to work if I have them all in one ugly function
+        creates url to send to api to get moon data
+       */
+
+//FIND MOON PHASE_______________________________________________________
+      var configMoon = {
+          lang: 'en', // 'ca' 'de' 'en' 'es' 'fr' 'it' 'pl' 'pt' 'ru' 'zh' (*)
+          month: new Date().getMonth() + 1, // 1  - 12
+          year: new Date().getFullYear(),
+          size: 50, //pixels
+          lightColor: "#FFFF88", //CSS color
+          shadeColor: "#111111", //CSS color
+          sizeQuarter: 20, //pixels
+          texturize: false //true - false
+      };
+
+      configMoon.LDZ = new Date(configMoon.year, configMoon.month - 1, 1) / 1000;
+      var obj = configMoon;
+      var gets = [];
+      //add url info to complete url accessed by api
+      for (var i in obj) {
+          gets.push(i + "=" + encodeURIComponent(obj[i]))
+      }
+      //final api url
+      var url = "https://www.icalendar37.net/lunar/api/?" + gets.join("&");
+      //get moon data from moon api
+      var phase = "dog";
+      axios.get(url).then(res => {
+          var day = new Date().getDate();
+          var moon = res.data;//moon dat
+          phase = moon.phase[day].phaseName;
+          setMoonPhase(phase);
+//END FIND MOON PHASE________________________________________
+
+//FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
+          axios.get('/api/swiss/',
+              {
+                  params: {
+                      birthPlace: httpUser.getCurrentUser().birthPlace,
+                      birthday: httpUser.getCurrentUser().birthday,
+                      birthTime: httpUser.getCurrentUser().birthTime,
+                  }
+              }).then(response =>
+          {
+              setAstrologyData(response.data);
+//END FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
+
+//FIND PREDICTION THAT MATCHES FOUND MOON SIGN, MOON HOUSE, MOON PHASE_____________________________________
+              axios.get('/api/reading/prediction',
+                  {
+                      params: {
+                          sign: response.data.currentMoonSign,
+                          house: response.data.currentMoonHouse,
+                          moonPhase: phase,
+                      }
+                  })
+                  .then(response => {
+                      setPrediction(response.data);
+                  })
+                  .catch(err => console.log(err));
+          })
+      });
+//FOUND ALL ASTROLOGY DATA
   };
-  if (moonPhase === "")
-  {
-    getMoonPhase();
-  }
+
   useEffect(() => {
+      /*
+      this function finds the current moonPhase, moonHouse, moonSign,
+       then finds the prediction that matches this combination.
+       This information is stored in the states called moonPhase, astrologyData, and prediction
+       */
+      getAllAstrologyData();
     let loadCounter = 0;
     const increaseCounter = () => {
       loadCounter += 1;
@@ -141,8 +173,6 @@ export default function Today() {
         setQuote("Quote '404' not found");
       });
 
-
-
     mockGetArticle()
       .then(newArticle => {
         increaseCounter();
@@ -153,58 +183,9 @@ export default function Today() {
         setArticle("Nothing to do today");
       });
   }, []);
-  const find = {
-    house: astrologyData.currentMoonHouse,
-    sign: astrologyData.ascendantSign,
-    moonPhase: moonPhase
-  }
-  const temp17 = astrologyData.ascendantSign;
-  //data = astrologyData.ascendantSign;
-  
-  //setTest(astrologyData.ascendantSign);
-  const [items, setItems] = useState([]);
-  var val, art;
-  var deets;
-  const GetPrediction =() => 
-  axios.get('/api/reading/'+astrologyData.ascendantSign,astrologyData.ascendantSign)
-  //axios.get('/api/reading/'+[find.sign,find.moonPhase],[find.sign,find.moonPhase]) 
-  .then(response => {
-      // to get something specific do response.data[#].var
-    deets = response.data;
-    setItems(response.data);
-  //   var myJSON = JSON.stringify(deets);
-  //   console.log("JSON is: "+myJSON);    
-  //   response.data.map(directory => {
-  //     console.log("in map: "+directory.moonPhase + " curr phase:... " + moonPhase);
-  //     if(directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
-  //     //   return(<div>
-  //     //     <h3>Quote is: {directory.quote}</h3>
-  //     //     <h3>Article is: {directory.article}</h3>
-  //     // </div>);
-  //       console.log("found!");
-  //     val = directory.quote;
-  //     art = directory.article;
-  //     console.log("val is: "+val+" and "+art);
-  //   }
-  // })
-  })
-  .catch(err => console.log(err));
-console.log("items is: "+ items);
 
 useEffect(() => {
-  GetPrediction();
 }, []);
-//URL WORKS WITH GET
-//   function api() {
-//     return fetch('http://ohmanda.com/api/horoscope/aquarius')
-//     .then((response) => response.json())
-//     .then((responseJson) => {
-//       return responseJson.movies;
-//     })
-//     .catch((error) => {
-//       console.error(error);
-//     });
-//  }
 
   if (isLoading) {
     return (
@@ -215,7 +196,6 @@ useEffect(() => {
   } else {
     return (
       <div>
-        {/* <button onClick={GetPrediction}>temp</button> */}
         <div className={classes.quote}>
         <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
         </div>
@@ -235,67 +215,15 @@ useEffect(() => {
            <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-                     
-          <div>
-
-           { items.map(directory => {
-      if(directory.sign.toLowerCase() === astrologyData.ascendantSign.toLowerCase() && directory.house.toLowerCase() === astrologyData.currentMoonHouse.toString().toLowerCase() && directory.moonPhase.toLowerCase() === moonPhase.toLowerCase()){
-        return(
-        <div key={directory.quote}>
-        <h2>Quote: {directory.quote}</h2> 
-         <h2>Article: {directory.article}</h2>
-        </div>
-        );
-      }
-    })
+          <div>{!prediction[0] ? <h2>No prediction found</h2> :
+              <div>
+                  <h3>{prediction[0].quote}</h3>
+                  <h3>{prediction[0].article}</h3>
+              </div>
     }
              </div>
-          
-           {/* <Predictions
-           temp17={temp17}
-           find={find}
-           /> */}
-           
-           {/* add a js file and pass pred and map it */}
           </div>
-          {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
-          return <span>{i}<br /></span>;
-        })) }</Typography> */}
       </div>
-     
-      // <div className={classes.paper}>
-      //   <div className={classes.quote}>
-      //   <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
-      //     <div>
-
-      //     <img
-      //       className={classes.image}
-      //       src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
-      //       alt="Rick"
-      //     />
-      //     <br></br>
-      //     <h2>Today's moon:  {moonPhase}</h2>
-      //     <h2>Today's moon sign: {astrologyData.currentMoonSign}</h2>
-      //     <h2>Today's moon house: House {astrologyData.currentMoonHouse}</h2>
-      //     <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-      //     <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
-          
-          
-      //     {/* <span className={classes.quoteText}>{quote}</span> */}
-                   
-
-      //       <h2 class="info"><br></br>Today's moon:  {moonPhase}</h2>
-      //     </div>
-
-      //   </div>
-      //   <div>
-      //   <span className={classes.quoteText}>Quote of the day:</span>
-      //   </div>
-      //   <span className={classes.quoteText}>Future predictions:</span>
-      //   {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
-      //     return <span>{i}<br /></span>;
-      //   })) }</Typography> */}
-      // </div>
     );
   }
 

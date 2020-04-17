@@ -41,9 +41,9 @@ app.use('/api/swiss/', async (req, res) =>
     const birthday = req.query.birthday
     const birthPlace = req.query.birthPlace;
     const birthTime = req.query.birthTime
-    console.log("user: " + req.query.birthday);
+    //console.log("user: " + req.query.birthday);
     const data = swisseph.getAstrologyData(birthday, birthTime, birthPlace)
-    console.log(data);
+    //console.log(data);
     res.send(data)
 });
 
