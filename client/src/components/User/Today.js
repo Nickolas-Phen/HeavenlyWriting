@@ -215,7 +215,7 @@ useEffect(() => {
            <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-          <div>{!prediction[0].sign || !prediction[0].house || !prediction[0].moonPhase ? <h2>No prediction found</h2> :
+          <div>{!prediction[0] ? <h2>No prediction found</h2> :
               <div>
                   <h3>{prediction[0].quote}</h3>
                   <h3>{prediction[0].article}</h3>
