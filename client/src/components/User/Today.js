@@ -71,11 +71,24 @@ export default function Today() {
         currentMoonHouse: "",
       }
   );
-  // getData will load data from the backend only on load.
+  const [prediction, setPrediction] = useState(
+        {
+            sign: "",
+            house: "",
+            moonPhase: "",
+            quote: "",
+            pic: "",
+            article: "",
+        }
+    );
   const getAllAstrologyData = () => {
-      //It would be much cleaner to separate getting the different astrology data as different functions,
-      //but I can only get it to work if I have them all in one ugly function
-      //creates url to send to api to get moon data
+      /*
+      It would be much cleaner to separate getting the different astrology data as different functions,
+        but I can only get it to work if I have them all in one ugly function
+        creates url to send to api to get moon data
+       */
+
+//FIND MOON PHASE_______________________________________________________
       var configMoon = {
           lang: 'en', // 'ca' 'de' 'en' 'es' 'fr' 'it' 'pl' 'pt' 'ru' 'zh' (*)
           month: new Date().getMonth() + 1, // 1  - 12
@@ -103,6 +116,9 @@ export default function Today() {
           var moon = res.data;//moon dat
           phase = moon.phase[day].phaseName;
           setMoonPhase(phase);
+//END FIND MOON PHASE________________________________________
+
+//FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
           axios.get('/api/swiss/',
               {
                   params: {
@@ -113,8 +129,9 @@ export default function Today() {
               }).then(response =>
           {
               setAstrologyData(response.data);
-              console.log("current moon sign: "+ response.data.currentMoonSign);
-              console.log("moon phase: " + phase);
+//END FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
+
+//FIND PREDICTION THAT MATCHES FOUND MOON SIGN, MOON HOUSE, MOON PHASE_____________________________________
               axios.get('/api/reading/prediction',
                   {
                       params: {
@@ -124,25 +141,20 @@ export default function Today() {
                       }
                   })
                   .then(response => {
-                      console.log(response.data);
-                      setItems(response.data);
+                      setPrediction(response.data);
                   })
                   .catch(err => console.log(err));
-              console.log("items is: "+ items);
           })
       });
+//FOUND ALL ASTROLOGY DATA
   };
 
-  // if (moonPhase === "")
-  // {
-  //   getMoonPhase();
-  // }
-  // if (astrologyData.currentMoonSign === "")
-  // {
-  //     console.log("get astrology data");
-  //     getAstrologyData();
-  // }
   useEffect(() => {
+      /*
+      this function finds the current moonPhase, moonHouse, moonSign,
+       then finds the prediction that matches this combination.
+       This information is stored in the states called moonPhase, astrologyData, and prediction
+       */
       getAllAstrologyData();
     let loadCounter = 0;
     const increaseCounter = () => {
@@ -161,8 +173,6 @@ export default function Today() {
         setQuote("Quote '404' not found");
       });
 
-
-
     mockGetArticle()
       .then(newArticle => {
         increaseCounter();
@@ -173,24 +183,8 @@ export default function Today() {
         setArticle("Nothing to do today");
       });
   }, []);
-  //data = astrologyData.ascendantSign;
-  
-  //setTest(astrologyData.ascendantSign);
-  const [items, setItems] = useState(
-      {
-          sign: "",
-          house: "",
-          moonPhase: "",
-          quote: "",
-          pic: "",
-          article: "",
-      }
-  );
-  var val, art;
-
 
 useEffect(() => {
-  //GetPrediction();
 }, []);
 
   if (isLoading) {
@@ -202,7 +196,6 @@ useEffect(() => {
   } else {
     return (
       <div>
-        {/* <button onClick={GetPrediction}>temp</button> */}
         <div className={classes.quote}>
         <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
         </div>
@@ -222,61 +215,16 @@ useEffect(() => {
            <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
            <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
            <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-                     
-          <div>{!items[0].sign || !items[0].house || !items[0].moonPhase ? <h2>No prediction found</h2> :
+          <div>{!prediction[0].sign || !prediction[0].house || !prediction[0].moonPhase ? <h2>No prediction found</h2> :
               <div>
-                  <h2>Quote: {items[0].quote}</h2>
-                  <h2>Article: {items[0].article}</h2>
+                  <h2>Quote: {prediction[0].quote}</h2>
+                  <h2>Article: {prediction[0].article}</h2>
               </div>
           }
     }
              </div>
-          
-           {/* <Predictions
-           temp17={temp17}
-           find={find}
-           /> */}
-           
-           {/* add a js file and pass pred and map it */}
           </div>
-          {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
-          return <span>{i}<br /></span>;
-        })) }</Typography> */}
       </div>
-     
-      // <div className={classes.paper}>
-      //   <div className={classes.quote}>
-      //   <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
-      //     <div>
-
-      //     <img
-      //       className={classes.image}
-      //       src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
-      //       alt="Rick"
-      //     />
-      //     <br></br>
-      //     <h2>Today's moon:  {moonPhase}</h2>
-      //     <h2>Today's moon sign: {astrologyData.currentMoonSign}</h2>
-      //     <h2>Today's moon house: House {astrologyData.currentMoonHouse}</h2>
-      //     <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-      //     <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
-          
-          
-      //     {/* <span className={classes.quoteText}>{quote}</span> */}
-                   
-
-      //       <h2 class="info"><br></br>Today's moon:  {moonPhase}</h2>
-      //     </div>
-
-      //   </div>
-      //   <div>
-      //   <span className={classes.quoteText}>Quote of the day:</span>
-      //   </div>
-      //   <span className={classes.quoteText}>Future predictions:</span>
-      //   {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
-      //     return <span>{i}<br /></span>;
-      //   })) }</Typography> */}
-      // </div>
     );
   }
 
