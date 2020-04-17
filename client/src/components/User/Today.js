@@ -122,7 +122,7 @@ export default function Today() {
           axios.get('/api/swiss/',
               {
                   params: {
-                      birthPlace: httpUser.getCurrentUser().birthPlace,
+                      placeOfBirth: httpUser.getCurrentUser().placeOfBirth,
                       birthday: httpUser.getCurrentUser().birthday,
                       birthTime: httpUser.getCurrentUser().birthTime,
                   }
