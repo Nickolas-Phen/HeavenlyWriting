@@ -60,7 +60,7 @@ export const findCurrentMoonPosition = () =>
 {
 	const today = new Date();
 	var moonPos;
-	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDay(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
+	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
 		//assert.equal (julday_ut, 2455927.5);
 		//console.log ('Julian UT day for date:', julday_ut);
 
@@ -78,11 +78,11 @@ export const findCurrentSunPosition = () =>
 {
 	const today = new Date();
 	var sunPos;
-	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDay(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
+	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
 		//assert.equal (julday_ut, 2455927.5);
 		//console.log ('Julian UT day for date:', julday_ut);
 
-		// Moon position
+		// Sun position
 		swisseph.swe_calc_ut (julday_ut, swisseph.SE_SUN, flag, function (body) {
 			//assert (!body.error, body.error);
 			//console.log ('Moon position:', body.longitude, body.latitude);
@@ -92,10 +92,10 @@ export const findCurrentSunPosition = () =>
 	return sunPos;
 };
 
-export const findMoonPhase = (moonLongitude, sunLongtitude) =>
+export const findMoonPhase = (moonLongitude, sunLongitude) =>
 {
 	//moon phase = sunlongitude-moonlongitude
-	const difference = Math.abs(sunLongtitude-moonLongitude);
+	const difference = Math.abs(sunLongitude-moonLongitude);
 	if (difference >= 0 && difference < 45)
 		return "New Moon";
 	if (difference >= 45 && difference < 90)
