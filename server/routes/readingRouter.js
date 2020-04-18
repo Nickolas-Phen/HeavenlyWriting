@@ -8,7 +8,7 @@ readingRouter.post('/', reading.create);
 readingRouter.get('/prediction', reading.findByUniqueCombo);
 // ':' = url parameter
 readingRouter.get('/', reading.list);//returns all readings in database
-readingRouter.put('/:userId', reading.update);
-readingRouter.delete('/:userId', reading.remove);
+readingRouter.put('/prediction', reading.update);
+readingRouter.delete('/prediction', reading.remove);
 
 export default readingRouter;
