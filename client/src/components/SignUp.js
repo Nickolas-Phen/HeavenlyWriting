@@ -12,6 +12,7 @@ import {Redirect} from 'react-router-dom'
 import httpUser from '../httpUser'
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
+import './App.css';
 
 
 const useStyles = makeStyles(theme => ({
@@ -484,9 +485,10 @@ export default function SignUp(props) {
                         </Grid>
                     </Grid>
                     </Grid>
-                        <h3>Select your birthday</h3>
+                    <h1></h1>
                     <Grid container spacing = {2} justify="center">
-
+                        <Grid item xs={12} sm={3}>
+<h3></h3>
                         <div className="search-location-input">
                         <input
 
@@ -494,66 +496,67 @@ export default function SignUp(props) {
                             name="placeOfBirth"
                             ref={autoCompleteRef}
                             onChange={onChangeText}
-                            placeholder="Enter a City"
+                            placeholder="Enter City of Birth"
                             value={query}
                         />
                         </div>
-
-                    <Grid container spacing = {2} justify="center">
-                        <Grid item xs={12} sm={3}>
-                            <TextField
-
-                                variant="outlined"
-                                required
-                                fullWidth
-                                name="birthday"
-                                label="Birthday (ex: 01/30/2000)"
-                                type="birthday"
-                                id="birthday"
-                                autoComplete="birthday"
-                                onChange={onChangeText}
-                            />
                         </Grid>
-                        <Grid item xs={12} sm={3}>
-                            <TextField
-                                variant="outlined"
-                                fullWidth
-                                id="birthTime"
-                                label="Time of birth if known (ex: 12:34)"
-                                name="birthTime"
-                                autoComplete="tbirth"
-                                onChange={onChangeText}
-                            />
                         </Grid>
-                        <Grid>
-                        <label>
-                        <input
-                            name = "AM"
-                            type = "radio"
-                            value = "option1"
-                            checked = {AM_PM === "AM"}
-                            onChange = {onAM_PMChange}>
-                        </input>
-                            AM
-                        </label>
-                        <label>
+                        <Grid container spacing = {2} justify="center">
+                            <Grid item xs={12} sm={3}>
+                                <TextField
+
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="birthday"
+                                    label="Birthday (ex: 01/30/2000)"
+                                    type="birthday"
+                                    id="birthday"
+                                    autoComplete="birthday"
+                                    onChange={onChangeText}
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={3}>
+                                <TextField
+                                    variant="outlined"
+                                    fullWidth
+                                    id="birthTime"
+                                    label="Time of birth if known (ex: 12:34)"
+                                    name="birthTime"
+                                    autoComplete="tbirth"
+                                    onChange={onChangeText}
+                                />
+                            </Grid>
+                            <Grid>
+                            <label>
                             <input
-                                name = "PM"
+                                name = "AM"
                                 type = "radio"
-                                value = "option2"
-                                checked = {AM_PM === "PM"}
+                                value = "option1"
+                                checked = {AM_PM === "AM"}
                                 onChange = {onAM_PMChange}>
                             </input>
-                            PM
-                        </label>
+                                AM
+                            </label>
+                            <label>
+                                <input
+                                    name = "PM"
+                                    type = "radio"
+                                    value = "option2"
+                                    checked = {AM_PM === "PM"}
+                                    onChange = {onAM_PMChange}>
+                                </input>
+                                PM
+                            </label>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                    <FormControlLabel
-                        control={<Checkbox value="mailchimp" color="primary" />}
-                        label="Opt into Mailchimp"
-                        onChange = {onMailchimpChange}
-                    />
-                    </Grid>
+                        <FormControlLabel
+                            control={<Checkbox value="mailchimp" color="primary" />}
+                            label="Opt into Mailchimp"
+                            onChange = {onMailchimpChange}
+                        />
+                   
                     {/* <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="Recieve Email updates"

@@ -22,6 +22,7 @@ httpUser.getCurrentUser = function() {
         email: 'joe.schmoe@gmail.com',
         password: '1234',
         birthtime: "11:00",
+        placeOfBirth: "Orlando, FL, USA",
         username: 'No one logged in',
     };
     const token = this.getToken();
