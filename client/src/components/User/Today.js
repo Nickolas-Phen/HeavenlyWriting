@@ -62,13 +62,13 @@ export default function Today() {
   const [quote, setQuote] = useState("");
   // find something for picture.
   const [article, setArticle] = useState("");
-  const [moonPhase, setMoonPhase] = useState("");
   const [astrologyData, setAstrologyData] = useState(
       {
         currentMoonSign: "",
         sunBirthSign: "",
         ascendantSign: "",
         currentMoonHouse: "",
+        currentMoonPhase: "",
       }
   );
   const [prediction, setPrediction] = useState(
@@ -88,37 +88,7 @@ export default function Today() {
         creates url to send to api to get moon data
        */
 
-//FIND MOON PHASE_______________________________________________________
-      var configMoon = {
-          lang: 'en', // 'ca' 'de' 'en' 'es' 'fr' 'it' 'pl' 'pt' 'ru' 'zh' (*)
-          month: new Date().getMonth() + 1, // 1  - 12
-          year: new Date().getFullYear(),
-          size: 50, //pixels
-          lightColor: "#FFFF88", //CSS color
-          shadeColor: "#111111", //CSS color
-          sizeQuarter: 20, //pixels
-          texturize: false //true - false
-      };
-
-      configMoon.LDZ = new Date(configMoon.year, configMoon.month - 1, 1) / 1000;
-      var obj = configMoon;
-      var gets = [];
-      //add url info to complete url accessed by api
-      for (var i in obj) {
-          gets.push(i + "=" + encodeURIComponent(obj[i]))
-      }
-      //final api url
-      var url = "https://www.icalendar37.net/lunar/api/?" + gets.join("&");
-      //get moon data from moon api
-      var phase = "dog";
-      axios.get(url).then(res => {
-          var day = new Date().getDate();
-          var moon = res.data;//moon dat
-          phase = moon.phase[day].phaseName;
-          setMoonPhase(phase);
-//END FIND MOON PHASE________________________________________
-
-//FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
+//FIND MOON SIGN, MOON PHASE, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
           axios.get('/api/swiss/',
               {
                   params: {
@@ -137,15 +107,14 @@ export default function Today() {
                       params: {
                           sign: response.data.currentMoonSign,
                           house: response.data.currentMoonHouse,
-                          moonPhase: phase,
+                          moonPhase: response.data.currentMoonPhase,
                       }
                   })
                   .then(response => {
                       setPrediction(response.data);
                   })
                   .catch(err => console.log(err));
-          })
-      });
+          });
 //FOUND ALL ASTROLOGY DATA
   };
 
@@ -153,7 +122,7 @@ export default function Today() {
       /*
       this function finds the current moonPhase, moonHouse, moonSign,
        then finds the prediction that matches this combination.
-       This information is stored in the states called moonPhase, astrologyData, and prediction
+       This information is stored in the states called astrologyData and prediction
        */
       getAllAstrologyData();
     let loadCounter = 0;
@@ -205,7 +174,7 @@ useEffect(() => {
              src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
              alt="Rick"
            />
-           <h2 class="text">Today's Moon is: {moonPhase}.</h2>
+           <h2 class="text">Today's Moon is a {astrologyData.currentMoonPhase}.</h2>
           </div>
           
            <div class="margin">

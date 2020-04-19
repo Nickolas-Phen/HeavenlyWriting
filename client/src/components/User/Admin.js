@@ -4,7 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import {Signs, Houses, MoonPhases} from "../astronomyInfo";
+import {HousesLabels, SignsLabels, MoonPhasesLabels} from "../astronomyInfo";
 import TextEditor from "../widgets/TextEditor";
 import PredictionTable from "./PredictionTable";
 import Select from "react-select";
@@ -197,13 +197,13 @@ export default function Admin() {
       <Container component="main" maxWidth= "md">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={3}>
-            <Select clearValue = {searchedSign === ""} options = {Signs} onChange = {updateSign}></Select>
+            <Select options = {SignsLabels} onChange = {updateSign}></Select>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <Select options = {Houses} onChange = {updateHouse}></Select>
+            <Select options = {HousesLabels} onChange = {updateHouse}></Select>
           </Grid>
           <Grid item xs={12} sm={3}>
-            <Select options = {MoonPhases} onChange = {updatePhase}></Select>
+            <Select options = {MoonPhasesLabels} onChange = {updatePhase}></Select>
           </Grid>
             <Grid item xs ={6} sm ={3}>
                 <Button onClick = {deletePrediction} disabled = {deleteButtonDisabled} color="secondary" variant="contained">Delete</Button>

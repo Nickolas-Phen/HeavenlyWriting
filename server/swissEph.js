@@ -36,6 +36,8 @@ export const getAstrologyData = async(birthday, birthTime, birthPlace) =>
 		//console.log("------------------Julday found");
 		
 		const currentMoonPos = findCurrentMoonPosition();
+		const currentSunPos = findCurrentSunPosition();
+		const currentMoonPhase = findMoonPhase(currentMoonPos, currentSunPos);
 		const birthSunPos = findSunPosition(julday);
 		const currentMoonSign = convertLatitudeToSign(currentMoonPos);
 		const sunBirthSign = convertLatitudeToSign(birthSunPos);
@@ -45,6 +47,7 @@ export const getAstrologyData = async(birthday, birthTime, birthPlace) =>
 			sunBirthSign: sunBirthSign,
 			ascendantSign: ascendantSign,
 			currentMoonHouse: findCurrentMoonHouse(ascendantSign),
+			currentMoonPhase: currentMoonPhase
 		};
 	} catch (err) {
 		console.log(err);
@@ -57,7 +60,7 @@ export const findCurrentMoonPosition = () =>
 {
 	const today = new Date();
 	var moonPos;
-	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDay(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
+	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
 		//assert.equal (julday_ut, 2455927.5);
 		//console.log ('Julian UT day for date:', julday_ut);
 
@@ -69,6 +72,46 @@ export const findCurrentMoonPosition = () =>
 		});
 	});
 	return moonPos;
+};
+
+export const findCurrentSunPosition = () =>
+{
+	const today = new Date();
+	var sunPos;
+	swisseph.swe_julday (today.getFullYear(), today.getMonth(), today.getDate(), today.getHours(), swisseph.SE_GREG_CAL, function (julday_ut) {
+		//assert.equal (julday_ut, 2455927.5);
+		//console.log ('Julian UT day for date:', julday_ut);
+
+		// Sun position
+		swisseph.swe_calc_ut (julday_ut, swisseph.SE_SUN, flag, function (body) {
+			//assert (!body.error, body.error);
+			//console.log ('Moon position:', body.longitude, body.latitude);
+			sunPos=body.longitude;
+		});
+	});
+	return sunPos;
+};
+
+export const findMoonPhase = (moonLongitude, sunLongitude) =>
+{
+	//moon phase = sunlongitude-moonlongitude
+	const difference = Math.abs(sunLongitude-moonLongitude);
+	if (difference >= 0 && difference < 45)
+		return "New Moon";
+	if (difference >= 45 && difference < 90)
+		return "Crescent Moon";
+	if (difference >= 90 && difference < 135)
+		return "First Quarter Moon";
+	if (difference >= 135 && difference < 180)
+		return "Gibbous Moon";
+	if (difference >= 180 && difference < 225)
+		return "Full Moon";
+	if (difference >= 225 && difference < 270)
+		return "Disseminating Moon";
+	if (difference >= 270 && difference < 315)
+		return "Third Quarter Moon";
+	if (difference >= 315 && difference < 360)
+		return "Balsamic Moon";
 };
 
 export const findSunPosition = (julday_ut) =>
