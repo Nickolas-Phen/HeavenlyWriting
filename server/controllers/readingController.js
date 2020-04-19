@@ -62,33 +62,12 @@ export const read = (req, res) =>
 
 
 export const update = (req, res) => {
-
-    Reading.findById(req.params.readingId, (err, updatedReading) => {
+    console.log(req.body);
+    Reading.updateOne({house: req.body.house, sign: req.body.sign, moonPhase: req.body.moonPhase}, req.body, {upsert: true}, (err) => {
         if (err)
         {
             res.status(404).send("Error: Unable to update");
             console.log("Update error");
-        }
-        else{
-
-            /* Replace the Reading's properties with the new required properties found in req.body */
-            updatedReading.firstName = req.body.firstName;
-            updatedReading.lastName = req.body.lastName;
-            updatedReading.birthday = req.body.birthday;
-            updatedReading.email = req.body.email;
-            updatedReading.Readingname = req.body.Readingname;
-            updatedReading.password = req.body.password;
-
-            /* Save the Reading */
-            updatedReading.save( (err) => {
-                if (err) {
-                    res.status(404).send("Error");
-                    console.log(err);
-                }
-                else {
-                    res.json(data);
-                }
-            });
         }
     });
 };
@@ -97,15 +76,12 @@ export const update = (req, res) => {
 /* Delete a reading */
 
 export const remove = (req, res) => {
-    Reading.findByIdAndDelete(req.params.readingId, (err, removedReading) =>
+    console.log(req.query);
+    Reading.deleteOne({house: req.query.house, sign: req.query.sign, moonPhase: req.query.moonPhase}, (err) =>
     {
         if (err)
         {
             res.status(404).send("Error: Reading could not be deleted");
-        }
-        else
-        {
-            res.send(removedReading);
         }
     });
 };
@@ -126,8 +102,7 @@ export const list = (req, res) => {
         }
         else
         {
-            
-            console.log((readings));
+
             const data = readings;
             res.send(readings);
         }
