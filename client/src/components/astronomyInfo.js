@@ -1,4 +1,5 @@
 export const SignsLabels = [
+    {value: '', label: 'None'},
     {value: 'aries', label: 'Aries'},
     {value: 'taurus', label: 'Taurus'},
     {value: 'gemini', label: 'Gemini'},
@@ -17,6 +18,7 @@ export const Signs = ['Aries', 'Taurus','Gemini', 'Cancer', 'Leo', 'Virgo',
 ];
 
 export const HousesLabels = [
+    {value: '', label: 'None'},
     {value: '1', label: 'First House'},
     {value: '2', label: 'Second House'},
     {value: '3', label: 'Third House'},
@@ -36,6 +38,7 @@ export const Houses = [
 ];
 
 export const MoonPhasesLabels = [
+    {value: '', label: 'None'},
     {value: 'newMoon', label: 'New Moon'},
     {value: 'crescentMoon', label: 'Crescent Moon'},
     {value: 'firstQuarterMoon', label: 'First Quarter Moon'},
