@@ -12,7 +12,7 @@ export default function ListPage() {
     setTab(tab);
     history.push(tab.toLowerCase());
   };
-    if(httpUser.getCurrentUser().admin === "true"){
+    if(httpUser.getCurrentUser().admin === "true" || httpUser.getCurrentUser().username === "admin"){
         return(<List>
             {["Today", "Previous", "Feedback", "Admin","Log out"].map(text => (
               <ListItem button key={text} onClick={() => changeTab(text)}>
