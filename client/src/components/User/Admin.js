@@ -37,10 +37,27 @@ export default function Admin() {
   const GetPredictionInfo =() => {
       axios.get('/api/reading')
           .then(response => {
-              setdbData(response.data);
+                  //sort through dbData and only grab items that match filter
+              const filtered = filterPredictions(response.data);
+              setdbData(filtered);
               setLoading(false);
           })
           .catch(err => console.log(err));
+  };
+
+  const filterPredictions = (data) => {
+      let filteredData = [];
+      for (const i in data)
+      {
+          if ((data[i].sign === searchedSign || searchedSign === '')
+              && (data[i].house === searchedHouse || searchedHouse === '')
+              && (data[i].moonPhase === searchedPhase || searchedPhase === ''))
+          {
+              console.log("pushing");
+              filteredData.push(data[i]);
+          }
+      }
+      return filteredData;
   };
 
   const updateSign = (selectedSign) =>
@@ -135,12 +152,17 @@ export default function Admin() {
       }
   };
 
-    if (searchedPhase && searchedHouse && searchedSign && searching)
+    if (searching)
     {
-        searchForPrediction();
-        console.log("searching...");
+        setdbData(filterPredictions(dbData));
+        if (searchedPhase && searchedHouse && searchedSign)
+        {
+            searchForPrediction();
+            console.log("searching...");
+        }
         setSearching(false);
     }
+
     if (searchedPhase && searchedHouse && searchedSign && deleteButtonDisabled)
     {
         setDeleteButtonDisabled(false);
@@ -157,6 +179,9 @@ export default function Admin() {
       
       <PredictionTable
         dbData={dbData}
+        signFilter = {searchedSign}
+        houseFilter = {searchedHouse}
+        moonPhaseFilter = {searchedPhase}
       />
       <br></br>
       <Typography paragraph>Select the information corresponding to the interpretation you wish to update, add, or delete</Typography>

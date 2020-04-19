@@ -44,7 +44,14 @@ function createData(house, sign, moonPhase, quote, picture, article) {
 export default function PredictionTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-  const {dbData} = props;
+  const dbData = props.dbData;
+  const filter =
+      {
+        signFilter: props.signFilter,
+        houseFilter: props.houseFilter,
+        phaseFilter: props.moonPhaseFilter
+      };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -52,6 +59,7 @@ export default function PredictionTable(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
   const emptyRows = rowsPerPage - Math.min(rowsPerPage, dbData.length - page * rowsPerPage);
  // const rows = createRow(dbData);
   const classes = useStyles();
@@ -71,18 +79,21 @@ export default function PredictionTable(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {dbData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(createRow).map((row) => (
-            <TableRow key={row.house}>
-              <TableCell align="right">
-                {row.house}
-              </TableCell>
-              <TableCell align="right">{row.sign}</TableCell>
-              <TableCell align="right">{row.moonPhase}</TableCell>
-              <TableCell align="right">{row.quote}</TableCell>
-              <TableCell align="right">{row.picture}</TableCell>
-              <TableCell align="right">{row.article}</TableCell>
+          {dbData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(createRow).map((row) => {
+            return (
+            <TableRow>
+            <TableCell align="right">
+            {row.house}
+            </TableCell>
+            <TableCell align="right">{row.sign}</TableCell>
+            <TableCell align="right">{row.moonPhase}</TableCell>
+            <TableCell align="right">{row.quote}</TableCell>
+            <TableCell align="right">{row.picture}</TableCell>
+            <TableCell align="right">{row.article}</TableCell>
             </TableRow>
-          ))}
+            )
+          }
+          )}
         </TableBody>
       </Table>
       <TablePagination

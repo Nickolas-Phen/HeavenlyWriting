@@ -102,8 +102,7 @@ export const list = (req, res) => {
         }
         else
         {
-            
-            console.log((readings));
+
             const data = readings;
             res.send(readings);
         }
