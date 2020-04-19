@@ -5,10 +5,10 @@ const readingRouter = express.Router();
 //route for creating new reading
 readingRouter.post('/', reading.create);
 //to get one 
-readingRouter.get('/:sign', reading.read);
+readingRouter.get('/prediction', reading.findByUniqueCombo);
 // ':' = url parameter
 readingRouter.get('/', reading.list);//returns all readings in database
-readingRouter.put('/:userId', reading.update);
-readingRouter.delete('/:userId', reading.remove);
+readingRouter.put('/prediction', reading.update);
+readingRouter.delete('/prediction', reading.remove);
 
 export default readingRouter;
