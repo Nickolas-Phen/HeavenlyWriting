@@ -34,9 +34,11 @@ export default function Admin() {
   const [returnedArticle, setReturnedArticle] = useState('');
   const [searching, setSearching] = useState(false);
   const [deleteButtonDisabled, setDeleteButtonDisabled] = useState(true);
+  const [unfilteredData, setUnfilteredData] = useState([]);
   const GetPredictionInfo =() => {
       axios.get('/api/reading')
           .then(response => {
+              setUnfilteredData(response.data);
                   //sort through dbData and only grab items that match filter
               const filtered = filterPredictions(response.data);
               setdbData(filtered);
@@ -47,6 +49,7 @@ export default function Admin() {
 
   const filterPredictions = (data) => {
       let filteredData = [];
+      console.log("searched sign: ", searchedSign);
       for (const i in data)
       {
           if ((data[i].sign === searchedSign || searchedSign === '')
@@ -62,8 +65,10 @@ export default function Admin() {
 
   const updateSign = (selectedSign) =>
   {
-      console.log(selectedSign.label);
-      setSearchedSign(selectedSign.label);
+      if (selectedSign.label === "None")
+          setSearchedSign(selectedSign.value);
+      else
+        setSearchedSign(selectedSign.label);
       setSearching(true);
 
   };
@@ -76,7 +81,10 @@ export default function Admin() {
 
   const updatePhase = (selectedPhase) =>
   {
-        setSearchedPhase(selectedPhase.label);
+      if (selectedPhase.label === "None")
+          setSearchedPhase(selectedPhase.value);
+      else
+          setSearchedPhase(selectedPhase.label);
         setSearching(true);
   };
 
@@ -152,9 +160,10 @@ export default function Admin() {
       }
   };
 
+
     if (searching)
     {
-        setdbData(filterPredictions(dbData));
+        setdbData(filterPredictions(unfilteredData));
         if (searchedPhase && searchedHouse && searchedSign)
         {
             searchForPrediction();
@@ -188,7 +197,7 @@ export default function Admin() {
       <Container component="main" maxWidth= "md">
         <Grid container spacing={2}>
           <Grid item xs={12} sm={3}>
-            <Select options = {Signs} onChange = {updateSign}></Select>
+            <Select clearValue = {searchedSign === ""} options = {Signs} onChange = {updateSign}></Select>
           </Grid>
           <Grid item xs={12} sm={3}>
             <Select options = {Houses} onChange = {updateHouse}></Select>
@@ -196,7 +205,7 @@ export default function Admin() {
           <Grid item xs={12} sm={3}>
             <Select options = {MoonPhases} onChange = {updatePhase}></Select>
           </Grid>
-            <Grid item xs ={12} sm ={3}>
+            <Grid item xs ={6} sm ={3}>
                 <Button onClick = {deletePrediction} disabled = {deleteButtonDisabled} color="secondary" variant="contained">Delete</Button>
             </Grid>
         </Grid>
