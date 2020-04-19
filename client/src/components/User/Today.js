@@ -5,9 +5,17 @@ import { useState, useEffect } from "react";
 import Song from "./MocArticle";
 //import getMoonPhase from '../../api/getMoonData.js'
 import axios from "axios";
-import './today.css'
+import './today.css';
 import httpUser from "../../httpUser";
+import pic from "../../assets/galaxy.jpg";
 
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -15,6 +23,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    
   },
   quote: {
     marginBottom: theme.spacing(4),
@@ -36,8 +45,19 @@ const useStyles = makeStyles(theme => ({
   },
   image: {
     width: "25%",
+    minWidth: "100%",
+  },
+  table: {
+    marginLeft: "35%",
+    border: "ridge",
     minWidth: 250,
-  }
+    display: "flex",
+    maxWidth: "30%",
+    align: "center",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexWrap: "wrap",
+  },
 }));
 
 const mockGetQuote = () =>
@@ -54,13 +74,19 @@ const mockGetArticle = () =>
     }, 500);
   });
 
+  function createData(field, textvalue) {
+    return { field, textvalue };
+  }
+
 export default function Today() {
   var data;
-  const classes = useStyles();
+   const classes = useStyles();
   const [test, setTest] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [quote, setQuote] = useState("");
   // find something for picture.
+
+  const [color, setColor] = useState("");
   const [article, setArticle] = useState("");
   const [astrologyData, setAstrologyData] = useState(
       {
@@ -99,6 +125,9 @@ export default function Today() {
               }).then(response =>
           {
               setAstrologyData(response.data);
+              data =  response.data.ascendantSign ;
+          
+                            getColor();
 //END FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
 
 //FIND PREDICTION THAT MATCHES FOUND MOON SIGN, MOON HOUSE, MOON PHASE_____________________________________
@@ -112,19 +141,41 @@ export default function Today() {
                   })
                   .then(response => {
                       setPrediction(response.data);
+
                   })
                   .catch(err => console.log(err));
           });
 //FOUND ALL ASTROLOGY DATA
   };
+  const getColor = () => {
+
+    if(data === "Leo" || data === "Aries" || data ==="Sagittarius"){
+      setColor("#F39C54"); //red
+      setTest("https://piedfeed.com/wp-content/uploads/2017/08/zodiac_signs___fire_signs_by_lightnigwolf-d8y29g2.jpg");
+      //setTest("https://itsblossom.com/wp-content/uploads/2019/07/leoseason.gif");
+    }else if(data === "Taurus" || data === "Virgo" || data === "Capricorn"){
+      setColor("#88DE74");//green
+      setTest("https://www.liveabout.com/thmb/2z2oYJdaMFDSAzh6PC6MGLCcS-c=/1333x1000/smart/filters:no_upscale()/earth-element-capricorn-taurus-virgo-206726-5427982d15bd41688905453a1b40a37e.png");
+    }else if (data === "Gemini" || data === "Libra" || data === "Aquarius"){
+      setColor("#F7F087");//goldish
+       setTest("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT3eVdFkWy1uTyWM80OaQsOm1oItK77kG2zIod9VuL2mqB6C3uO&usqp=CAU");
+    }else if (data === "Cancer" || data === "Scorpio" || data === "Pisces"){
+      setColor("#87CFF7");//blue
+       setTest("https://image.shutterstock.com/image-vector/water-signs-star-constellations-600w-626264162.jpg");
+    }
+  }
 
   useEffect(() => {
+    
+    
+
       /*
       this function finds the current moonPhase, moonHouse, moonSign,
        then finds the prediction that matches this combination.
        This information is stored in the states called astrologyData and prediction
        */
       getAllAstrologyData();
+      //getColor();
     let loadCounter = 0;
     const increaseCounter = () => {
       loadCounter += 1;
@@ -156,6 +207,13 @@ export default function Today() {
 useEffect(() => {
 }, []);
 
+  const rows = [
+    createData('Date of Birth', httpUser.getCurrentUser().birthday.substring(0,10)),
+    createData('Moon Sign', astrologyData.currentMoonSign),
+    createData('Moon House', astrologyData.currentMoonHouse),
+    createData('Sun Birth Sign', astrologyData.sunBirthSign),
+    createData('Your Ascendant Sign', astrologyData.ascendantSign),
+  ];
   if (isLoading) {
     return (
       <div className={classes.paper}>
@@ -164,35 +222,73 @@ useEffect(() => {
     );
   } else {
     return (
-      <div>
-        <div className={classes.quote}>
-        <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
-        </div>
-        <div>
-            <img
-             className={classes.image}
-             src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
-             alt="Rick"
-           />
-           <h2 class="text">Today's Moon is a {astrologyData.currentMoonPhase}.</h2>
-          </div>
-          
-           <div class="margin">
-        <h2 >According to your date of birth you have entered {httpUser.getCurrentUser().birthday.substring(0,10)} :</h2>
-        <br></br>
-             <h2> Moon sign: {astrologyData.currentMoonSign}</h2>
-           <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
-           <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
-           <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-          <div>{!prediction[0] ? <h2>No prediction found</h2> :
-              <div>
-                  <h3>{prediction[0].quote}</h3>
-                  <h3>{prediction[0].article}</h3>
-              </div>
-    }
-             </div>
-          </div>
+      <div >
+      <div className="pic2">
       </div>
+      <div className="bgColor" style={{backgroundColor: color}}>
+        <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
+        <div>
+          {!prediction[0] ? <h2>No prediction found</h2> :
+               <div >
+                   <h3>{prediction[0].quote}</h3>
+                   <h3>{prediction[0].article}</h3>
+               </div>
+     }
+              </div>
+      <TableContainer style={{backgroundColor: color}} component={Paper}>
+        
+      <Table className={classes.table} aria-label="Info Table">
+        <TableHead>
+        <img
+             className={classes.image}
+              src={test}
+              alt="Rick"
+            />
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.field}>
+              <TableCell component="th" scope="row">
+                {row.field}
+              </TableCell>
+              <TableCell align="right">{row.textvalue}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+
+      </div>
+      </div>
+    //   <div >
+    //     <div className={classes.quote} >
+    //     <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
+    //     </div>
+    //     <div style={{backgroundColor: color}}>
+    //         <img
+    //          className={classes.image}
+    //          src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
+    //          alt="Rick"
+    //        />
+    //        <h2 class="text">Today's Moon is a {astrologyData.currentMoonPhase}.</h2>
+    //       </div>
+          
+    //        <div class="margin">
+    //     <h2 style={{backgroundColor: {color}}}>According to your date of birth you have entered {httpUser.getCurrentUser().birthday.substring(0,10)} :</h2>
+    //     <br></br>
+    //          <h2> Moon sign: {astrologyData.currentMoonSign}</h2>
+    //        <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
+    //        <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
+    //        <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
+    //       <div>{!prediction[0] ? <h2>No prediction found</h2> :
+    //           <div >
+    //               <h3>{prediction[0].quote}</h3>
+    //               <h3>{prediction[0].article}</h3>
+    //           </div>
+    // }
+    //          </div>
+    //       </div>
+    //   </div>
     );
   }
 
