@@ -488,7 +488,7 @@ export default function SignUp(props) {
                     <h1></h1>
                     <Grid container spacing = {2} justify="center">
                         <Grid item xs={12} sm={3}>
-<h3></h3>
+
                         <div className="search-location-input">
                         <input
 

@@ -30,20 +30,10 @@ export const create = async (req, res) => {
    //turns the birthtime into military time
    //formatting afterwards is "HH:MM"
   ///*
+  console.log(req.body);
     let time = req.body.birthTime;
     let temp = '';
-    if (time[6] === 'A')
-    {
-        if (time[0] === '1' && time[1] === '2')
-        {
-            temp  = '00';
-        }
-        else {
-            temp = time[0] + time[1];
-        }
-        temp = temp + time[2] + time[3] + time[4];
-    }
-    else 
+    if (time[5] === 'P')
     {
         if (time[0] === '1' && time[1] === '2')
         {
@@ -55,6 +45,17 @@ export const create = async (req, res) => {
             let hours_int = (parseInt(hours) + 12); //make it into an int
             temp = hours_int + time[2] + time[3] + time[4];
         }
+    }
+    else 
+    {
+        if (time[0] === '1' && time[1] === '2')
+        {
+            temp  = '00';
+        }
+        else {
+            temp = time[0] + time[1];
+        }
+        temp = temp + time[2] + time[3] + time[4];
     }
     req.body.birthTime = temp;
     req.body.admin = 'false';
