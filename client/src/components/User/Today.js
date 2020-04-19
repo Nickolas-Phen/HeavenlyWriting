@@ -5,9 +5,9 @@ import { useState, useEffect } from "react";
 import Song from "./MocArticle";
 //import getMoonPhase from '../../api/getMoonData.js'
 import axios from "axios";
-import './today.css'
+import './today.css';
 import httpUser from "../../httpUser";
-
+import pic from "../../assets/galaxy.jpg";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -164,35 +164,43 @@ useEffect(() => {
     );
   } else {
     return (
-      <div>
-        <div className={classes.quote}>
-        <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
-        </div>
-        <div>
-            <img
-             className={classes.image}
-             src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
-             alt="Rick"
-           />
-           <h2 class="text">Today's Moon is a {astrologyData.currentMoonPhase}.</h2>
-          </div>
-          
-           <div class="margin">
-        <h2 >According to your date of birth you have entered {httpUser.getCurrentUser().birthday.substring(0,10)} :</h2>
-        <br></br>
-             <h2> Moon sign: {astrologyData.currentMoonSign}</h2>
-           <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
-           <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
-           <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-          <div>{!prediction[0] ? <h2>No prediction found</h2> :
-              <div>
-                  <h3>{prediction[0].quote}</h3>
-                  <h3>{prediction[0].article}</h3>
-              </div>
-    }
-             </div>
-          </div>
+      <div >
+       
+      <div className="pic2">
       </div>
+      <div className="color">
+      <h1>HELLO WORLD!</h1>
+      </div>
+      </div>
+    //   <div>
+    //     <div className={classes.quote}>
+    //     <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
+    //     </div>
+    //     <div>
+    //         <img
+    //          className={classes.image}
+    //          src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
+    //          alt="Rick"
+    //        />
+    //        <h2 class="text">Today's Moon is a {astrologyData.currentMoonPhase}.</h2>
+    //       </div>
+          
+    //        <div class="margin">
+    //     <h2 >According to your date of birth you have entered {httpUser.getCurrentUser().birthday.substring(0,10)} :</h2>
+    //     <br></br>
+    //          <h2> Moon sign: {astrologyData.currentMoonSign}</h2>
+    //        <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
+    //        <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
+    //        <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
+    //       <div>{!prediction[0] ? <h2>No prediction found</h2> :
+    //           <div>
+    //               <h3>{prediction[0].quote}</h3>
+    //               <h3>{prediction[0].article}</h3>
+    //           </div>
+    // }
+    //          </div>
+    //       </div>
+    //   </div>
     );
   }
 
