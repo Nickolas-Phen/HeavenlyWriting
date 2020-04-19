@@ -32,7 +32,7 @@ export const create = async (req, res) => {
   ///*
     let time = req.body.birthTime;
     let temp = '';
-    if (time[7] === 'P')
+    if (time[5] === 'P')
     {
         if (time[0] === '1' && time[1] === '2')
         {
