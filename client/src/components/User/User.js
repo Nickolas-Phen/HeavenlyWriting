@@ -101,7 +101,16 @@ function DrawerTest(props) {
     history.push(tab.toLowerCase());
   };
 
-  if(httpUser.getCurrentUser().username === "admin"){
+  //if user isn't logged in, redirect them to sign in page
+  if (httpUser.getCurrentUser().username === "No one logged in")//if default user, 'No one logged in', is logged in
+  {
+    return <Redirect to = 'signin'></Redirect>
+  }
+
+  //if user is an admin, show page with admin tab
+  //if(httpUser.getCurrentUser().username === "admin"){
+    if(httpUser.getCurrentUser().admin === "True"){
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -150,7 +159,7 @@ function DrawerTest(props) {
         </div>
         <Divider />
         <List>
-          {["Today", "Previous", "Feedback", "Admin","Log out"].map(text => (
+          {["Today", "Feedback", "Admin","Log out"].map(text => (
             <ListItem button key={text} onClick={() => changeTab(text)}>
               <ListItemText primary={text} />
             </ListItem>
@@ -167,9 +176,9 @@ function DrawerTest(props) {
           <Route path="/Log out">
             <Redirect to = 'Home'></Redirect>
           </Route>
-          <Route path="/previous">
+          {/* <Route path="/previous">
             <Previous />
-          </Route>
+          </Route> */}
           <Route path="/feedback">
             <Feedback />
           </Route>
@@ -232,7 +241,7 @@ function DrawerTest(props) {
             </div>
             <Divider />
             <List>
-              {["Today", "Previous", "Feedback", "Log out"].map(text => (
+              {["Today", "Feedback", "Log out"].map(text => (
                 <ListItem button key={text} onClick={() => changeTab(text)}>
                   <ListItemText primary={text} />
                 </ListItem>
@@ -249,9 +258,9 @@ function DrawerTest(props) {
               <Route path="/Log out">
                 <Redirect to = 'Home'></Redirect>
               </Route>
-              <Route path="/previous">
+              {/* <Route path="/previous">
                 <Previous />
-              </Route>
+              </Route> */}
               <Route path="/feedback">
                 <Feedback />
               </Route>

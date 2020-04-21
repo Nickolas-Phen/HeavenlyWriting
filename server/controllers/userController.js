@@ -4,19 +4,18 @@ import axios from 'axios'
 import * as authHelper from '../authHelperFunctions.js'
 //import findMoon from '../../client/src/api/getMoonData.js'
 import request from 'superagent';
-import express from 'express'
+import express from 'express';
 import bodyParser from 'body-parser';
+import config from '../config/config.js';
+
+//import coordinates from './coordinatesController.js';
 
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-var mailchimpInstance   = 'us19',
-    listUniqueId        = 'de644ad1de',
-    mailchimpApiKey     = '31d36951a5db54c9db20da653fb109b3-us19',
-    mailchimpClientId   = '175466601412',
-    mailchimpSecretKey  = '5d835fb683d1825acd624c20698d3bbcb1103926a3a5ca31ed';
+
 
 
 //function to create a new object
@@ -25,9 +24,42 @@ export const create = async (req, res) => {
     //creates user and saves it at the same time
    // /*
 
+   //turns the birthtime into military time
+   //formatting afterwards is "HH:MM"
+  ///*
+  console.log(req.body);
+    let time = req.body.birthTime;
+    let temp = '';
+    if (time[5] === 'P')
+    {
+        if (time[0] === '1' && time[1] === '2')
+        {
+            temp = time[0] + time[1] + time[2] + time[3] + time[4];
+        }
+        else 
+        {
+            const hours = time[0] + time[1]; //grab hour part of string
+            let hours_int = (parseInt(hours) + 12); //make it into an int
+            temp = hours_int + time[2] + time[3] + time[4];
+        }
+    }
+    else 
+    {
+        if (time[0] === '1' && time[1] === '2')
+        {
+            temp  = '00';
+        }
+        else {
+            temp = time[0] + time[1];
+        }
+        temp = temp + time[2] + time[3] + time[4];
+    }
+    req.body.birthTime = temp;
+    req.body.admin = 'false';
+  //  */
     try {
         //create sign token, showing success
-        console.log("Creating user");
+      //  console.log("Creating user");
         console.log(req.body);
         const user = await User.create(req.body);
         console.log(user);
@@ -39,38 +71,61 @@ export const create = async (req, res) => {
     catch (err)
     {
         console.log("failed to add user to database");
-       // console.log(err);
+        console.log(err);
         //res.json({success: false, code: err.code});
     }
-//*/
+
 
     //calls the function that adds the user to mailchimp
+    if (req.body.mailchimp === 'true')
+    {
      mail(req, res);
+    }
+    else 
+    {
+        console.log("User opted out of mailchimp.")
+    }
 };
 
 
 
 //finds a user by the username
 //input is the username requested
-export const findByUsername = (reqUsername, res) =>
+export const findByUsername = (req, res) =>
 {
-    Schema.find({username:reqUsername}, (err, data) =>
+    User.find({username:req.params.username}).then(user =>
     {
-        if (err) {console.log(err);}
+        if (user.length === 0) {//if no user by the entered username is found, the returned user object is an empty array, []
+            return res.status(200).send({
+                message: "unique"
+            });
+        }
         //else { res.send(data);}
-        res.send(data);
+        else
+        {
+            return res.status(200).send({
+                message: "not unique"
+            });
+        }
     })
 };
 
-export const findByEmail = (reqEmail, res) =>
+export const findByEmail = (req, res) =>
 {
-    console.log(reqEmail);
-    console.log("DDFDFD");
-    Schema.find({username:reqEmail}, (err, data) =>
+    User.find({email:req.params.email}).then(user =>
     {
-        if (err) {console.log(err);}
+        if (user.length === 0) {//if no user by the entered email is found, the returned user object is an empty array, []
+            return res.status(200).send({
+                message: "unique"
+            });
+        }
         //else { res.send(data);}
-        res.send(data);
+        else
+        {
+            return res.status(200).send({
+                message: "not unique"
+            });
+        }
     })
 };
 
@@ -107,7 +162,6 @@ export const update = (req, res) => {
 
             //calls functions to add more info to the user
             //addNonRequired(req,temp);
-            //findZodiac(req, temp);
 
 
              /* Save the user */
@@ -141,6 +195,24 @@ export const remove = (req, res) => {
             res.json({success: true, message: "User deleted", user});
         }
     });
+};
+
+export const makeAdmin = (req, res) =>
+{
+    Schema.find({username:req.body.username}, (err, data) =>
+    {
+        if (err) {console.log(err);}
+        //else { res.send(data);}
+        if (data.admin === 'false' || !data.admin)
+        {
+            data.admin = 'true';
+        }
+        else
+        {
+            data.admin = 'false';
+        }
+        res.send(data);
+    })
 };
 
 
@@ -178,8 +250,8 @@ export const authenticate = async (req, res) => {
 };
 
 export const show = async (req, res) => {
-    console.log("Current User:");
-    console.log(req.user);
+    //console.log("Current User:");
+    //console.log(req.user);
 
     try {
         const user = await User.findById(req.params.id);
@@ -194,9 +266,9 @@ export const show = async (req, res) => {
 export const mail = (input, res) =>
 {
     request
-    .post('https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listUniqueId + '/members/')
+    .post('https://' + config.mailchimp.mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + config.mailchimp.listUniqueId + '/members/')
     .set('Content-Type', 'application/json;charset=utf-8')
-    .set('Authorization', 'Basic ' + new Buffer('any:' + mailchimpApiKey ).toString('base64'))
+    .set('Authorization', 'Basic ' + new Buffer('any:' + config.mailchimp.mailchimpApiKey ).toString('base64'))
     .send({
       'email_address': input.body.email,
       'status': 'subscribed',
@@ -241,11 +313,12 @@ const addNonRequired = (req, res) =>
 
 //sets the zodiac sign for the user
 export const findZodiac = (req, res) => {
-   
-    if(req.birthday.getMonth()  ==  0)
+   var day = new Date('12-12-1212');
+   console.log(day.getMonth());
+    if(day.getMonth()  ==  0)
     {
-        if(req.birthday.getDay() <=  19)
-        {req.body.zodiac   = "Capricorn";}
+        if(req.body.birthday.getDay() <=  19)
+        {req.zodiac   = "Capricorn";}
 
         else
         {

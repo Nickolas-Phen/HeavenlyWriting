@@ -7,29 +7,11 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import {Link}    from 'react-router-dom'
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-//import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import defaultPicture from "../assets/defaultSignInPic.jpeg";
 import {Redirect} from 'react-router-dom'
-import axios from 'axios';
 import httpUser from '../httpUser.js'
-
-
-function Copyright() {
-    return (
-        <Typography variant="body2" color="textSecondary" align="center">
-            {'Copyright © '}
-            <Link color="inherit" href="https://material-ui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -64,11 +46,19 @@ export default function SignIn(props) {
             password: '',
         }
     );
+    const [rememberMe, setRememberMe] = useState(false);//state for whether the user wants their info remembered
+    const [loginFailed, setLoginFailed] = useState(false);//state for showing failed to log in message
     const onChangeText = (e) => {
-        //when a user types in info to any box, update userInfo state to match
+        //when a user types in info to any box, update fields state to match
         const newState = {...fields};
         newState[e.target.name] = e.target.value;
         setFields(newState);
+    };
+
+    const boxChecked = () =>
+    {
+        //remember me box checked/unchecked
+        setRememberMe(!rememberMe);
     };
 
     const loginPressed = async (e) =>
@@ -80,6 +70,11 @@ export default function SignIn(props) {
             setToUserPage(true);
             //sets current user to the logged in user
             props.onLoginSuccess(user);
+        }
+        else
+        {
+            //failed to login, show failure message
+            setLoginFailed(true);
         }
     };
 
@@ -93,7 +88,7 @@ export default function SignIn(props) {
         <Container component="main" maxWidth="md">
             <CssBaseline />
             <div className={classes.paper}>
-                <Typography component="h1" variant="h5">
+                <Typography component="h1" variant="h5" className="c">
                     Sign in
                 </Typography>
                 <form className={classes.form} noValidate>
@@ -108,6 +103,8 @@ export default function SignIn(props) {
                         autoComplete="username"
                         autoFocus
                         onChange={onChangeText}
+                        //if user selected remember me, show their previous info
+                        defaultValue={rememberMe ? httpUser.getCurrentUser().username : ''}
                     />
                     <TextField
                         variant="outlined"
@@ -122,9 +119,10 @@ export default function SignIn(props) {
                         onChange={onChangeText}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox onChange = {boxChecked} value="remember" color="primary" />}
                         label="Remember me"
                     />
+                    <div>{loginFailed ? <font color = "red" >Incorrect username or password</font> : null}</div>
                     <Button
                         component = {Link} to ="/user"
                         type="submit"
@@ -138,7 +136,7 @@ export default function SignIn(props) {
                     </Button>
                     <Grid container>
                         <Grid item xs>
-                            <Link variant="body2">
+                            <Link to = "/forgotpassword" variant="body2">
                                 Forgot password?
                             </Link>
                         </Grid>
@@ -150,9 +148,6 @@ export default function SignIn(props) {
                     </Grid>
                 </form>
             </div>
-            <Box mt={8}>
-                <Copyright />
-            </Box>
         </Container>
     );
 }

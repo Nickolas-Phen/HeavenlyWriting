@@ -16,12 +16,13 @@ httpUser.setToken = function(token) {
 
 httpUser.getCurrentUser = function() {
     const defaultUser = {
-        firstName: 'Joe',
-        lastName: 'Schmoe',
-        birthday: '11/11/11',
+        firstName: 'Nobody',
+        lastName: 'Logged In',
+        birthday: '11/11/2000',
         email: 'joe.schmoe@gmail.com',
         password: '1234',
-        birthtime: 0,
+        birthtime: "11:00",
+        placeOfBirth: "Orlando, FL, USA",
         username: 'No one logged in',
     };
     const token = this.getToken();
@@ -30,6 +31,7 @@ httpUser.getCurrentUser = function() {
 
 httpUser.logIn = async function(credentials) {
     try {
+        console.log("logging in...");
         const response = await axios.post( '/api/user/authenticate', credentials );
 
         const token = response.data.token;
@@ -58,6 +60,7 @@ httpUser.signUp = async function(userInfo) {
 };
 
 httpUser.logOut = function() {
+    console.log("logging out...");
     localStorage.removeItem('token');
     delete this.defaults.headers.common.token;
     return true;

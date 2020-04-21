@@ -1,5 +1,6 @@
 //function to create a new object
 //req is the object to be created
+import util from "util";
 import Reading from "../models/readingSchema.js";
 export const create = async (req, res) => {
     // console.log("find moon called");
@@ -28,55 +29,45 @@ export const create = async (req, res) => {
 export const findByUniqueCombo = (req, res) =>
 {
     //search for reading based on unique combo of house, sign, moonPhase
-    Schema.find({house: req.body.house, sign: req.body.sign, moonPhase: req.body.moonPhase}, (err, data) =>
+
+    Reading.find({house: req.query.house, sign: req.query.sign, moonPhase: req.query.moonPhase}, (err, data) =>
     {
         //if found, send it
         if (err) {console.log(err);}
         //else { res.send(data);}
+
         res.send(data);
     })
 };
 
-//finds a reading by the id
+//finds a reading by the moon sign TEMPERORY
 export const read = (req, res) =>
 {
-    Schema.findById(req.params.readingId, (err, data) =>
+        Reading.find(req.params, (err, data) =>
     {
-        if (err) {console.log(err);}
-        //else { res.send(data);}
-        res.send(data);
+        //the problem is I am passing an object so how to fix that 
+        //works when I pass one thing, but still cant get one of the things inside the object
+        console.log("is it this? %j",JSON.stringify(req.params));
+        console.log("is it this! "+req.params);
+        if (err) {
+            console.log("ERROR");
+            console.log(err);   
+        }else{
+            console.log("passed " + data + " here");
+            res.send(data);
+        }
+ 
     })
 };
 
 
 export const update = (req, res) => {
-
-    Reading.findById(req.params.readingId, (err, updatedReading) => {
+    console.log(req.body);
+    Reading.updateOne({house: req.body.house, sign: req.body.sign, moonPhase: req.body.moonPhase}, req.body, {upsert: true}, (err) => {
         if (err)
         {
             res.status(404).send("Error: Unable to update");
             console.log("Update error");
-        }
-        else{
-
-            /* Replace the Reading's properties with the new required properties found in req.body */
-            updatedReading.firstName = req.body.firstName;
-            updatedReading.lastName = req.body.lastName;
-            updatedReading.birthday = req.body.birthday;
-            updatedReading.email = req.body.email;
-            updatedReading.Readingname = req.body.Readingname;
-            updatedReading.password = req.body.password;
-
-            /* Save the Reading */
-            updatedReading.save( (err) => {
-                if (err) {
-                    res.status(404).send("Error");
-                    console.log(err);
-                }
-                else {
-                    res.json(data);
-                }
-            });
         }
     });
 };
@@ -85,15 +76,12 @@ export const update = (req, res) => {
 /* Delete a reading */
 
 export const remove = (req, res) => {
-    Reading.findByIdAndDelete(req.params.readingId, (err, removedReading) =>
+    console.log(req.query);
+    Reading.deleteOne({house: req.query.house, sign: req.query.sign, moonPhase: req.query.moonPhase}, (err) =>
     {
         if (err)
         {
             res.status(404).send("Error: Reading could not be deleted");
-        }
-        else
-        {
-            res.send(removedReading);
         }
     });
 };
@@ -103,13 +91,18 @@ export const remove = (req, res) => {
 export const list = (req, res) => {
     Reading.find({}, (err, readings) =>
     {
+        console.log("in list");
+                    //get sign only, these 2 dont work
+        // console.log(req.body.sign);
+        // console.log(readings.sign);
         if (err)
         {
             res.status(404).send('Error: Readings could not be found');
+            console.log("ERROR");
         }
         else
         {
-            console.log((readings));
+
             const data = readings;
             res.send(readings);
         }

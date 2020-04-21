@@ -7,16 +7,20 @@ import bcrypt from 'bcrypt'
 const userSchema = new mongoose.Schema ({
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
-    birthday: {type: Date, required: true},
+    birthday: {type: Date /*, required: true*/},
     email: {type: String, required:true},
-    
-    middleName: {type: String},
+    phoneNumber: {type: String, required: true},
+    placeOfBirth: {type: String, required: true},
+    admin: {type: String},
+
+    //middleName: {type: String},
     birthTime: {type: String},
-    birthPlace: {type: String},
     house: {type: String},
     zodiac: {type: String},
 
     //add moon location?
+   // longitude: {type: Number},
+   // latitude: {type: Number},
     
     //find a way to protect this?
     username: {type: String, required: true, unique:true},

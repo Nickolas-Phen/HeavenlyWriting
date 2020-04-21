@@ -5,8 +5,17 @@ import { useState, useEffect } from "react";
 import Song from "./MocArticle";
 //import getMoonPhase from '../../api/getMoonData.js'
 import axios from "axios";
-import './today.css'
+import './today.css';
 import httpUser from "../../httpUser";
+import pic from "../../assets/galaxy.jpg";
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -14,6 +23,7 @@ const useStyles = makeStyles(theme => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    
   },
   quote: {
     marginBottom: theme.spacing(4),
@@ -35,8 +45,19 @@ const useStyles = makeStyles(theme => ({
   },
   image: {
     width: "25%",
+    minWidth: "100%",
+  },
+  table: {
+    marginLeft: "35%",
+    border: "ridge",
     minWidth: 250,
-  }
+    display: "flex",
+    maxWidth: "30%",
+    align: "center",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+    flexWrap: "wrap",
+  },
 }));
 
 const mockGetQuote = () =>
@@ -53,74 +74,147 @@ const mockGetArticle = () =>
     }, 500);
   });
 
+  function createData(field, textvalue) {
+    return { field, textvalue };
+  }
+
 export default function Today() {
   var data;
-  const classes = useStyles();
+   const classes = useStyles();
+  const [test, setTest] = useState('');
   const [isLoading, setLoading] = useState(true);
   const [quote, setQuote] = useState("");
   // find something for picture.
+
+  const [color, setColor] = useState("");
   const [article, setArticle] = useState("");
-  const [moonPhase, setMoonPhase] = useState("");
   const [astrologyData, setAstrologyData] = useState(
       {
         currentMoonSign: "",
         sunBirthSign: "",
         ascendantSign: "",
         currentMoonHouse: "",
+        currentMoonPhase: "",
       }
   );
-  // getData will load data from the backend only on load.
-  const getMoonPhase = () => {
-    //creates url to send to api to get moon data
-    var configMoon = {
-      lang  		:'en', // 'ca' 'de' 'en' 'es' 'fr' 'it' 'pl' 'pt' 'ru' 'zh' (*)
-      month 		:new Date().getMonth() + 1, // 1  - 12
-      year  		:new Date().getFullYear(),
-      size		:50, //pixels
-      lightColor	:"#FFFF88", //CSS color
-      shadeColor	:"#111111", //CSS color
-      sizeQuarter	:20, //pixels
-      texturize	:false //true - false
-    };
-
-    //don't know what this does
-    configMoon.LDZ=new Date(configMoon.year,configMoon.month-1,1)/1000;
-    var obj = configMoon;
-    var gets=[];
-    //add url info to complete url accessed by api
-    for (var i in obj){
-      gets.push(i+"="+encodeURIComponent(obj[i]))
-    }
-    //final api url
-    var url = "https://www.icalendar37.net/lunar/api/?"+gets.join("&");
-    //get moon data from moon api
-    var phase = "dog";
-    axios.get(url).then(res =>
-    {
-      var day = new Date().getDate();
-      var moon = res.data;//moon dat
-      phase = moon.phase[day].phaseName;
-      console.log("Phase: " + phase);
-      setMoonPhase(phase);
-    });
-    axios.get('/api/swiss/',
+  const [prediction, setPrediction] = useState(
         {
-          params: {
-            birthPlace: httpUser.getCurrentUser().birthPlace,
-            birthday: httpUser.getCurrentUser().birthday,
-            birthTime: httpUser.getCurrentUser().birthTime,
-          }
-        }).then(res =>
-    {
-      console.log(res.data);
-      setAstrologyData(res.data);
-    })
+            sign: "",
+            house: "",
+            moonPhase: "",
+            quote: "",
+            pic: "",
+            article: "",
+        }
+    );
+  const getAllAstrologyData = () => {
+      /*
+      It would be much cleaner to separate getting the different astrology data as different functions,
+        but I can only get it to work if I have them all in one ugly function
+        creates url to send to api to get moon data
+       */
+
+//FIND MOON SIGN, MOON PHASE, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
+          axios.get('/api/swiss/',
+              {
+                  params: {
+                      placeOfBirth: httpUser.getCurrentUser().placeOfBirth,
+                      birthday: httpUser.getCurrentUser().birthday,
+                      birthTime: httpUser.getCurrentUser().birthTime,
+                  }
+              }).then(response =>
+          {
+              setAstrologyData(response.data);
+              //data =  response.data.ascendantSign ;
+              data =  response.data.sunBirthSign;
+                            getColor();
+//END FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
+
+//FIND PREDICTION THAT MATCHES FOUND MOON SIGN, MOON HOUSE, MOON PHASE_____________________________________
+              axios.get('/api/reading/prediction',
+                  {
+                      params: {
+                          sign: response.data.currentMoonSign,
+                          house: response.data.currentMoonHouse,
+                          moonPhase: response.data.currentMoonPhase,
+                      }
+                  })
+                  .then(response => {
+                      setPrediction(response.data);
+                      //adding the predictions
+                      // axios.post('/api/predictions',
+                      // {
+                      //   deets: {
+                      //     username: httpUser.getCurrentUser().username,
+                      //     //moonPhase: response.data.currentMoonPhase,
+                      //     quote: response.data[0].quote,
+                      //     article: response.data[0].article,
+                      //   }
+                      // }).then(res =>{
+                      //   console.log("res is "+ JSON.stringify(res));
+                      // }).catch(err => console.log(err));
+                  })
+                  .catch(err => console.log(err));
+          });
+//FOUND ALL ASTROLOGY DATA
   };
-  if (moonPhase === "")
-  {
-    getMoonPhase();
+
+
+  const getColor = () => {
+
+    if(data === "Leo" || data === "Aries" || data ==="Sagittarius"){
+      setColor("#F39C54"); //red
+      //setTest("https://piedfeed.com/wp-content/uploads/2017/08/zodiac_signs___fire_signs_by_lightnigwolf-d8y29g2.jpg");
+      if(data === "Leo"){
+        //https://itsblossom.com/wp-content/uploads/2019/07/leoseason.gif
+        setTest("https://media.giphy.com/media/Q8ZruFpT4VGVe2qFbE/giphy.gif");
+      }else if(data === "Aries"){
+        setTest("https://media.giphy.com/media/RMePWGZwvngc6ebdCw/giphy.gif");
+      }else if (data === "Sagittarius"){
+        setTest("https://media.giphy.com/media/H7fYQ9eS9uGjKwurBd/giphy.gif");
+      }
+    }else if(data === "Taurus" || data === "Virgo" || data === "Capricorn"){
+      setColor("#88DE74");//green
+      //setTest("https://www.liveabout.com/thmb/2z2oYJdaMFDSAzh6PC6MGLCcS-c=/1333x1000/smart/filters:no_upscale()/earth-element-capricorn-taurus-virgo-206726-5427982d15bd41688905453a1b40a37e.png");
+      if(data === "Taurus"){
+        setTest("https://media1.giphy.com/media/lSz3J36JVDG4bTWMME/giphy.gif?cid=ecf05e4725493e578870881e5a2831b38769f9e94d768293&rid=giphy.gif");
+        }else if(data === "Virgo"){
+          setTest("https://media.giphy.com/media/cn3dcc98ZOhjZPGQSC/giphy.gif");
+        }else if (data === "Capricorn"){
+          setTest("https://media.giphy.com/media/dutzEo8JsuwbMrahJH/giphy.gif");
+        }
+    }else if (data === "Gemini" || data === "Libra" || data === "Aquarius"){
+      setColor("#F7F087");//goldish
+      if(data === "Gemini"){
+        setTest("https://media.giphy.com/media/ViOMR3f1z9mq3MELJm/giphy.gif");
+      }else if(data === "Libra"){
+        setTest("https://media.giphy.com/media/VgNctFELbNwdTNMWRs/giphy.gif");
+      }else if (data === "Aquarius"){
+        setTest("https://media.giphy.com/media/kEbn3fvRtNtZUkjfYA/giphy.gif");
+      }
+    }else if (data === "Cancer" || data === "Scorpio" || data === "Pisces"){
+      setColor("#87CFF7");//blue
+      if(data === "Cancer"){
+        setTest("https://media.giphy.com/media/dZpd8u44q3mDIe8VO9/giphy.gif");
+      }else if(data === "Scorpio"){
+        setTest("https://media.giphy.com/media/VgGrCd14gy8NSBX2mC/giphy.gif");
+      }else if (data === "Pisces"){
+        setTest("https://media.giphy.com/media/YPPGJVeZOrBaIEiSYu/giphy.gif");
+      }
+    }
   }
+
   useEffect(() => {
+    
+    
+
+      /*
+      this function finds the current moonPhase, moonHouse, moonSign,
+       then finds the prediction that matches this combination.
+       This information is stored in the states called astrologyData and prediction
+       */
+      getAllAstrologyData();
+      //getColor();
     let loadCounter = 0;
     const increaseCounter = () => {
       loadCounter += 1;
@@ -138,18 +232,6 @@ export default function Today() {
         setQuote("Quote '404' not found");
       });
 
-      fetch("	http://ohmanda.com/api/horoscope/aquarius")
-  .then(response => response.json())
-  .then((jsonData) => {
-    // jsonData is parsed json object received from url
-    data = jsonData;
-    console.log("here" +jsonData);
-  })
-  .catch((error) => {
-    // handle your errors here
-    console.error(error);
-  });
-
     mockGetArticle()
       .then(newArticle => {
         increaseCounter();
@@ -161,17 +243,16 @@ export default function Today() {
       });
   }, []);
 
-  function api() {
-    return fetch('http://ohmanda.com/api/horoscope/aquarius')
-    .then((response) => response.json())
-    .then((responseJson) => {
-      return responseJson.movies;
-    })
-    .catch((error) => {
-      console.error(error);
-    });
- }
+useEffect(() => {
+}, []);
 
+  const rows = [
+    createData('Date of Birth', httpUser.getCurrentUser().birthday.substring(0,10)),
+    createData('Moon Sign', astrologyData.currentMoonSign),
+    createData('Moon House', astrologyData.currentMoonHouse),
+    createData('Sun Birth Sign', astrologyData.sunBirthSign),
+    createData('Your Ascendant Sign', astrologyData.ascendantSign),
+  ];
   if (isLoading) {
     return (
       <div className={classes.paper}>
@@ -180,66 +261,74 @@ export default function Today() {
     );
   } else {
     return (
-      <div>
-        <h1 onChange={api}>{data}</h1>
-        <div className={classes.quote}>
-        <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
-        </div>
-        <div>
-            <img
-             className={classes.image}
-             src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
-             alt="Rick"
-           />
-           <h2 class="text">Today's Moon is: {moonPhase}.</h2>
-          </div>
-          
-           <div class="margin">
-        <h2 >According to your date of birth you have entered {httpUser.getCurrentUser().birthday.substring(0,10)} :</h2>
-        <br></br>
-             <h2> Moon sign: {astrologyData.currentMoonSign}</h2>
-           <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
-           <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
-           <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-          </div>
-          {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
-          return <span>{i}<br /></span>;
-        })) }</Typography> */}
+      <div >
+      <div className="pic2">
       </div>
-     
-      // <div className={classes.paper}>
-      //   <div className={classes.quote}>
-      //   <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
-      //     <div>
+      <div className="bgColor" style={{backgroundColor: color}}>
+        <h1 className="text">Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
+        <div>
+          {!prediction[0] ? <h2>No prediction found</h2> :
+               <div >
+                   <h3 className="info">{prediction[0].quote}</h3>
+                   <h3>{prediction[0].article}</h3>
+               </div>
+     }
+              </div>
+      <TableContainer style={{backgroundColor: color}} component={Paper}>
+        
+      <Table className={classes.table} aria-label="Info Table">
+        <TableHead>
+        <img
+             className={classes.image}
+              src={test}
+              alt="Rick"
+            />
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.field}>
+              <TableCell component="th" scope="row">
+                {row.field}
+              </TableCell>
+              <TableCell align="right">{row.textvalue}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
 
-      //     <img
-      //       className={classes.image}
-      //       src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
-      //       alt="Rick"
-      //     />
-      //     <br></br>
-      //     <h2>Today's moon:  {moonPhase}</h2>
-      //     <h2>Today's moon sign: {astrologyData.currentMoonSign}</h2>
-      //     <h2>Today's moon house: House {astrologyData.currentMoonHouse}</h2>
-      //     <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
-      //     <h2>Welcome {httpUser.getCurrentUser().username}!</h2>
+      </div>
+      </div>
+    //   <div >
+    //     <div className={classes.quote} >
+    //     <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
+    //     </div>
+    //     <div style={{backgroundColor: color}}>
+    //         <img
+    //          className={classes.image}
+    //          src="https://www.farmersalmanac.com/wp-content/uploads/2015/02/moon-phases2.jpg"
+    //          alt="Rick"
+    //        />
+    //        <h2 class="text">Today's Moon is a {astrologyData.currentMoonPhase}.</h2>
+    //       </div>
           
-          
-      //     {/* <span className={classes.quoteText}>{quote}</span> */}
-                   
-
-      //       <h2 class="info"><br></br>Today's moon:  {moonPhase}</h2>
-      //     </div>
-
-      //   </div>
-      //   <div>
-      //   <span className={classes.quoteText}>Quote of the day:</span>
-      //   </div>
-      //   <span className={classes.quoteText}>Future predictions:</span>
-      //   {/* <Typography className={classes.article} paragraph >{ article.split('\n').map((i => {
-      //     return <span>{i}<br /></span>;
-      //   })) }</Typography> */}
-      // </div>
+    //        <div class="margin">
+    //     <h2 style={{backgroundColor: {color}}}>According to your date of birth you have entered {httpUser.getCurrentUser().birthday.substring(0,10)} :</h2>
+    //     <br></br>
+    //          <h2> Moon sign: {astrologyData.currentMoonSign}</h2>
+    //        <h2> Moon house: House {astrologyData.currentMoonHouse}</h2>
+    //        <h2> Sun birth sign: {astrologyData.sunBirthSign}</h2>
+    //        <h2>Your ascendant sign: {astrologyData.ascendantSign}</h2>
+    //       <div>{!prediction[0] ? <h2>No prediction found</h2> :
+    //           <div >
+    //               <h3>{prediction[0].quote}</h3>
+    //               <h3>{prediction[0].article}</h3>
+    //           </div>
+    // }
+    //          </div>
+    //       </div>
+    //   </div>
     );
   }
+
 }
