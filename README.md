@@ -35,6 +35,28 @@ The Mailchimp API is in the first file location and on lines 19 to 21. The mailc
 The Google API is in the second file location on line 4. This API key is used to generate results when the user searches for their city of birth during sign up. This API key from Google must have both the Google Maps and Google Places API enabled. The Google API requires a billing account to be used and is free for at least 10,000 requests, which is counted per character entered. 
 The environmental variables in this project are primarily the API keys and have been discussed above. The files that use environmental variables locations and the variables that are currently in use are listed in the following section. These environmental variables can all be found in the config.js and config_example.js file and will only need to be changed in this location. The log-in credentials for the administrator is the username “admin” and the password “He4venly_Writing”. 
 
+## Project Handoff Guidelines
+When moving the project off Heroku, first create a fork of the website https://floating-cliffs-61030.herokuapp.com/. This is the most up to date code for the website that works with Heroku and will be the easiest for migrating to a different host. Once a fork is created, some code will have to be edited to fix the environment variables used by Heroku for API keys or checking if the website is in development mode. Here are the files that use any environment variables, indicated by a process.env variable:
+* client/src/httpUser.js
+* client/src/serviceWorker.js
+* server/authHelperFunctions.js
+* server/controllers/coordinatesController.js
+* server/index.js
+* server/swissEph.js
+And the environment variables needed for those files:
+* bingMap: AnxfM8n3m1Zr6H0pXfmiTxP9NBD1Y0NwimpNzIO4zu7AMxqjRwUc4wIekGKtGLA0
+* googleAPI: AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY
+* listUniqueId: de644ad1de
+* mailchimpApiKey:  31d36951a5db54c9db20da653fb109b3-us19
+* mailchimpInstance: us19
+* MONGODB_URI: mongodb+srv://user:test@cluster0-6wnxv.mongodb.net/test?retryWrites=true&w=majority
+* NODE_ENV: production
+* openCage: d8f1bb88bbfa4f7ca0f0484c90a11383
+* PORT: 40387 (but in this case whatever port is used by the new host’s server)
+* secret: fjidas0jfisan8e9fhn9a88n
+	Additionally, to communicate between the client and server for the site, we used the Axios library to send data between and requires a base URL and port to function. These are defined in httpUser.js and must be changed to the desired URL and server port for the new host.
+	More information on migration from Heroku to a different host can also be found at
+https://devcenter.heroku.com/articles/app-migration.
 
 
 ## File structure
