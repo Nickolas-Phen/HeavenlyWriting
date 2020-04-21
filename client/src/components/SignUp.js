@@ -553,7 +553,7 @@ export default function SignUp(props) {
                         </Grid>
                         <FormControlLabel
                             control={<Checkbox value="mailchimp" color="primary" />}
-                            label="Receieve emails when the moon sign changes"
+                            label="Receieve emails when the moon sign changes."
                             onChange = {onMailchimpChange}
                         />
                    

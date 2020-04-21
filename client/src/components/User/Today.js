@@ -141,12 +141,25 @@ export default function Today() {
                   })
                   .then(response => {
                       setPrediction(response.data);
-
+                      //adding the predictions
+                      // axios.post('/api/predictions',
+                      // {
+                      //   deets: {
+                      //     username: httpUser.getCurrentUser().username,
+                      //     //moonPhase: response.data.currentMoonPhase,
+                      //     quote: response.data[0].quote,
+                      //     article: response.data[0].article,
+                      //   }
+                      // }).then(res =>{
+                      //   console.log("res is "+ JSON.stringify(res));
+                      // }).catch(err => console.log(err));
                   })
                   .catch(err => console.log(err));
           });
 //FOUND ALL ASTROLOGY DATA
   };
+
+
   const getColor = () => {
 
     if(data === "Leo" || data === "Aries" || data ==="Sagittarius"){
@@ -252,15 +265,16 @@ useEffect(() => {
       <div className="pic2">
       </div>
       <div className="bgColor" style={{backgroundColor: color}}>
-        <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
+        <h1 className="text">Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
         <div>
           {!prediction[0] ? <h2>No prediction found</h2> :
                <div >
-                   <h3>{prediction[0].quote}</h3>
+                   <h3 className="info">{prediction[0].quote}</h3>
                    <h3>{prediction[0].article}</h3>
                </div>
      }
               </div>
+              <iframe allowtransparency="no" scrolling="no" src="https://in-the-sky.org/widgets/moonphase.php?skin=1"></iframe>	
       <TableContainer style={{backgroundColor: color}} component={Paper}>
         
       <Table className={classes.table} aria-label="Info Table">
