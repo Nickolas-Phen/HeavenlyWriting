@@ -132,7 +132,7 @@ export default function Feedback() {
       variant="contained"
       color="primary" 
       //...onClick={() => console.log([mood, stress, energy, sociability])}
-      onClick={() => sendFeedback()}
+      //onClick={() => sendFeedback()}
       >Submit Feedback</Button>
     </div>
   );

@@ -181,6 +181,7 @@ export default function SignUp(props) {
             return false;
         }
         return true;
+        
     };
 
     const emailIsUnique = async (email) =>
@@ -374,7 +375,7 @@ export default function SignUp(props) {
         <Container component="main" maxWidth= "md">
             <CssBaseline />
             <div className={classes.paper}>
-                <h1>
+                <h1 className="c">
                     Sign up
                 </h1>
                 {/* adding get post inside of form */}

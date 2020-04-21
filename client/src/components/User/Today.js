@@ -274,7 +274,6 @@ useEffect(() => {
                </div>
      }
               </div>
-              <iframe allowtransparency="no" scrolling="no" src="https://in-the-sky.org/widgets/moonphase.php?skin=1"></iframe>	
       <TableContainer style={{backgroundColor: color}} component={Paper}>
         
       <Table className={classes.table} aria-label="Info Table">
