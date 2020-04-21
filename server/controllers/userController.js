@@ -4,8 +4,9 @@ import axios from 'axios'
 import * as authHelper from '../authHelperFunctions.js'
 //import findMoon from '../../client/src/api/getMoonData.js'
 import request from 'superagent';
-import express from 'express'
+import express from 'express';
 import bodyParser from 'body-parser';
+import config from './config/config.js';
 
 //import coordinates from './coordinatesController.js';
 
