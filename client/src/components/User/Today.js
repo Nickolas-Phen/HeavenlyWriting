@@ -125,8 +125,8 @@ export default function Today() {
               }).then(response =>
           {
               setAstrologyData(response.data);
-              data =  response.data.ascendantSign ;
-          
+              //data =  response.data.ascendantSign ;
+              data =  response.data.sunBirthSign;
                             getColor();
 //END FIND MOON SIGN, MOON HOUSE, USER ASCENDANT SIGN, USER SIGN SIGN_____________________________________________
 
@@ -141,27 +141,66 @@ export default function Today() {
                   })
                   .then(response => {
                       setPrediction(response.data);
-
+                      //adding the predictions
+                      // axios.post('/api/predictions',
+                      // {
+                      //   deets: {
+                      //     username: httpUser.getCurrentUser().username,
+                      //     //moonPhase: response.data.currentMoonPhase,
+                      //     quote: response.data[0].quote,
+                      //     article: response.data[0].article,
+                      //   }
+                      // }).then(res =>{
+                      //   console.log("res is "+ JSON.stringify(res));
+                      // }).catch(err => console.log(err));
                   })
                   .catch(err => console.log(err));
           });
 //FOUND ALL ASTROLOGY DATA
   };
+
+
   const getColor = () => {
 
     if(data === "Leo" || data === "Aries" || data ==="Sagittarius"){
       setColor("#F39C54"); //red
-      setTest("https://piedfeed.com/wp-content/uploads/2017/08/zodiac_signs___fire_signs_by_lightnigwolf-d8y29g2.jpg");
-      //setTest("https://itsblossom.com/wp-content/uploads/2019/07/leoseason.gif");
+      //setTest("https://piedfeed.com/wp-content/uploads/2017/08/zodiac_signs___fire_signs_by_lightnigwolf-d8y29g2.jpg");
+      if(data === "Leo"){
+        //https://itsblossom.com/wp-content/uploads/2019/07/leoseason.gif
+        setTest("https://media.giphy.com/media/Q8ZruFpT4VGVe2qFbE/giphy.gif");
+      }else if(data === "Aries"){
+        setTest("https://media.giphy.com/media/RMePWGZwvngc6ebdCw/giphy.gif");
+      }else if (data === "Sagittarius"){
+        setTest("https://media.giphy.com/media/H7fYQ9eS9uGjKwurBd/giphy.gif");
+      }
     }else if(data === "Taurus" || data === "Virgo" || data === "Capricorn"){
       setColor("#88DE74");//green
-      setTest("https://www.liveabout.com/thmb/2z2oYJdaMFDSAzh6PC6MGLCcS-c=/1333x1000/smart/filters:no_upscale()/earth-element-capricorn-taurus-virgo-206726-5427982d15bd41688905453a1b40a37e.png");
+      //setTest("https://www.liveabout.com/thmb/2z2oYJdaMFDSAzh6PC6MGLCcS-c=/1333x1000/smart/filters:no_upscale()/earth-element-capricorn-taurus-virgo-206726-5427982d15bd41688905453a1b40a37e.png");
+      if(data === "Taurus"){
+        setTest("https://media1.giphy.com/media/lSz3J36JVDG4bTWMME/giphy.gif?cid=ecf05e4725493e578870881e5a2831b38769f9e94d768293&rid=giphy.gif");
+        }else if(data === "Virgo"){
+          setTest("https://media.giphy.com/media/cn3dcc98ZOhjZPGQSC/giphy.gif");
+        }else if (data === "Capricorn"){
+          setTest("https://media.giphy.com/media/dutzEo8JsuwbMrahJH/giphy.gif");
+        }
     }else if (data === "Gemini" || data === "Libra" || data === "Aquarius"){
       setColor("#F7F087");//goldish
-       setTest("https://encrypted-tbn0.gstatic.com/images?q=tbn%3AANd9GcT3eVdFkWy1uTyWM80OaQsOm1oItK77kG2zIod9VuL2mqB6C3uO&usqp=CAU");
+      if(data === "Gemini"){
+        setTest("https://media.giphy.com/media/ViOMR3f1z9mq3MELJm/giphy.gif");
+      }else if(data === "Libra"){
+        setTest("https://media.giphy.com/media/VgNctFELbNwdTNMWRs/giphy.gif");
+      }else if (data === "Aquarius"){
+        setTest("https://media.giphy.com/media/kEbn3fvRtNtZUkjfYA/giphy.gif");
+      }
     }else if (data === "Cancer" || data === "Scorpio" || data === "Pisces"){
       setColor("#87CFF7");//blue
-       setTest("https://image.shutterstock.com/image-vector/water-signs-star-constellations-600w-626264162.jpg");
+      if(data === "Cancer"){
+        setTest("https://media.giphy.com/media/dZpd8u44q3mDIe8VO9/giphy.gif");
+      }else if(data === "Scorpio"){
+        setTest("https://media.giphy.com/media/VgGrCd14gy8NSBX2mC/giphy.gif");
+      }else if (data === "Pisces"){
+        setTest("https://media.giphy.com/media/YPPGJVeZOrBaIEiSYu/giphy.gif");
+      }
     }
   }
 
@@ -226,15 +265,16 @@ useEffect(() => {
       <div className="pic2">
       </div>
       <div className="bgColor" style={{backgroundColor: color}}>
-        <h1>Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
+        <h1 className="text">Welcome {httpUser.getCurrentUser().firstName} {httpUser.getCurrentUser().lastName}!</h1>
         <div>
           {!prediction[0] ? <h2>No prediction found</h2> :
                <div >
-                   <h3>{prediction[0].quote}</h3>
+                   <h3 className="info">{prediction[0].quote}</h3>
                    <h3>{prediction[0].article}</h3>
                </div>
      }
               </div>
+              <iframe allowtransparency="no" scrolling="no" src="https://in-the-sky.org/widgets/moonphase.php?skin=1"></iframe>	
       <TableContainer style={{backgroundColor: color}} component={Paper}>
         
       <Table className={classes.table} aria-label="Info Table">

@@ -108,7 +108,9 @@ function DrawerTest(props) {
   }
 
   //if user is an admin, show page with admin tab
-  if(httpUser.getCurrentUser().username === "admin"){
+  //if(httpUser.getCurrentUser().username === "admin"){
+    if(httpUser.getCurrentUser().admin === "True"){
+
   return (
     <div className={classes.root}>
       <CssBaseline />

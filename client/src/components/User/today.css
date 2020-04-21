@@ -4,7 +4,8 @@ body, html {
 
 .text{
     text-align: center;
-    margin-top: -10%;
+    color: black;
+    /* margin-top: -10%; */
 /* word-wrap: break-word; */
 }
 .margin{
@@ -12,7 +13,7 @@ body, html {
 }
 .info{
     text-align: center;
-position: absolute;
+    font-style: italic;
 }
 .pic2{
 

@@ -50,7 +50,7 @@ export const read = (req, res) =>
         console.log("is it this? %j",JSON.stringify(req.params));
         console.log("is it this! "+req.params);
         if (err) {
-            console.log("ERROR BIH!");
+            console.log("ERROR");
             console.log(err);   
         }else{
             console.log("passed " + data + " here");
