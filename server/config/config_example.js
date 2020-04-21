@@ -21,6 +21,6 @@ export default {
         mailchimpApiKey     : '31d36951a5db54c9db20da653fb109b3-us19',
     },
     googleAPI:{
-        key = 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY'
+        key : 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY'
     }
 };

@@ -6,7 +6,7 @@ import * as authHelper from '../authHelperFunctions.js'
 import request from 'superagent';
 import express from 'express';
 import bodyParser from 'body-parser';
-import config from './config/config.js';
+import config from '../config/config.js';
 
 //import coordinates from './coordinatesController.js';
 
