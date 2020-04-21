@@ -14,11 +14,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 
-var mailchimpInstance   = 'us19',
-    listUniqueId        = 'de644ad1de',
-    mailchimpApiKey     = '31d36951a5db54c9db20da653fb109b3-us19',
-    mailchimpClientId   = '175466601412',
-    mailchimpSecretKey  = '5d835fb683d1825acd624c20698d3bbcb1103926a3a5ca31ed';
+
 
 
 //function to create a new object
@@ -269,9 +265,9 @@ export const show = async (req, res) => {
 export const mail = (input, res) =>
 {
     request
-    .post('https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listUniqueId + '/members/')
+    .post('https://' + config.mailchimp.mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + config.mailchimp.listUniqueId + '/members/')
     .set('Content-Type', 'application/json;charset=utf-8')
-    .set('Authorization', 'Basic ' + new Buffer('any:' + mailchimpApiKey ).toString('base64'))
+    .set('Authorization', 'Basic ' + new Buffer('any:' + config.mailchimp.mailchimpApiKey ).toString('base64'))
     .send({
       'email_address': input.body.email,
       'status': 'subscribed',

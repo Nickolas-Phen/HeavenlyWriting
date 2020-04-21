@@ -44,6 +44,7 @@
     "jsonwebtoken": "^8.5.1",
     "jwt-decode": "^2.2.0",
     "mailchimp-api-v3": "^1.13.1",
+    "material-table": "^1.57.2",
     "mocha": "^6.2.1",
     "mongoose": "^5.7.1",
     "morgan": "^1.9.1",
@@ -62,6 +63,5 @@
     "xmlhttprequest": "^1.8.0"
   },
   "homepage": "https://github.com/UFWebApps/React_Template_Repo#readme",
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

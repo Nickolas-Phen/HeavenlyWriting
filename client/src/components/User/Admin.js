@@ -216,10 +216,6 @@ export default function Admin() {
         <TextareaAutosize value ={returnedArticle} onChange = {articleChanged} aria-label="empty textarea" rowsMin={10} width="auto" placeholder = "Interpretation information"/>
         <Button color = "primary" variant="contained" onClick = {updatePrediction}>Update</Button>
     
-    <body>
-        <h3> sign in to view mailchimp list</h3>
-        <a class="btn btn-primary" href="/mailchimp/auth/authorize">Connect with MailChimp</a>
-    </body>
     </div>
     
     
