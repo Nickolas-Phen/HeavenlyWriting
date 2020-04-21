@@ -59,15 +59,6 @@ export default function SignUp(props) {
     const [query, setQuery] = useState("");
     const autoCompleteRef = useRef(null);
 
-        //places: AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE
-        //maps: AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8
-        //both: AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY
-      //  let apikey = 'AIzaSyCeqpD_lzUDLTqRFOmVa-erdkaEHMenyPE';
-     //   let apikey = 'AIzaSyCHWAtcKoko1s12OT7Oofq81qtCFNt3JE8';
-        let apikey = 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY';
-
-
-
         let autoComplete;
 
         const loadScript = (url, callback) => {
@@ -368,7 +359,7 @@ export default function SignUp(props) {
     useEffect(() => {
         loadScript(
 
-          `https://maps.googleapis.com/maps/api/js?key=${apikey}&libraries=places`,
+          `https://maps.googleapis.com/maps/api/js?key=${config.googleAPI.key}&libraries=places`,
           () => handleScriptLoad(setQuery, autoCompleteRef)
         );
       }, []);
