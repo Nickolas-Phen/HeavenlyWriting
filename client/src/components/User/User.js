@@ -159,7 +159,7 @@ function DrawerTest(props) {
         </div>
         <Divider />
         <List>
-          {["Today", "Previous", "Feedback", "Admin","Log out"].map(text => (
+          {["Today", "Feedback", "Admin","Log out"].map(text => (
             <ListItem button key={text} onClick={() => changeTab(text)}>
               <ListItemText primary={text} />
             </ListItem>
@@ -176,9 +176,9 @@ function DrawerTest(props) {
           <Route path="/Log out">
             <Redirect to = 'Home'></Redirect>
           </Route>
-          <Route path="/previous">
+          {/* <Route path="/previous">
             <Previous />
-          </Route>
+          </Route> */}
           <Route path="/feedback">
             <Feedback />
           </Route>
@@ -241,7 +241,7 @@ function DrawerTest(props) {
             </div>
             <Divider />
             <List>
-              {["Today", "Previous", "Feedback", "Log out"].map(text => (
+              {["Today", "Feedback", "Log out"].map(text => (
                 <ListItem button key={text} onClick={() => changeTab(text)}>
                   <ListItemText primary={text} />
                 </ListItem>
@@ -258,9 +258,9 @@ function DrawerTest(props) {
               <Route path="/Log out">
                 <Redirect to = 'Home'></Redirect>
               </Route>
-              <Route path="/previous">
+              {/* <Route path="/previous">
                 <Previous />
-              </Route>
+              </Route> */}
               <Route path="/feedback">
                 <Feedback />
               </Route>
