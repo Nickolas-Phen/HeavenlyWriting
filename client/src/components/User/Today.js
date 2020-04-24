@@ -252,6 +252,7 @@ useEffect(() => {
     createData('Moon House', astrologyData.currentMoonHouse),
     createData('Sun Birth Sign', astrologyData.sunBirthSign),
     createData('Your Ascendant Sign', astrologyData.ascendantSign),
+    createData('Current Moon Phase', astrologyData.currentMoonPhase),
   ];
   if (isLoading) {
     return (
@@ -269,7 +270,8 @@ useEffect(() => {
         <div>
           {!prediction[0] ? <h2>No prediction found</h2> :
                <div >
-                   <h3 className="info">{prediction[0].quote}</h3>
+                   <h3>{prediction[0].quote}</h3>
+                   <br />
                    <h3>{prediction[0].article}</h3>
                </div>
      }

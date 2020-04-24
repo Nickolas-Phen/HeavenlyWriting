@@ -13,7 +13,7 @@ import httpUser from '../httpUser'
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import './App.css';
-import config from '../config/config.js'
+//import config from '../config/config.js'
 
 
 const useStyles = makeStyles(theme => ({
@@ -356,12 +356,12 @@ export default function SignUp(props) {
         }
     };
     const classes = useStyles();
-
-
+    const api = 'AIzaSyCL07PegVvOkQbIG9iFHa5MkfpSaSvOrWY';
+    //console.log("Google api: " + api);
     useEffect(() => {
         loadScript(
 
-          `https://maps.googleapis.com/maps/api/js?key=${config.googleAPI.key}&libraries=places`,
+          `https://maps.googleapis.com/maps/api/js?key=${api}&libraries=places`,
           () => handleScriptLoad(setQuery, autoCompleteRef)
         );
       }, []);

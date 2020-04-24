@@ -1,67 +1,41 @@
 {
-  "name": "react_template_repo",
-  "version": "1.0.0",
-  "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
-  "main": "index.js",
+  "name": "heroku4",
+  "version": "3.0.0",
+  "description": "",
   "type": "module",
+  "engines": {
+    "node": "13.6"
+  },
   "scripts": {
-    "test": "react-scripts test",
-    "install-all": "concurrently \"npm install\" \"cd client && npm install\"",
-    "client": "cd client && npm start",
-    "server": "nodemon server/server.js",
-    "dev": "concurrently \"nodemon server/server.js\" \"cd client && npm run start\"",
-    "build": "react-scripts build",
-    "start": "react-scripts start",
-    "heroku-postbuild": "cd client && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "eject": "react-scripts eject"
+    "start": "node server",
+    "build": "cd client/ && npm install && npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "client/node_modules"
+  ],
+  "dependencies": {
+    "axios": "^0.19.2",
+    "bcrypt": "^4.0.1",
+    "body-parser": "^1.19.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.5.1",
+    "mailchimp-api-v3": "^1.13.1",
+    "mongoose": "^5.9.7",
+    "superagent": "^5.2.2",
+    "swisseph": "^0.5.13",
+    "util": "^0.12.2"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/UFWebApps/React_Template_Repo.git"
+    "url": "https://github.com/mars/heroku-cra-node.git"
   },
-  "keywords": [],
-  "author": "Dakota Rennemann",
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react"
+  ],
   "license": "MIT",
-  "dependencies": {
-    "@ckeditor/ckeditor5-build-classic": "^18.0.0",
-    "@ckeditor/ckeditor5-react": "^2.1.0",
-    "@date-io/date-fns": "^2.5.0",
-    "@material-ui/core": "^4.9.10",
-    "@material-ui/icons": "^4.9.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
-    "@testing-library/user-event": "^7.2.1",
-    "axios": "^0.19.2",
-    "babel-polyfill": "^6.26.0",
-    "bcrypt": "^4.0.1",
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.19.0",
-    "bootstrap": "^4.4.1",
-    "concurrently": "^4.1.0",
-    "date-and-time": "^0.13.1",
-    "dotenv": "^8.2.0",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "jwt-decode": "^2.2.0",
-    "mailchimp-api-v3": "^1.13.1",
-    "material-table": "^1.57.2",
-    "mocha": "^6.2.1",
-    "mongoose": "^5.7.1",
-    "morgan": "^1.9.1",
-    "nodemon": "^1.18.10",
-    "react": "^16.13.1",
-    "react-bootstrap": "^1.0.0-beta.17",
-    "react-dom": "^16.13.1",
-    "react-router-dom": "^5.1.2",
-    "react-scripts": "3.4.0",
-    "react-select": "^3.0.8",
-    "requirejs": "^2.3.6",
-    "should": "^13.2.3",
-    "supertest": "^4.0.2",
-    "swisseph": "^0.5.13",
-    "util": "^0.12.2",
-    "xmlhttprequest": "^1.8.0"
-  },
-  "homepage": "https://github.com/UFWebApps/React_Template_Repo#readme",
   "devDependencies": {}
 }
