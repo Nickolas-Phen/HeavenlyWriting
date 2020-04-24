@@ -1,5 +1,5 @@
 import swisseph from 'swisseph'
-import config from './config/config.js'
+//import config from './config/config.js'
 import  request  from 'request';
 
 swisseph.swe_set_ephe_path('./server/Ephe');
@@ -28,7 +28,7 @@ export const getAstrologyData = async(birthday, birthTime, birthPlace) =>
 		//console.log(formattedCoords);
 		let formattedBdaytime =formatEverything(birthdayAndTime);
 		
-		url = url + formattedCoords +'?datetime='+formattedBdaytime + '&key=' + config.bingMap.key;
+		url = url + formattedCoords +'?datetime='+formattedBdaytime + '&key=' + process.env.bingMap;
 		//console.log(url);
 		//console.log("------------------Finding JulDAy");
 		const julday = await getJD(birthdayAndTime, url);
@@ -260,7 +260,7 @@ export const getCoords=async(addy)=>{
 	// The below code makes a GET request to the specified URL.
 	return new Promise((resolve, reject) => {
 		request({
-			url: 'https://api.opencagedata.com/geocode/v1/json?q='+addressTemp+"&key="+config.openCage.key
+			url: 'https://api.opencagedata.com/geocode/v1/json?q='+addressTemp+"&key="+ process.env.openCage
 
 		}, async (error, response, body) => {
 			if (error)

@@ -1,4 +1,4 @@
-import config from '../config/config.js';
+/*import config from '../config/config.js';*/
 import request from 'request';
 
 export default (req, res, next) => {
@@ -9,7 +9,7 @@ export default (req, res, next) => {
         // Setup your options q and key are provided. Feel free to add others to make the JSON response less verbose and easier to read
         const options = {
             q: addressTemp,
-            key: config.openCage.key,
+            key: process.env.openCage,
         };
 
         // The below code makes a GET request to the specified URL.

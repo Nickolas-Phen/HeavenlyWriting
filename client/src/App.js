@@ -1,10 +1,10 @@
 import React, {useState} from 'react';
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
-import ForgotPassword from "./components/ForgotPassword";
 import User from "./components/User/User";
 import HomePage from "./components/HomePage";
-import { Switch, Route} from "react-router-dom";
+import ForgotPassword from "./components/ForgotPassword";
+import { Switch, Route, useHistory } from "react-router-dom";
 import httpUser from './httpUser'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -28,9 +28,6 @@ const App = () => {
       <Route path="/today">
         <User />
         </Route>
-       <Route path="/previous">
-       <User />
-         </Route> 
          <Route path="/feedback">
        <User />
          </Route> 
@@ -52,38 +49,3 @@ const App = () => {
 };
 
 export default App;
-{/* <Route path="/feedback">
-    <User /> 
-    <Route path="/admin">         
-    <User />
-  </Route> 
-  <Route path="/previous">
-     <User /> */}
-  //    <Switch>
-  //    <Route path="/signup">
-  //      <SignUp />
-  //    </Route>
-  //    <Route path="/today">
-  //      <User />
-  //    </Route>
-  //  <Route path="/signin">
-  //      <SignIn />
-  //  </Route>
-  //    <Route path="/">
-  //      <HomePage />
-  //    </Route>
-  //working one
-//   <Switch>
-//   <Route path="/home">
-//     <Home onLogOut = {logOut}/>
-//   </Route>
-//   <Route path="/signup">
-//     <SignUp onSignUpSuccess={onLoginSuccess}/>
-//   </Route>
-// <Route path="/signin">
-//     <SignIn onLoginSuccess={onLoginSuccess}/>
-// </Route>
-//   <Route path="/">
-//     <User/>
-//   </Route>
-// </Switch>

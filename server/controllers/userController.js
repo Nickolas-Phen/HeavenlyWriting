@@ -6,7 +6,7 @@ import * as authHelper from '../authHelperFunctions.js'
 import request from 'superagent';
 import express from 'express';
 import bodyParser from 'body-parser';
-import config from '../config/config.js';
+//import config from '../config/config.js';
 
 //import coordinates from './coordinatesController.js';
 
@@ -263,12 +263,17 @@ export const show = async (req, res) => {
 
 //only function not included from BC 3 is middleware
 
+const mailchimpInstance = 'us19';
+const mailchimpApiKey = '31d36951a5db54c9db20da653fb109b3-us19';
+const listUniqueId = 'de644ad1de';
+
 export const mail = (input, res) =>
 {
+    //console.log(mailchimpInstance + mailchimpApiKey + listUniqueId);
     request
-    .post('https://' + config.mailchimp.mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + config.mailchimp.listUniqueId + '/members/')
+    .post('https://' + mailchimpInstance + '.api.mailchimp.com/3.0/lists/' + listUniqueId + '/members/')
     .set('Content-Type', 'application/json;charset=utf-8')
-    .set('Authorization', 'Basic ' + new Buffer('any:' + config.mailchimp.mailchimpApiKey ).toString('base64'))
+    .set('Authorization', 'Basic ' + new Buffer('any:' + mailchimpApiKey ).toString('base64'))
     .send({
       'email_address': input.body.email,
       'status': 'subscribed',
@@ -416,4 +421,3 @@ export const findZodiac = (req, res) => {
 
 
 };
-

@@ -1,9 +1,11 @@
-//Thanks Jon and Dakota!
+ //Thanks Jon and Dakota!
 
 import axios from 'axios';
 import jwtDecode from 'jwt-decode'
 
-const httpUser = axios.create();
+var baseURL = process.env.baseURL || 'localhost';
+var port = process.env.PORT || 5000;
+var httpUser = axios.create({baseURL: baseURL + ":" + port});
 
 httpUser.getToken = function() {
     return localStorage.getItem('token');
@@ -31,9 +33,10 @@ httpUser.getCurrentUser = function() {
 
 httpUser.logIn = async function(credentials) {
     try {
-        console.log("logging in...");
-        const response = await axios.post( '/api/user/authenticate', credentials );
-
+        console.log("test");
+        console.log(baseURL + ":" + port);
+        const response = await axios.post('/api/user/authenticate', credentials);
+        //console.log(response);
         const token = response.data.token;
         if(token) {
             this.defaults.headers.common.token = this.setToken(token);
@@ -42,6 +45,8 @@ httpUser.logIn = async function(credentials) {
             return false;
         }
     } catch(err) {
+        console.log('Cred: ');
+        console.log(credentials);
         console.log(err);
         return false;
     }
@@ -60,7 +65,6 @@ httpUser.signUp = async function(userInfo) {
 };
 
 httpUser.logOut = function() {
-    console.log("logging out...");
     localStorage.removeItem('token');
     delete this.defaults.headers.common.token;
     return true;
